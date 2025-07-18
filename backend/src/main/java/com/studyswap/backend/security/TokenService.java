@@ -23,7 +23,7 @@ public class TokenService {
 
             String token = JWT.create()
                 .withIssuer("StudySwap")
-                .withSubject(user.getName())
+                .withSubject(user.getUsername())
                 .withExpiresAt(this.getExpirationAt())
                 .sign(algorithm);
 
