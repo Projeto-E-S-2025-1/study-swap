@@ -41,8 +41,7 @@ public class User implements UserDetails {
     @NotNull(message = "Role é obrigatório")
     private Role role;
 
-    public User(Long id, String name, String email, String password, Role role) {
-        this.id = id;
+    public User(String name, String email, String password, Role role) {
         this.name = name;
         this.email = email;
         this.password = password;
