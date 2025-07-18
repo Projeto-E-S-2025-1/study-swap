@@ -33,6 +33,19 @@ public class TokenService {
         }
     }
 
+    public String validateToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(this.secret);
+            return JWT.require(algorithm)
+                    .withIssuer("StudySwap")
+                    .build()
+                    .verify(token)
+                    .getSubject();
+        } catch (JWTVerificationException e) {
+            return "";
+        }
+    }
+
     private Instant getExpirationAt() {
         return Instant.now().plusSeconds(86400);
     }
