@@ -14,7 +14,7 @@ import com.studyswap.backend.model.User;
 @Service
 public class TokenService {
 
-    @Value("${api.security.token.secret}")
+    @Value("${api.security.auth.token.secret}")
     private String secret;
     
     public String generateToken(User user) {
