@@ -71,4 +71,15 @@ export class AuthService {
     }
     return localStorage.getItem('token');
   }
+  decodeToken(token: string): any {
+    if (!this.isBrowser || !token) {
+      return null;
+    }
+    try {
+      return this.jwtHelper.decodeToken(token);
+    } catch (error) {
+      console.error('Erro ao decodificar o token:', error);
+      return null;
+    }
+  }
 }
