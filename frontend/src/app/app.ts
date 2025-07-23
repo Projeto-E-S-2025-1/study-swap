@@ -16,5 +16,5 @@ import { HeaderComponent } from './shared/header/header.component'; // Importe s
   styleUrls: ['./app.component.scss'] // Crie este arquivo CSS se não existir
 })
 export class App {
-  protected readonly title = signal('studyswap');
+
 }

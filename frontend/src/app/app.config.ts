@@ -7,7 +7,6 @@ import { routes } from './app.routes';
 // CORREÇÃO AQUI: Mude 'auth-interceptor' para 'auth.interceptor'
 import { authInterceptor } from './auth/auth-interceptor'; // Importe a função interceptor
 
-
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
@@ -15,6 +14,5 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     provideHttpClient(withInterceptors([authInterceptor])),
-
   ]
 };
