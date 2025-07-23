@@ -1,0 +1,18 @@
+<!-- src/app/shared/header/header.component.html -->
+<header class="app-header">
+    <nav>
+        <div class="logo">
+            <a routerLink="/">StudySwap</a>
+        </div>
+        <div class="nav-links">
+            <ng-container *ngIf="isUserAuthenticated; else loggedOutLinks">
+                <a routerLink="/dashboard">Dashboard</a>
+                <button (click)="logout()">Logout</button>
+            </ng-container>
+            <ng-template #loggedOutLinks>
+                <a routerLink="/login">Login</a>
+                <a routerLink="/register">Cadastro</a>
+            </ng-template>
+        </div>
+    </nav>
+</header>
