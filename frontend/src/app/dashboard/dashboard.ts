@@ -7,22 +7,25 @@ import { AuthService } from '../auth/auth.service';
   selector: 'app-dashboard',
   standalone: true, 
   imports: [
-    CommonModule // Necessário para *ngIf, *ngFor, etc.
+    CommonModule 
   ],
   templateUrl: './dashboard.html', 
   styleUrl: './dashboard.css'       
 })
-export class Dashboard implements OnInit { 
-  userEmail: string | null = null; // Propriedade para armazenar o e-mail do usuário
+export class Dashboard implements OnInit {
+  userEmail: string | null = null;
+  userName: string | null = null; 
 
-  constructor(private authService: AuthService) { } // Injete o AuthService
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-
     const token = this.authService.getToken();
     if (token) {
-
-      this.userEmail = 'exemplo@email.com'; // Substitua pela lógica real de decodificação do token
+      const decodedToken = this.authService.decodeToken(token);
+      if (decodedToken) {
+        this.userEmail = decodedToken.email || null; // Assumindo que o token tem 'email'
+        this.userName = decodedToken.name || null; // Assumindo que o token tem 'name'
+      }
     }
   }
 }
