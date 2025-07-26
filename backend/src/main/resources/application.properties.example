@@ -1,7 +1,7 @@
 spring.application.name=study_swap
 spring.datasource.url=jdbc:postgresql://localhost:5432/study_swap
-spring.datasource.username=${DB_USERNAME}
-spring.datasource.password=${DB_PASSWORD}
+spring.datasource.username=
+spring.datasource.password=
 spring.datasource.driver-class-name=org.postgresql.Driver
 
 spring.jpa.hibernate.ddl-auto=create-drop
@@ -9,4 +9,4 @@ spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 
-api.security.auth.token.secret=${JWT_SECRET}
+api.security.auth.token.secret=
