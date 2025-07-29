@@ -17,4 +17,22 @@ public class QuestionService {
 
     @Autowired
     private MaterialRepository materialRepository;
+
+    public Question createQuestion(CreateQuestionDTO dto, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        var material = materialRepository.findById(dto.getMaterialId())
+            .orElseThrow(() -> new RuntimeException("Material não encontrado"));
+
+        var question = new Question(
+            null,
+            dto.getDescription(),
+            dto.getTitle(),
+            user,
+            material
+        );
+
+        return questionRepository.save(question);
+    }
+
 }
