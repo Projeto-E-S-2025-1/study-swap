@@ -11,18 +11,14 @@ import com.studyswap.backend.dto.MaterialDTO;
 import com.studyswap.backend.model.Material;
 import com.studyswap.backend.model.User;
 import com.studyswap.backend.repository.MaterialRepository;
-import com.studyswap.backend.repository.UserRepository;
 
 @Service
 public class MaterialService {
     @Autowired
     private MaterialRepository materialRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    public Material createMaterial(MaterialDTO materialDTO){
-        Material entity = convertToEntity(materialDTO);
+    public Material createMaterial(MaterialDTO materialDTO, User user){
+        Material entity = convertToEntity(materialDTO, user);
         return materialRepository.save(entity);
     }
 
@@ -50,9 +46,10 @@ public class MaterialService {
         materialRepository.delete(entity);
     }
 
-    private Material convertToEntity(MaterialDTO materialDTO) {
+    private Material convertToEntity(MaterialDTO materialDTO, User user) {
         Material entity = new Material();
         copyDTOToEntity(materialDTO, entity);
+        entity.setUser(user);
         return entity;
     }
 
@@ -65,8 +62,5 @@ public class MaterialService {
         entity.setTransactionType(materialDTO.getTransactionType());
         entity.setPrice(materialDTO.getPrice());
         entity.setPhoto(materialDTO.getPhoto());
-        User user = userRepository.findById(materialDTO.getUserId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
-        entity.setUser(user);
     }
 }

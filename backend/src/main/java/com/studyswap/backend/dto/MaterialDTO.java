@@ -28,15 +28,12 @@ public class MaterialDTO {
 
     private String photo;
 
-    @NotNull(message = "O usuário é obrigatório")
-    private Long userId;
-
     public MaterialDTO() {
     }
 
     public MaterialDTO(String title, String description, MaterialType materialType,
             ConservationStatus conservationStatus, TransactionType transactionType,
-            Double price, String photo, Long userId) {
+            Double price, String photo) {
         this.title = title;
         this.description = description;
         this.materialType = materialType;
@@ -44,7 +41,6 @@ public class MaterialDTO {
         this.transactionType = transactionType;
         this.price = price;
         this.photo = photo;
-        this.userId = userId;
     }
 
     public String getTitle() {
@@ -101,13 +97,5 @@ public class MaterialDTO {
 
     public void setPhoto(String photo) {
         this.photo = photo;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 }
