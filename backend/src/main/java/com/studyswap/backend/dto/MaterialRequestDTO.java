@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-public class MaterialDTO {
+public class MaterialRequestDTO {
     @NotBlank(message = "O título é obrigatório")
     private String title;
 
@@ -28,10 +28,10 @@ public class MaterialDTO {
 
     private String photo;
 
-    public MaterialDTO() {
+    public MaterialRequestDTO() {
     }
 
-    public MaterialDTO(String title, String description, MaterialType materialType,
+    public MaterialRequestDTO(String title, String description, MaterialType materialType,
             ConservationStatus conservationStatus, TransactionType transactionType,
             Double price, String photo) {
         this.title = title;
