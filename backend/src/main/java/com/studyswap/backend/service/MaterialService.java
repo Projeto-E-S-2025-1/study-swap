@@ -22,10 +22,14 @@ public class MaterialService {
         return materialRepository.save(entity);
     }
 
-    public Material updateMaterial(Long idMaterial, MaterialDTO materialDTO) {
+    public Material updateMaterial(Long idMaterial, MaterialDTO materialDTO, User user) {
         Material entity = materialRepository.findById(idMaterial).orElseThrow(
             () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Material não encontrado"));
         
+        if (!entity.getUser().getId().equals(user.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não tem permissão para editar este material");
+        }
+
         copyDTOToEntity(materialDTO, entity);
         return materialRepository.save(entity);
     }
@@ -39,10 +43,14 @@ public class MaterialService {
         return materialRepository.findAll();
     }
 
-    public void deleteMaterial(Long id) {
-        Material entity = materialRepository.findById(id).orElseThrow(
+    public void deleteMaterial(Long idMaterial, User user) {
+        Material entity = materialRepository.findById(idMaterial).orElseThrow(
             () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Material não encontrado"));
         
+        if (!entity.getUser().getId().equals(user.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não tem permissão para remover este material");
+        }
+
         materialRepository.delete(entity);
     }
 
