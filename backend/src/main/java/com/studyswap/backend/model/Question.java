@@ -1,5 +1,6 @@
 package com.studyswap.backend.model;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
@@ -9,31 +10,39 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Question {
-	//Atributos	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(updatable=false)
 	private Long id;
-	
+
 	@Column(nullable=false)
 	@NotBlank(message = "a descrição é obrigatória")
 	private String description;
-	
+
 	@Column(nullable=false)
 	@NotBlank(message = "o título é obrigatório")
 	private String title;
-	
+
 	@ManyToOne
 	@JoinColumn(name="user_id", nullable=false)
 	private User author;
-	
+
 	@ManyToOne
 	@JoinColumn(name="material_id", nullable=false)
 	private Material material;
+
+	@Column(nullable = false, updatable = false)
+	private LocalDateTime createdAt;
+
+	@PrePersist
+	protected void onCreate() {
+		this.createdAt = LocalDateTime.now();
+	}
 
 	public Long getId() {
 		return id;
@@ -75,6 +84,14 @@ public class Question {
 		this.material = material;
 	}
 
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -84,9 +101,7 @@ public class Question {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
+		if (obj == null || getClass() != obj.getClass())
 			return false;
 		Question other = (Question) obj;
 		return Objects.equals(id, other.id);
@@ -99,6 +114,4 @@ public class Question {
 		this.author = author;
 		this.material = material;
 	}
-	
-
 }

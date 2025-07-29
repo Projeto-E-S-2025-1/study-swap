@@ -1,9 +1,13 @@
 package com.studyswap.backend.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 
 import com.studyswap.backend.dto.CreateQuestionDTO;
+import com.studyswap.backend.dto.QuestionResponseDTO;
 import com.studyswap.backend.dto.UpdateQuestionDTO;
 import com.studyswap.backend.model.Question;
 import com.studyswap.backend.model.User;
@@ -68,5 +72,23 @@ public class QuestionService {
         }
 
         questionRepository.delete(question);
+    }
+
+    public List<QuestionResponseDTO> getQuestionsByMaterial(Long materialId) {
+        if (!materialRepository.existsById(materialId)) {
+            throw new EntityNotFoundException("Material não encontrado");
+        }
+
+        List<Question> questions = questionRepository.findByMaterialId(materialId);
+
+        return questions.stream()
+            .map(q -> new QuestionResponseDTO(
+                q.getId(),
+                q.getTitle(),
+                q.getDescription(),
+                q.getAuthor().getName(),
+                q.getCreatedAt()
+            ))
+            .collect(Collectors.toList());
     }
 }
