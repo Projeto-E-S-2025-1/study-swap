@@ -56,4 +56,17 @@ public class QuestionService {
 
         return questionRepository.save(question);
     }
+
+    public void deleteQuestion(Long questionId, Authentication authentication) {
+        User loggedUser = (User) authentication.getPrincipal();
+
+        Question question = questionRepository.findById(questionId)
+            .orElseThrow(() -> new EntityNotFoundException("Pergunta não encontrada"));
+
+        if (!question.getAuthor().getId().equals(loggedUser.getId())) {
+            throw new SecurityException("Usuário não autorizado para deletar esta pergunta");
+        }
+
+        questionRepository.delete(question);
+    }
 }
