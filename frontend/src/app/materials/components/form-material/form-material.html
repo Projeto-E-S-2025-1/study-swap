@@ -1,0 +1,63 @@
+<div class="container mt-4">
+    <form (ngSubmit)="onSubmit()" #materialForm="ngForm">
+      <div class="form-group">
+        <label for="title">Título</label>
+        <input id="title" name="title" type="text" class="form-control" [(ngModel)]="materialDTO.title" required>
+      </div>
+  
+      <div class="form-group">
+        <label for="description">Descrição</label>
+        <textarea id="description" name="description" class="form-control" [(ngModel)]="materialDTO.description" required></textarea>
+      </div>
+
+      <div>
+        <label for="materialType">Tipo de Material</label>
+        <select name="materialType" id="materialType" class="form-control" [(ngModel)]="materialDTO.materialType" required>
+          <option *ngFor="let type of materialTypes" [value]="type">
+            {{ type }}
+          </option>
+        </select>
+      </div>
+
+      <div>
+        <label for="conservationStatus">Estado de Conservação</label>
+        <select name="conservationStatus" id="conservationStatus" class="form-control" [(ngModel)]="materialDTO.conservationStatus" required>
+          <option *ngFor="let status of conservationStatuses" [value]="status">
+            {{ status }}
+          </option>
+        </select>
+      </div>
+      
+      <div>
+        <label for="transactionType">Tipo de Transação</label>
+        <select name="transactionType" id="transactionType" class="form-control" [(ngModel)]="materialDTO.transactionType" required>
+          <option *ngFor="let transaction of transactionTypes" [value]="transaction">
+            {{ transaction }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group" *ngIf="materialDTO.transactionType === 'VENDA'">
+        <label for="price">Preço</label>
+        <input id="price" name="price" type="number" class="form-control" [(ngModel)]="materialDTO.price" required>
+      </div>
+  
+      <div class="form-group">
+        <label for="photo">Foto do Material</label>
+        <input id="photo" name="photo" type="file" class="form-control" 
+               (change)="onFileSelected($event)" accept="image/*">
+        
+        <!-- Preview da imagem -->
+        <div *ngIf="imagePreview" class="mt-2">
+          <img [src]="imagePreview" alt="Preview" style="max-width: 200px; max-height: 200px;" class="img-thumbnail">
+        </div>
+      </div>
+  
+      <button type="submit" class="btn btn-success mt-3">Salvar</button>
+  
+      <!-- Feedback -->
+      <div *ngIf="successMessage" class="alert alert-success mt-3">{{ successMessage }}</div>
+      <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+    </form>
+  </div>
+  
