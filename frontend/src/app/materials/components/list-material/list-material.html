@@ -1,0 +1,28 @@
+<div class="vitrine-container">
+  <div class="vitrine-header">
+    <h2 class="vitrine-title">Nossos Produtos</h2>
+    <button class="login-btn" type="button" (click)="openModal()">+ Adicionar</button>
+  </div>
+
+  <div class="product-grid">
+    <div *ngFor="let produto of materials" class="product-card" [routerLink]="['/materials', produto.id]" style="cursor: pointer;">
+      <img
+      [src]="produto.photoUrl ? 'http://localhost:8080' + produto.photoUrl : 'http://localhost:8080/images/default-photo.png'"
+      [alt]="produto.title"
+      class="product-image"
+      />
+      <div class="product-info">
+        <h3 class="product-name">{{ produto.title }}</h3>
+        <p class="product-price" *ngIf="produto.price !== null">R$ {{ produto.price }}</p>
+        <p class="product-price" *ngIf="produto.price === null">{{ produto.transactionType }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showModal">
+    <div class="modal-content">
+      <button class="close-btn" (click)="closeModal()">×</button>
+      <app-form-materials (materialAdicionado)="onProdutoAdicionado($event)"></app-form-materials>
+    </div>
+  </div>
+</div>
