@@ -1,10 +1,17 @@
 package com.studyswap.backend.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.studyswap.backend.dto.MaterialRequestDTO;
@@ -18,13 +25,21 @@ public class MaterialService {
     @Autowired
     private MaterialRepository materialRepository;
 
-    public MaterialResponseDTO createMaterial(MaterialRequestDTO materialDTO, User user){
+    public MaterialResponseDTO createMaterial(MaterialRequestDTO materialDTO, User user, MultipartFile file){
         Material entity = convertToEntity(materialDTO, user);
+
+        if (file != null && !file.isEmpty()) {
+            String fileUrl = storeFile(file);
+            entity.setPhoto(fileUrl);
+        } else {
+            entity.setPhoto("/images/default-photo.png");
+        }
+
         Material saved = materialRepository.save(entity);
         return convertToResponseDTO(saved);
     }
 
-    public MaterialResponseDTO updateMaterial(Long idMaterial, MaterialRequestDTO materialDTO, User user) {
+    public MaterialResponseDTO updateMaterial(Long idMaterial, MaterialRequestDTO materialDTO, User user, MultipartFile file) {
         Material entity = materialRepository.findById(idMaterial).orElseThrow(
             () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Material não encontrado"));
         
@@ -33,6 +48,13 @@ public class MaterialService {
         }
 
         copyDTOToEntity(materialDTO, entity);
+
+        // Se um novo arquivo for enviado, substitui a imagem
+        if (file != null && !file.isEmpty()) {
+            String fileUrl = storeFile(file);
+            entity.setPhoto(fileUrl);
+        }
+        
         Material updated = materialRepository.save(entity);
         return convertToResponseDTO(updated);
     }
@@ -89,5 +111,20 @@ public class MaterialService {
             material.getUser().getId(),
             material.getUser().getName()
         );
+    }
+
+    private String storeFile(MultipartFile file) {
+        try {
+            String uploadDir = "uploads/";
+            Files.createDirectories(Paths.get(uploadDir));
+
+            String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+            Path path = Paths.get(uploadDir + fileName);
+            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+
+            return "/uploads/" + fileName;
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao salvar o arquivo", e);
+        }
     }
 }
