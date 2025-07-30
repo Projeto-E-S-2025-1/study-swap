@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.studyswap.backend.dto.MaterialRequestDTO;
 import com.studyswap.backend.dto.MaterialResponseDTO;
@@ -24,19 +25,23 @@ public class MaterialController {
     @Autowired
     private AuthService authService;
 
-    @PostMapping
-    public ResponseEntity<MaterialResponseDTO> createMaterial(@Validated @RequestBody MaterialRequestDTO materialDTO) {
+    @PostMapping(consumes = {"multipart/form-data"})
+    public ResponseEntity<MaterialResponseDTO> createMaterial(
+            @RequestPart("materialDTO") @Validated MaterialRequestDTO materialDTO,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+
         User user = authService.getAuthenticatedUser();
-        MaterialResponseDTO savedMaterial = materialService.createMaterial(materialDTO, user);
+        MaterialResponseDTO savedMaterial = materialService.createMaterial(materialDTO, user, file);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedMaterial);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = {"multipart/form-data"})
     public ResponseEntity<MaterialResponseDTO> updateMaterial(
             @PathVariable Long id,
-            @Validated @RequestBody MaterialRequestDTO materialDTO) {
+            @RequestPart("materialDTO") @Validated MaterialRequestDTO materialDTO,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
         User user = authService.getAuthenticatedUser();
-        MaterialResponseDTO updatedMaterial = materialService.updateMaterial(id, materialDTO, user);
+        MaterialResponseDTO updatedMaterial = materialService.updateMaterial(id, materialDTO, user, file);
         return ResponseEntity.status(HttpStatus.OK).body(updatedMaterial);
     }
 
