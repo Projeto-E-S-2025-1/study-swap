@@ -17,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.studyswap.backend.dto.MaterialRequestDTO;
 import com.studyswap.backend.dto.MaterialResponseDTO;
 import com.studyswap.backend.model.Material;
+import com.studyswap.backend.model.MaterialType;
 import com.studyswap.backend.model.User;
 import com.studyswap.backend.repository.MaterialRepository;
 
@@ -67,6 +68,11 @@ public class MaterialService {
 
     public List<MaterialResponseDTO> getAllMaterials() {
         return materialRepository.findAll().stream().map(this::convertToResponseDTO).toList();
+    }
+
+    public List<MaterialResponseDTO> searchMaterials(String title, MaterialType materialType) {
+        List<Material> materials = materialRepository.searchByTitleAndType(title, materialType);
+        return materials.stream().map(this::convertToResponseDTO).toList();
     }
 
     public void deleteMaterial(Long idMaterial, User user) {
