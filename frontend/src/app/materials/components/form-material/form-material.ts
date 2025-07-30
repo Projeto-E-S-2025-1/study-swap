@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { Output, EventEmitter } from '@angular/core';
+import { Material } from '../../models/material.model';
 
 @Component({
   selector: 'app-form-materials',
@@ -15,6 +17,7 @@ import { HttpClient } from '@angular/common/http';
   standalone: true
 })
 export class FormMaterial implements OnInit {
+  @Output() materialAdicionado = new EventEmitter<Material>();
   materialDTO = {
     title: '',
     description: '',
@@ -82,6 +85,7 @@ export class FormMaterial implements OnInit {
       next: () => {
         this.successMessage = 'Material cadastrado com sucesso!';
         setTimeout(() => this.router.navigate(['/materials']), 1500);
+        this.materialAdicionado.emit(materialToSend);
       },
       error: (err) => {
         this.errorMessage = 'Erro ao cadastrar o material.';
