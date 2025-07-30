@@ -10,7 +10,7 @@ import { AuthService } from '../auth.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup; // Declare, mas não inicialize no ngOnInit
@@ -24,11 +24,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    this.isBrowser = isPlatformBrowser(platformId); // Defina a flag no construtor
-
-    // Inicialize o formulário AQUI no CONSTRUTOR, mas apenas se estiver no navegador.
-    // Isso é importante para que o `loginForm` exista no HTML DOM se estiver no browser
-    // e seja `undefined` no servidor para o *ngIf.
+    this.isBrowser = isPlatformBrowser(platformId);
     if (this.isBrowser) {
       this.loginForm = this.fb.group({
         email: ['', [Validators.required, Validators.email]],
