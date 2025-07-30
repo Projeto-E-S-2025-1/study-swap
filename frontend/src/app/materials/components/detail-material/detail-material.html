@@ -1,0 +1,22 @@
+<div class="detalhe-material-container">
+  <div class="detalhe-material-card">
+    <img 
+      class="detalhe-material-imagem"
+      src="http://localhost:8080/images/default-photo.png"
+      [alt]="material?.title"
+    />
+
+    <div class="detalhe-material-info">
+      <h2 class="detalhe-material-titulo">{{ material?.title }}</h2>
+      <p class="detalhe-material-descricao">{{ material?.description }}</p>
+      <div class="detalhe-material-atributos">
+        <span><strong>Tipo:</strong> {{ material?.materialType }}</span>
+        <span><strong>Estado de conservação:</strong> {{ material?.conservationStatus }}</span>
+        <span><strong>Transação:</strong> {{ material?.transactionType }}</span>
+        <span *ngIf="material?.transactionType === 'VENDA'">
+          <strong>Preço:</strong> R$ {{ material?.price }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
