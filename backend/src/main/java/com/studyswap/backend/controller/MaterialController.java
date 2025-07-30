@@ -11,7 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.studyswap.backend.dto.MaterialRequestDTO;
 import com.studyswap.backend.dto.MaterialResponseDTO;
+import com.studyswap.backend.model.ConservationStatus;
 import com.studyswap.backend.model.MaterialType;
+import com.studyswap.backend.model.TransactionType;
 import com.studyswap.backend.model.User;
 import com.studyswap.backend.service.AuthService;
 import com.studyswap.backend.service.MaterialService;
@@ -61,9 +63,11 @@ public class MaterialController {
     @GetMapping("/search")
     public List<MaterialResponseDTO> searchMaterials(
             @RequestParam(required = false) String title,
-            @RequestParam(required = false) MaterialType materialType
+            @RequestParam(required = false) MaterialType materialType,
+            @RequestParam(required = false) ConservationStatus conservationStatus,
+            @RequestParam(required = false) TransactionType transactionType
     ) {
-        return materialService.searchMaterials(title, materialType);
+        return materialService.searchMaterials(title, materialType, conservationStatus, transactionType);
     }
 
     @GetMapping
