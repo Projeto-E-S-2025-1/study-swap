@@ -1,6 +1,6 @@
 <div class="detalhe-material-container">
   <div class="detalhe-material-card">
-    <img 
+    <img
       class="detalhe-material-imagem"
       src="http://localhost:8080/images/default-photo.png"
       [alt]="material?.title"
@@ -18,5 +18,9 @@
         </span>
       </div>
     </div>
+  </div>
+
+  <div class="question-list-wrapper">
+    <app-question-list *ngIf="materialId !== null" [materialId]="materialId"></app-question-list>
   </div>
 </div>
