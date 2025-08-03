@@ -107,6 +107,9 @@ public class Question {
 		return Objects.equals(id, other.id);
 	}
 
+		public Question() {
+    }
+
 	public Question(Long id, String description, String title, User author, Material material) {
 		this.id = id;
 		this.description = description;
