@@ -1,5 +1,52 @@
 <div class="question-section">
-  <h3 class="question-title">Perguntas sobre este material</h3>
+  <div class="question-header">
+    <h3 class="question-title">Perguntas sobre este material</h3>
+    <button
+      class="btn-new-question"
+      (click)="toggleForm()"
+      [class.active]="showForm">
+      {{ showForm ? 'Cancelar' : 'Nova Pergunta' }}
+    </button>
+  </div>
+
+  <!-- Formulário para nova pergunta -->
+  <div *ngIf="showForm" class="question-form">
+    <form (ngSubmit)="onSubmit()" #questionForm="ngForm">
+      <div class="form-group">
+        <label for="title">Título</label>
+        <input
+          id="title"
+          name="title"
+          type="text"
+          class="form-control"
+          [(ngModel)]="questionDTO.title"
+          required
+          placeholder="Digite o título da pergunta">
+      </div>
+
+      <div class="form-group">
+        <label for="description">Descrição</label>
+        <textarea
+          id="description"
+          name="description"
+          class="form-control"
+          [(ngModel)]="questionDTO.description"
+          required
+          rows="3"
+          placeholder="Descreva sua pergunta detalhadamente"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-success" [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Enviando...' : 'Enviar Pergunta' }}
+        </button>
+      </div>
+
+      <!-- Feedback -->
+      <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+      <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+    </form>
+  </div>
 
   <div *ngIf="isLoading" class="question-loading">Carregando perguntas...</div>
 
@@ -10,6 +57,7 @@
   <!-- Container com scroll para as perguntas -->
   <div *ngIf="!isLoading && questions.length > 0" class="questions-container">
     <div class="question-card" *ngFor="let question of questions">
+      <h4 class="question-title-card">{{ question.title }}</h4>
       <p class="question-content">{{ question.description }}</p>
       <span class="question-meta">Enviada por {{ question.authorName }} em {{ question.createdAt | date: 'shortDate' }}</span>
     </div>
