@@ -8,13 +8,13 @@ import jakarta.transaction.Transactional;
 import com.studyswap.backend.dto.ReviewRequestDTO;
 import com.studyswap.backend.model.Review;
 import com.studyswap.backend.model.User;
-import com.studyswap.backend.repository.AvaliacaoRepository;
+import com.studyswap.backend.repository.ReviewRepository;
 import com.studyswap.backend.repository.TransactionRepository;
 
 @Service
 public class ReviewService {
     @Autowired
-    private AvaliacaoRepository avaliacaoRepository;
+    private ReviewRepository avaliacaoRepository;
 
     @Autowired
     private TransactionRepository transacaoRepository;
