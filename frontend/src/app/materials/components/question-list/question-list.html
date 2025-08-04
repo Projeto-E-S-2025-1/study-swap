@@ -1,0 +1,17 @@
+<div class="question-section">
+  <h3 class="question-title">Perguntas sobre este material</h3>
+
+  <div *ngIf="isLoading" class="question-loading">Carregando perguntas...</div>
+
+  <div *ngIf="!isLoading && questions.length === 0" class="question-empty">
+    Nenhuma pergunta foi feita ainda.
+  </div>
+
+  <!-- Container com scroll para as perguntas -->
+  <div *ngIf="!isLoading && questions.length > 0" class="questions-container">
+    <div class="question-card" *ngFor="let question of questions">
+      <p class="question-content">{{ question.description }}</p>
+      <span class="question-meta">Enviada por {{ question.authorName }} em {{ question.createdAt | date: 'shortDate' }}</span>
+    </div>
+  </div>
+</div>

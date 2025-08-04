@@ -1,0 +1,73 @@
+.question-section {
+  padding: 24px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-top: 40px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  max-height: 500px; /* Altura máxima da seção inteira */
+}
+
+.question-title {
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+  font-weight: bold;
+  color: #333;
+  flex-shrink: 0; /* Não permite que o título encolha */
+}
+
+.question-loading,
+.question-empty {
+  font-style: italic;
+  color: #666;
+  padding: 20px 0;
+  text-align: center;
+}
+
+/* Container com scroll para as perguntas */
+.questions-container {
+  max-height: 400px; /* Altura máxima para o scroll */
+  overflow-y: auto;
+  padding-right: 8px; /* Espaço para a barra de scroll */
+}
+
+/* Estilização personalizada da barra de scroll */
+.questions-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.questions-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.questions-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.questions-container::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+.question-card {
+  background-color: white;
+  padding: 16px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  margin-right: 8px; /* Compensa o padding-right do container */
+}
+
+.question-content {
+  font-size: 1rem;
+  margin-bottom: 8px;
+  color: #222;
+  line-height: 1.5;
+}
+
+.question-meta {
+  font-size: 0.875rem;
+  color: #777;
+}
