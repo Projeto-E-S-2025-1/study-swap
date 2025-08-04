@@ -24,6 +24,7 @@ public class TokenService {
             String token = JWT.create()
                 .withIssuer("StudySwap")
                 .withSubject(user.getUsername())
+                .withClaim("userId", user.getId())
                 .withExpiresAt(this.getExpirationAt())
                 .sign(algorithm);
 

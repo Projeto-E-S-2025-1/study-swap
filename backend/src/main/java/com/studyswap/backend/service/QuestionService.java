@@ -88,6 +88,7 @@ public class QuestionService {
                 q.getTitle(),
                 q.getDescription(),
                 q.getAuthor().getName(),
+                q.getAuthor().getId(),
                 q.getCreatedAt()
             ))
             .collect(Collectors.toList());
