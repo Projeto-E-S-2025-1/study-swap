@@ -57,9 +57,59 @@
   <!-- Container com scroll para as perguntas -->
   <div *ngIf="!isLoading && questions.length > 0" class="questions-container">
     <div class="question-card" *ngFor="let question of questions">
-      <h4 class="question-title-card">{{ question.title }}</h4>
-      <p class="question-content">{{ question.description }}</p>
-      <span class="question-meta">Enviada por {{ question.authorName }} em {{ question.createdAt | date: 'shortDate' }}</span>
+      <!-- Modo visualização -->
+      <div *ngIf="editingQuestionId !== question.id">
+        <div class="question-header-card">
+          <h4 class="question-title-card">{{ question.title }}</h4>
+          <div class="question-actions" *ngIf="canEditQuestion(question)">
+            <button class="btn-edit" (click)="startEdit(question)">
+              <i class="icon-edit">✏️</i>
+            </button>
+          </div>
+        </div>
+        <p class="question-content">{{ question.description }}</p>
+        <span class="question-meta">Enviada por {{ question.authorName }} em {{ question.createdAt | date: 'shortDate' }}</span>
+      </div>
+
+      <!-- Modo edição -->
+      <div *ngIf="editingQuestionId === question.id" class="question-edit-form">
+        <form (ngSubmit)="updateQuestion()" #editForm="ngForm">
+          <div class="form-group">
+            <label for="editTitle">Título</label>
+            <input
+              id="editTitle"
+              name="editTitle"
+              type="text"
+              class="form-control"
+              [(ngModel)]="editQuestionDTO.title"
+              required>
+          </div>
+
+          <div class="form-group">
+            <label for="editDescription">Descrição</label>
+            <textarea
+              id="editDescription"
+              name="editDescription"
+              class="form-control"
+              [(ngModel)]="editQuestionDTO.description"
+              required
+              rows="3"></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-success btn-sm" [disabled]="isUpdating">
+              {{ isUpdating ? 'Salvando...' : 'Salvar' }}
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" (click)="cancelEdit()">
+              Cancelar
+            </button>
+          </div>
+
+          <!-- Feedback da edição -->
+          <div *ngIf="editSuccessMessage" class="alert alert-success">{{ editSuccessMessage }}</div>
+          <div *ngIf="editErrorMessage" class="alert alert-danger">{{ editErrorMessage }}</div>
+        </form>
+      </div>
     </div>
   </div>
 </div>
