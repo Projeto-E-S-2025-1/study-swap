@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Question } from '../../models/question.model';
-import { QuestionService, CreateQuestionDTO } from '../../services/question.service';
+import { QuestionService, CreateQuestionDTO, UpdateQuestionDTO } from '../../services/question.service';
 import { AuthService } from '../../../auth/auth.service';
 
 @Component({
@@ -19,6 +19,14 @@ export class QuestionListComponent implements OnInit {
   showForm = false;
   isSubmitting = false;
 
+  // Variáveis para edição
+  editingQuestionId: number | null = null;
+  isUpdating = false;
+  editQuestionDTO: UpdateQuestionDTO = {
+    title: '',
+    description: ''
+  };
+
   questionDTO: CreateQuestionDTO = {
     title: '',
     description: '',
@@ -27,6 +35,8 @@ export class QuestionListComponent implements OnInit {
 
   successMessage = '';
   errorMessage = '';
+  editSuccessMessage = '';
+  editErrorMessage = '';
 
   constructor(
     private questionService: QuestionService,
@@ -97,6 +107,66 @@ export class QuestionListComponent implements OnInit {
     });
   }
 
+  // Métodos para edição
+  canEditQuestion(question: Question): boolean {
+    const currentUserId = this.authService.getUserId();
+    return currentUserId !== null && question.authorId === currentUserId;
+  }
+
+  startEdit(question: Question): void {
+    this.editingQuestionId = question.id;
+    this.editQuestionDTO = {
+      title: question.title,
+      description: question.description
+    };
+    this.clearEditMessages();
+  }
+
+  cancelEdit(): void {
+    this.editingQuestionId = null;
+    this.editQuestionDTO = { title: '', description: '' };
+    this.clearEditMessages();
+  }
+
+  updateQuestion(): void {
+    this.clearEditMessages();
+
+    if (!this.editQuestionDTO.title?.trim() || !this.editQuestionDTO.description?.trim()) {
+      this.editErrorMessage = 'Por favor, preencha todos os campos.';
+      return;
+    }
+
+    if (this.editingQuestionId === null) {
+      this.editErrorMessage = 'Erro interno. Tente novamente.';
+      return;
+    }
+
+    this.isUpdating = true;
+
+    this.questionService.update(this.editingQuestionId, this.editQuestionDTO).subscribe({
+      next: (updatedQuestion) => {
+        // Atualizar a pergunta na lista
+        const index = this.questions.findIndex(q => q.id === updatedQuestion.id);
+        if (index !== -1) {
+          this.questions[index] = updatedQuestion;
+        }
+
+        this.editSuccessMessage = 'Pergunta atualizada com sucesso!';
+        this.isUpdating = false;
+
+        // Sair do modo de edição após 1.5 segundos
+        setTimeout(() => {
+          this.cancelEdit();
+        }, 1500);
+      },
+      error: (err) => {
+        console.error('Erro ao atualizar pergunta:', err);
+        this.editErrorMessage = 'Erro ao atualizar pergunta. Tente novamente.';
+        this.isUpdating = false;
+      }
+    });
+  }
+
   private resetForm(): void {
     this.questionDTO = {
       title: '',
@@ -108,5 +178,10 @@ export class QuestionListComponent implements OnInit {
   private clearMessages(): void {
     this.successMessage = '';
     this.errorMessage = '';
+  }
+
+  private clearEditMessages(): void {
+    this.editSuccessMessage = '';
+    this.editErrorMessage = '';
   }
 }
