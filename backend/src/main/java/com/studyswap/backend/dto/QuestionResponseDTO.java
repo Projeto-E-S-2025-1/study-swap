@@ -7,13 +7,15 @@ public class QuestionResponseDTO {
     private String title;
     private String description;
     private String authorName;
+    private Long authorId;
     private LocalDateTime createdAt;
 
-    public QuestionResponseDTO(Long id, String title, String description, String authorName, LocalDateTime createdAt) {
+    public QuestionResponseDTO(Long id, String title, String description, String authorName, Long authorId, LocalDateTime createdAt) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.authorName = authorName;
+        this.authorId = authorId;
         this.createdAt = createdAt;
     }
 
@@ -47,6 +49,14 @@ public class QuestionResponseDTO {
 
     public void setAuthorName(String authorName) {
         this.authorName = authorName;
+    }
+
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
     }
 
     public LocalDateTime getCreatedAt() {
