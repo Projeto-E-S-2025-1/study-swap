@@ -34,7 +34,6 @@ export class ListMaterial implements OnInit {
       },
       error: (err) => {
         this.errorMessage = 'Erro ao carregar materiais.';
-        console.error('Erro ao buscar materiais:', err);
         this.isLoading = false;
       }
     });

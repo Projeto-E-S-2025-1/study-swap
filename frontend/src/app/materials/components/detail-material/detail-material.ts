@@ -35,7 +35,6 @@ export class DetailMaterial implements OnInit {
           this.isLoading = false;
         },
         error: (error) => {
-          console.error('Erro ao buscar material:', error);
           this.errorMessage = 'Não foi possível carregar o material.';
           this.isLoading = false;
         }
