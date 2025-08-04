@@ -1,8 +1,9 @@
 export interface Question {
-  id?: number;
+  id: number;
   title: string;
   description: string;
   authorName: string;
+  authorId: number;
   createdAt?: string;
 }
 
