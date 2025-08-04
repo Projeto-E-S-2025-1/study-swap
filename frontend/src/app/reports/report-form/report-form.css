@@ -1,0 +1,44 @@
+.report-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 24px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+}
+
+.report-container h2 {
+  margin-bottom: 16px;
+  font-size: 24px;
+}
+
+.report-container label {
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  font-weight: bold;
+}
+
+.report-container select,
+.report-container textarea {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.report-container button {
+  margin-top: 20px;
+  padding: 10px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+.report-container button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
