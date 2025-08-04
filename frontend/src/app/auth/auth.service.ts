@@ -1,8 +1,8 @@
 // src/app/auth/auth.service.ts
-import { Injectable, PLATFORM_ID, Inject, Injector } from '@angular/core'; 
+import { Injectable, PLATFORM_ID, Inject, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { isPlatformBrowser } from '@angular/common'; 
+import { isPlatformBrowser } from '@angular/common';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { tap } from 'rxjs/operators';
 
@@ -15,22 +15,19 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    @Inject(PLATFORM_ID) private platformId: Object, // Injete PLATFORM_ID
-    private injector: Injector // Injete Injector para resolver JwtHelperService condicionalmente
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private injector: Injector
   ) {
-    this.isBrowser = isPlatformBrowser(platformId); // Define se estamos no navegador
+    this.isBrowser = isPlatformBrowser(platformId);
 
-    // Instancia JwtHelperService apenas no navegador
     if (this.isBrowser) {
       this.jwtHelper = new JwtHelperService();
     } else {
-      // Forneça uma implementação dummy ou null para o ambiente de servidor
-      // Isso evita o erro de "localStorage is not defined"
       this.jwtHelper = {
         isTokenExpired: () => true,
         tokenGetter: () => null,
         decodeToken: () => null
-      } as unknown as JwtHelperService; 
+      } as unknown as JwtHelperService;
     }
   }
 
@@ -38,7 +35,7 @@ export class AuthService {
     return this.http.post<{ token: string }>(`${this.api}/login`, credentials)
       .pipe(
         tap((response: { token: string }) => {
-          if (this.isBrowser && response && response.token) { // Use isBrowser
+          if (this.isBrowser && response && response.token) {
             localStorage.setItem('token', response.token);
           }
         })
@@ -58,7 +55,7 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    if (!this.isBrowser) { 
+    if (!this.isBrowser) {
       return false;
     }
     const token = localStorage.getItem('token');
@@ -66,11 +63,12 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    if (!this.isBrowser) { 
+    if (!this.isBrowser) {
       return null;
     }
     return localStorage.getItem('token');
   }
+
   decodeToken(token: string): any {
     if (!this.isBrowser || !token) {
       return null;
@@ -79,6 +77,25 @@ export class AuthService {
       return this.jwtHelper.decodeToken(token);
     } catch (error) {
       console.error('Erro ao decodificar o token:', error);
+      return null;
+    }
+  }
+
+  getUserId(): number | null {
+    if (!this.isBrowser) {
+      return null;
+    }
+
+    const token = this.getToken();
+    if (!token || this.jwtHelper.isTokenExpired(token)) {
+      return null;
+    }
+
+    try {
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      return decodedToken?.userId || null;
+    } catch (error) {
+      console.error('Erro ao extrair ID do usuário do token:', error);
       return null;
     }
   }
