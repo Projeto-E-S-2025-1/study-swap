@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { MaterialService } from '../../services/material.service';
 import { Material } from '../../models/material.model';
 import { QuestionListComponent } from '../question-list/question-list';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-detail-material',
@@ -17,10 +18,13 @@ export class DetailMaterial implements OnInit {
   material: Material & { id: number } | null = null;
   isLoading: boolean = true;
   errorMessage: string = '';
+  isOwner: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
-    private materialService: MaterialService
+    private router: Router,
+    private materialService: MaterialService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -32,6 +36,7 @@ export class DetailMaterial implements OnInit {
       this.materialService.getById(id).subscribe({
         next: (data) => {
           this.material = data as any;
+          this.isOwner = this.authService.getUserId() == this.material?.userId;
           this.isLoading = false;
         },
         error: (error) => {
@@ -47,5 +52,17 @@ export class DetailMaterial implements OnInit {
 
   get materialId(): number | null {
     return this.material ? this.material.id : null;
+  }
+
+  apagarMaterial() : void{
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.materialService.delete(id).subscribe({
+        next: () => {
+        },
+        error: (error) => {
+          console.error(error.message);
+        }
+      });
+    this.router.navigate(['/material']);
   }
 }

@@ -24,7 +24,8 @@ export class FormMaterial implements OnInit {
     materialType: MaterialType.LIVRO,
     conservationStatus: ConservationStatus.NOVO,
     transactionType: TransactionType.DOACAO,
-    price: 0 as number | null
+    price: 0 as number | null,
+    userId: 0 as number
   };
 
   materialFile?: File;
@@ -80,6 +81,8 @@ export class FormMaterial implements OnInit {
     if (materialToSend.transactionType !== TransactionType.VENDA) {
       materialToSend.price = null;
     }
+    materialToSend.userId = Number(this.authService.getUserId());
+    console.log(materialToSend.userId);
   
     this.materialService.create(materialToSend, this.selectedFile).subscribe({
       next: () => {

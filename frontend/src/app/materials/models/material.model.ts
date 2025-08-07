@@ -7,6 +7,7 @@ export interface Material {
     transactionType: TransactionType;
     price?: number | null;
     photoUrl?: string;
+    userId: number;
 }
 
 export enum MaterialType {

@@ -67,3 +67,36 @@
   .detalhe-material-atributos strong {
     color: #1976d2;
   }
+
+  .botao-editar {
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .botao-excluir {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .detalhe-material-acoes {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-shrink: 0;
+    padding: 32px 20px;
+    background: #f7f7f7;
+    gap: 32px;
+  }
