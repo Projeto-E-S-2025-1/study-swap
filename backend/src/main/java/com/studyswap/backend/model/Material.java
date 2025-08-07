@@ -66,8 +66,18 @@ public class Material {
 
     @OneToMany(mappedBy = "material", cascade = CascadeType.ALL)
     private List<Question> questions;
+    
+    private boolean available=true;
+    
+    public boolean isAvailable() {
+		return available;
+	}
 
-    public Material() {
+	public void setAvailable(boolean available) {
+		this.available = available;
+	}
+
+	public Material() {
     }
 
     public Material(String title, String description, MaterialType materialType,

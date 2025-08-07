@@ -6,6 +6,7 @@ import com.studyswap.backend.model.MaterialType;
 import com.studyswap.backend.model.TransactionType;
 
 public class MaterialResponseDTO {
+    private boolean available;
     private Long id;
     private String title;
     private String description;
@@ -17,11 +18,11 @@ public class MaterialResponseDTO {
     private Long userId;
     private String userName;
 
-    public MaterialResponseDTO() {}
+	public MaterialResponseDTO() {}
 
     public MaterialResponseDTO(Long id, String title, String description, MaterialType materialType,
             ConservationStatus conservationStatus, TransactionType transactionType,
-            Double price, String photo, Long userId, String userName) {
+            Double price, String photo, Long userId, String userName, boolean available) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -32,6 +33,14 @@ public class MaterialResponseDTO {
         this.photo = photo;
         this.userId = userId;
         this.userName = userName;
+        this.available=available;
+    }
+    public boolean isAvailable() {
+    	return available;
+    }
+    
+    public void setAvailable(boolean available) {
+    	this.available = available;
     }
 
     public Long getId() {

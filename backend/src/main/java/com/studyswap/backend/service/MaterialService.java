@@ -109,6 +109,7 @@ public class MaterialService {
         entity.setTransactionType(materialDTO.getTransactionType());
         entity.setPrice(materialDTO.getPrice());
         entity.setPhoto(materialDTO.getPhoto());
+        entity.setAvailable(materialDTO.isAvailable());
     }
 
     private MaterialResponseDTO convertToResponseDTO(Material material) {
@@ -122,7 +123,8 @@ public class MaterialService {
             material.getPrice(),
             material.getPhoto(),
             material.getUser().getId(),
-            material.getUser().getName()
+            material.getUser().getName(),
+            material.isAvailable()
         );
     }
 
