@@ -17,6 +17,10 @@
           <strong>Preço:</strong> R$ {{ material?.price }}
         </span>
       </div>
+      <div class="detalhe-material-acoes" *ngIf="isOwner == true">
+        <button class="botao-editar">Editar material</button>
+        <button class="botao-excluir" (click) = "apagarMaterial()">Excluir material</button>
+      </div>
       <div class="denuncia-menu-wrapper" (clickOutside)="showMenu = false">
         <button class="denunciar-btn" (click)="toggleMenu()">
           Denunciar
