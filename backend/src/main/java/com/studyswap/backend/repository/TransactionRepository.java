@@ -8,8 +8,5 @@ import com.studyswap.backend.model.Transaction;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long>{
-    
-    Transaction findByTransactionId(Long materialId);
-
     List<Transaction> findByStatus(String status);
 }
