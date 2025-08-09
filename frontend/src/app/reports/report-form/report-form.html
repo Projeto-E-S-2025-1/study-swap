@@ -4,7 +4,9 @@
   <label for="reason">Motivo:</label>
   <select id="reason" [(ngModel)]="reason" required>
     <option value="" disabled selected>Selecione um motivo</option>
-    <option *ngFor="let r of reasons" [value]="r.value">{{ r.label }}</option>
+    @for (r of reasons; track r.value) {
+      <option [value]="r.value">{{ r.label }}</option>
+    }
   </select>
 
   <label for="description">Descrição (opcional):</label>

@@ -5,9 +5,9 @@
   </div>
 
   <div class="product-grid">
-    <div *ngFor="let produto of materials" class="product-card" [routerLink]="['/materials', produto.id]" style="cursor: pointer;">
+    <div *ngFor="let produto of materials" class="product-card" [routerLink]="['/material', produto.id]" style="cursor: pointer;">
       <img
-      [src]="produto.photoUrl ? 'http://localhost:8080' + produto.photoUrl : 'http://localhost:8080/images/default-photo.png'"
+      [src]="produto.photo ? 'http://localhost:8080' + produto.photo : 'http://localhost:8080/images/default-photo.png'"
       [alt]="produto.title"
       class="product-image"
       />
