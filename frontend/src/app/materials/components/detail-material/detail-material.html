@@ -2,7 +2,7 @@
   <div class="detalhe-material-card">
     <img
       class="detalhe-material-imagem"
-      src="http://localhost:8080/images/default-photo.png"
+      [src]="material?.photo ? 'http://localhost:8080' + material?.photo : 'http://localhost:8080/images/default-photo.png'"
       [alt]="material?.title"
     />
 
@@ -16,6 +16,28 @@
         <span *ngIf="material?.transactionType === 'VENDA'">
           <strong>Preço:</strong> R$ {{ material?.price }}
         </span>
+      </div>
+      <div class="denuncia-menu-wrapper" (clickOutside)="showMenu = false">
+        <button class="denunciar-btn" (click)="toggleMenu()">
+          Denunciar
+        </button>
+
+        <div class="denuncia-opcoes" *ngIf="showMenu">
+          <a
+            *ngIf="materialId !== null"
+            [routerLink]="['/report']"
+            [queryParams]="{ materialId: materialId }"
+          >
+            Denunciar Material
+          </a>
+          <a
+            *ngIf="material?.userId"
+            [routerLink]="['/report']"
+            [queryParams]="{ userId: material?.userId }"
+          >
+            Denunciar Usuário
+          </a>
+        </div>
       </div>
     </div>
   </div>

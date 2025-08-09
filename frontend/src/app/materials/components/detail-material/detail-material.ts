@@ -17,6 +17,11 @@ export class DetailMaterial implements OnInit {
   material: Material & { id: number } | null = null;
   isLoading: boolean = true;
   errorMessage: string = '';
+  showMenu: boolean = false;
+
+  toggleMenu(): void {
+    this.showMenu = !this.showMenu;
+  }
 
   constructor(
     private route: ActivatedRoute,

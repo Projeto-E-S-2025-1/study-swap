@@ -23,16 +23,14 @@ public class ReviewService {
     public Review createReview(ReviewRequestDTO dto, Authentication authentication){
         User user = (User) authentication.getPrincipal();
 
-        var transacao = transacaoRepository.findByTransactionId(dto.getTransactionId());
-        if (transacao == null) {
-            throw new RuntimeException("Transacao nao realizada");
-        }
+        var transacao = transacaoRepository.findById(dto.getTransactionId())
+        .orElseThrow(() -> new RuntimeException("Transação não realizada"));
 
         if (!transacao.getReceiver().getId().equals(user.getId())) {
             throw new SecurityException("Você não tem permissão para avaliar essa transação.");
         }
 
-        if (avaliacaoRepository.findByTransacaoId(dto.getTransactionId()) != null) {
+        if (avaliacaoRepository.findByTransactionId(dto.getTransactionId()) != null) {
             throw new IllegalStateException("Essa transação já foi avaliada.");
         }
 

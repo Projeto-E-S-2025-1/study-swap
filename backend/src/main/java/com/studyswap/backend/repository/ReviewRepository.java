@@ -6,5 +6,5 @@ import com.studyswap.backend.model.Review;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long>{
-    Review findByTransacaoId(Long avaliacaoId);
+    Review findByTransactionId(Long transactionId);
 }
