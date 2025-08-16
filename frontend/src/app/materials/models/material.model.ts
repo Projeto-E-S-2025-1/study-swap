@@ -6,8 +6,9 @@ export interface Material {
     conservationStatus: ConservationStatus;
     transactionType: TransactionType;
     price?: number | null;
-    photoUrl?: string;
-    userId: number;
+    photo?: string;
+    userId?: number;
+    userName?: string;
 }
 
 export enum MaterialType {

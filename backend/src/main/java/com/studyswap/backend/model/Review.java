@@ -34,8 +34,8 @@ public class Review {
     @NotBlank(message = "Descrição obrigatória")
     private String description;
 
-    @Column(name = "transacao_id", updatable = false)
     @OneToOne
+    @JoinColumn(name = "transacao_id", updatable = false)
     private Transaction transaction;
 
     @Column(updatable = false, nullable = false)

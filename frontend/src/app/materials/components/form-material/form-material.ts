@@ -86,7 +86,7 @@ export class FormMaterial implements OnInit {
     this.materialService.create(materialToSend, this.selectedFile).subscribe({
       next: () => {
         this.successMessage = 'Material cadastrado com sucesso!';
-        setTimeout(() => this.router.navigate(['/materials']), 1500);
+        setTimeout(() => this.router.navigate(['/material']), 1500);
         this.materialAdicionado.emit(materialToSend);
       },
       error: (err) => {

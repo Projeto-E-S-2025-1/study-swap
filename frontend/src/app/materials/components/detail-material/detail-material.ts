@@ -19,6 +19,11 @@ export class DetailMaterial implements OnInit {
   isLoading: boolean = true;
   errorMessage: string = '';
   isOwner: boolean = false;
+  showMenu: boolean = false;
+
+  toggleMenu(): void {
+    this.showMenu = !this.showMenu;
+  }
 
   constructor(
     private route: ActivatedRoute,
