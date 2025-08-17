@@ -47,10 +47,9 @@ export class ListMaterial implements OnInit {
   }
 
   carregarMateriaisFiltrados(titulo: string, tipo: string): void {
-    
     this.isLoading = true;
     let filtro = '';
-    filtro += 'title=' + titulo.trim() + '&materialtype=' + tipo;
+    filtro += 'title=' + titulo.trim() + '&materialType=' + tipo;
 
     if(filtro.trim() == ''){
       this.isFiltered = false;
