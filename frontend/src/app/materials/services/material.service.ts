@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { Material } from '../models/material.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MaterialService {
-  private readonly API_URL = 'http://localhost:8080/material';
+  private readonly API_URL = `${environment.apiUrl}/material`;
   private http = inject(HttpClient);
   router = inject(Router);
 

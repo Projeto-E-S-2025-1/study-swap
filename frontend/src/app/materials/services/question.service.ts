@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Question } from '../models/question.model';
 import { AuthService } from '../../auth/auth.service';
+import { environment } from '../../../environments/environment';
 
 export interface CreateQuestionDTO {
   title: string;
@@ -19,7 +20,7 @@ export interface UpdateQuestionDTO {
   providedIn: 'root'
 })
 export class QuestionService {
-  private readonly API_URL = 'http://localhost:8080/questions';
+  private readonly API_URL = `${environment.apiUrl}/questions`;
   private http = inject(HttpClient);
   private authService = inject(AuthService);
 
