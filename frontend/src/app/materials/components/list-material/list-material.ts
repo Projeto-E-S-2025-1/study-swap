@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { Material } from '../../models/material.model';
 import { MaterialService } from '../../services/material.service';
 import { FormMaterial } from '../form-material/form-material';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-list-materials',
@@ -20,6 +21,8 @@ export class ListMaterial implements OnInit {
 
   showModal: boolean = false;
 
+  apiUrl = environment.apiUrl;
+
   constructor(private materialService: MaterialService) {}
 
   ngOnInit(): void {
@@ -32,7 +35,7 @@ export class ListMaterial implements OnInit {
         this.materials = data;
         this.isLoading = false;
       },
-      error: (err) => {
+      error: () => {
         this.errorMessage = 'Erro ao carregar materiais.';
         this.isLoading = false;
       }
