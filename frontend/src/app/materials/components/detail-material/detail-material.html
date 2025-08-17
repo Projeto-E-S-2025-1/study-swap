@@ -2,7 +2,7 @@
   <div class="detalhe-material-card">
     <img
       class="detalhe-material-imagem"
-      [src]="material?.photo ? 'http://localhost:8080' + material?.photo : 'http://localhost:8080/images/default-photo.png'"
+      [src]="material?.photo ? apiUrl + material?.photo : apiUrl + '/images/default-photo.png'"
       [alt]="material?.title"
     />
 

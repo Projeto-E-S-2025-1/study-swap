@@ -6,6 +6,7 @@ import { MaterialService } from '../../services/material.service';
 import { Material } from '../../models/material.model';
 import { QuestionListComponent } from '../question-list/question-list';
 import { AuthService } from '../../../auth/auth.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-detail-material',
@@ -15,15 +16,13 @@ import { AuthService } from '../../../auth/auth.service';
   styleUrls: ['./detail-material.css']
 })
 export class DetailMaterial implements OnInit {
-  material: Material & { id: number } | null = null;
+  material: (Material & { id: number }) | null = null;
   isLoading: boolean = true;
   errorMessage: string = '';
   isOwner: boolean = false;
   showMenu: boolean = false;
 
-  toggleMenu(): void {
-    this.showMenu = !this.showMenu;
-  }
+  apiUrl = environment.apiUrl;
 
   constructor(
     private route: ActivatedRoute,
@@ -31,6 +30,10 @@ export class DetailMaterial implements OnInit {
     private materialService: MaterialService,
     private authService: AuthService
   ) {}
+
+  toggleMenu(): void {
+    this.showMenu = !this.showMenu;
+  }
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
@@ -44,7 +47,7 @@ export class DetailMaterial implements OnInit {
           this.isOwner = this.authService.getUserId() == this.material?.userId;
           this.isLoading = false;
         },
-        error: (error) => {
+        error: () => {
           this.errorMessage = 'Não foi possível carregar o material.';
           this.isLoading = false;
         }
@@ -59,7 +62,7 @@ export class DetailMaterial implements OnInit {
     return this.material ? this.material.id : null;
   }
 
-  apagarMaterial() : void{
+  apagarMaterial(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.materialService.delete(id).subscribe({
         next: () => {
