@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.studyswap</groupId>
-	<artifactId>api</artifactId>
+	<artifactId>study-swap</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>api</name>
+	<name>study-swap</name>
 	<description>Academic material sharing and reuse platform</description>
 	<url/>
 	<licenses>

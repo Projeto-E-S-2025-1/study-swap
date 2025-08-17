@@ -10,6 +10,6 @@ FROM openjdk:21-jdk
 
 EXPOSE 8080
 
-COPY --from=build /target/housing-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /target/study-swap-0.0.1-SNAPSHOT.jar app.jar
 
 ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "app.jar"]
