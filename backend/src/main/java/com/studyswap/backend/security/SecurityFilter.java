@@ -26,17 +26,26 @@ public class SecurityFilter extends OncePerRequestFilter {
     private UserRepository userRepository;
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getRequestURI();
+        return path.startsWith("/auth/login") || path.startsWith("/auth/register") || path.startsWith("/uploads") || path.startsWith("/images");
+    }
+
+    @Override
     protected void doFilterInternal(
-        @NonNull HttpServletRequest request, 
-        @NonNull HttpServletResponse response, 
+        @NonNull HttpServletRequest request,
+        @NonNull HttpServletResponse response,
         @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
+
         var token = this.recoverToken(request);
 
         if (token != null) {
             String login = this.tokenService.validateToken(token);
             userRepository.findByEmail(login).ifPresent(user -> {
-                var auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                var auth = new UsernamePasswordAuthenticationToken(
+                    user, null, user.getAuthorities()
+                );
                 SecurityContextHolder.getContext().setAuthentication(auth);
             });
         }
