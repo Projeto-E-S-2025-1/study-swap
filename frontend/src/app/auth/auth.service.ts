@@ -1,14 +1,14 @@
-// src/app/auth/auth.service.ts
 import { Injectable, PLATFORM_ID, Inject, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private api = 'http://localhost:8080/auth';
+  private api = `${environment.apiUrl}/auth`;
   private jwtHelper: JwtHelperService;
   private isBrowser: boolean;
 
@@ -43,12 +43,11 @@ export class AuthService {
   }
 
   register(data: any) {
-    console.log('PASSO 3.1: AuthService recebendo dados para registro:', data);
     return this.http.post<any>(`${this.api}/register`, data);
   }
 
   logout() {
-    if (this.isBrowser) { // Use isBrowser
+    if (this.isBrowser) {
       localStorage.removeItem('token');
     }
     this.router.navigate(['/login']);
