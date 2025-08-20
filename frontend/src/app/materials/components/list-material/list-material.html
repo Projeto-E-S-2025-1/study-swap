@@ -4,7 +4,39 @@
     <button class="login-btn" type="button" (click)="openModal()">+ Adicionar</button>
   </div>
 
-  <div class="product-grid">
+  <div class="vitrine-filter">
+    <div>
+      <textarea name="textFilter" class="textFilter" [(ngModel)]="textFilter" placeholder="Título"></textarea>
+    </div>
+    <div>
+      <label for="typeFilter">Tipo</label>
+      <select name="typeFilter" class="form-control" [(ngModel)]="typeFilter">
+        <option *ngFor="let type of materialTypes" [value]="type">
+          {{ type }}
+        </option>
+      </select>
+    </div>
+    <div>
+      <button class="login-btn" type="button" (click)="carregarMateriaisFiltrados(textFilter, typeFilter)">Filtrar</button>
+    </div>
+  </div>
+
+  <div class="product-grid" *ngIf="isFiltered">
+    <div *ngFor="let produto of materials" class="product-card" [routerLink]="['/material', produto.id]" style="cursor: pointer;">
+      <img
+      [src]="produto.photo ? 'http://localhost:8080' + produto.photo : 'http://localhost:8080/images/default-photo.png'"
+      [alt]="produto.title"
+      class="product-image"
+      />
+      <div class="product-info">
+        <h3 class="product-name">{{ produto.title }}</h3>
+        <p class="product-price" *ngIf="produto.price !== null">R$ {{ produto.price }}</p>
+        <p class="product-price" *ngIf="produto.price === null">{{ produto.transactionType }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-grid" *ngIf="!isFiltered">
     <div *ngFor="let produto of materials" class="product-card" [routerLink]="['/material', produto.id]" style="cursor: pointer;">
       <img
         [src]="produto.photo ? apiUrl + produto.photo : apiUrl + '/images/default-photo.png'"

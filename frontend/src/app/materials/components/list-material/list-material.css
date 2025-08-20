@@ -109,3 +109,23 @@
     cursor: pointer;
   }
   
+  .vitrine-filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+
+  .vitrine-filter div {
+    max-width: fit-content;
+  }
+
+  .textFilter {
+    width: 100%;
+    height: 3.5em;
+    padding: 0.85rem 1.25rem;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    font-size: 1rem;
+    background-color: #ffffff;
+  }

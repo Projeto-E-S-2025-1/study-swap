@@ -82,7 +82,6 @@ export class FormMaterial implements OnInit {
       materialToSend.price = null;
     }
     materialToSend.userId = Number(this.authService.getUserId());
-    console.log(materialToSend.userId);
   
     this.materialService.create(materialToSend, this.selectedFile).subscribe({
       next: () => {
