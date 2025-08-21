@@ -2,13 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CreateReportDTO } from './dto/create-report.dto';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReportService {
 
-  private apiUrl = '/report';
+  private apiUrl = `${environment.apiUrl}/report`;
 
   constructor(private http: HttpClient) {}
 
