@@ -26,7 +26,10 @@ jobs:
 
       - name: Compilar e rodar testes com perfil de testes
         working-directory: ./backend
+        env:
+          API_SECURITY_AUTH_TOKEN_SECRET: ${{ secrets.API_SECURITY_AUTH_TOKEN_SECRET }}
         run: mvn clean verify -Dspring.profiles.active=test
+        
       
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
