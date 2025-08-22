@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Configurar JDK 21
         uses: actions/setup-java@v3
@@ -24,15 +26,30 @@ jobs:
           java-version: '21'
           cache: maven
 
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
       - name: Compilar e rodar testes com perfil de testes
         working-directory: ./backend
         env:
           API_SECURITY_AUTH_TOKEN_SECRET: ${{ secrets.API_SECURITY_AUTH_TOKEN_SECRET }}
         run: mvn clean verify -Dspring.profiles.active=test
-        
-      
+
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
           name: jacoco-report
           path: backend/target/site/jacoco/
+
+      - name: Analisar com SonarCloud
+        working-directory: ./backend
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+          -Dsonar.projectKey=Projeto-E-S-2025-1_study-swap \
+          -Dsonar.organization=projeto-es-2025-1 \
+          -Dsonar.host.url=https://sonarcloud.io
