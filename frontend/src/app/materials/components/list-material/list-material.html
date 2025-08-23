@@ -6,7 +6,8 @@
 
   <div class="vitrine-filter">
     <div>
-      <textarea name="textFilter" class="textFilter" [(ngModel)]="textFilter" placeholder="Título"></textarea>
+      <label for="textFilter">Título</label>
+      <textarea name="textFilter" class="textFilter" [(ngModel)]="textFilter"></textarea>
     </div>
     <div>
       <label for="typeFilter">Tipo</label>
@@ -17,7 +18,23 @@
       </select>
     </div>
     <div>
-      <button class="login-btn" type="button" (click)="carregarMateriaisFiltrados(textFilter, typeFilter)">Filtrar</button>
+      <label for="conservationFilter">Estado de Conservação</label>
+      <select name="conservationFilter" class="form-control" [(ngModel)]="conservationFilter">
+        <option *ngFor="let type of conservationStatus" [value]="type">
+          {{ type }}
+        </option>
+      </select>
+    </div>
+    <div>
+      <label for="transactionFilter">Tipo de Transação</label>
+      <select name="transactionFilter" class="form-control" [(ngModel)]="transactionFilter">
+        <option *ngFor="let type of transactionTypes" [value]="type">
+          {{ type }}
+        </option>
+      </select>
+    </div>
+    <div>
+      <button class="login-btn" type="button" (click)="carregarMateriaisFiltrados(textFilter, typeFilter, conservationFilter, transactionFilter)">Filtrar</button>
     </div>
   </div>
 
