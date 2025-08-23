@@ -3,7 +3,6 @@ package com.studyswap.backend.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +18,15 @@ import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class QuestionService {
-    @Autowired
+
     private QuestionRepository questionRepository;
 
-    @Autowired
     private MaterialRepository materialRepository;
+
+    public QuestionService(QuestionRepository questionRepository, MaterialRepository materialRepository) {
+        this.questionRepository = questionRepository;
+        this.materialRepository = materialRepository;
+    }
 
     public Question createQuestion(CreateQuestionDTO dto, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
