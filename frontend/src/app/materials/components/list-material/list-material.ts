@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
-import { Material, MaterialType } from '../../models/material.model';
+import { ConservationStatus, Material, MaterialType, TransactionType } from '../../models/material.model';
 import { MaterialService } from '../../services/material.service';
 import { FormMaterial } from '../form-material/form-material';
 import { environment } from '../../../../environments/environment';
@@ -18,6 +18,8 @@ import { environment } from '../../../../environments/environment';
 export class ListMaterial implements OnInit {
   materials: Material[] = [];
   materialTypes = Object.values(MaterialType);
+  conservationStatus = Object.values(ConservationStatus);
+  transactionTypes = Object.values(TransactionType);
   isLoading: boolean = true;
   errorMessage: string = '';
 
@@ -26,6 +28,8 @@ export class ListMaterial implements OnInit {
 
   textFilter: string = '';
   typeFilter: string = '';
+  conservationFilter: string = '';
+  transactionFilter: string = '';
 
   apiUrl = environment.apiUrl;
 
@@ -49,10 +53,10 @@ export class ListMaterial implements OnInit {
     });
   }
 
-  carregarMateriaisFiltrados(titulo: string, tipo: string): void {
+  carregarMateriaisFiltrados(titulo: string, tipo: string, conservation: string, transaction: string): void {
     this.isLoading = true;
     let filtro = '';
-    filtro += 'title=' + titulo.trim() + '&materialType=' + tipo;
+    filtro += 'title=' + titulo.trim() + '&materialType=' + tipo + '&conservationStatus=' + conservation + '&transactionType=' + transaction;
 
     if(filtro.trim() == ''){
       this.isFiltered = false;
