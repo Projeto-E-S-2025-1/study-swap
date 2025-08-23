@@ -20,13 +20,17 @@ import com.studyswap.backend.service.MaterialService;
 
 @RestController
 @RequestMapping("/material")
+
 public class MaterialController {
 
-    @Autowired
     private MaterialService materialService;
 
-    @Autowired
     private AuthService authService;
+
+    public MaterialController(MaterialService materialService, AuthService authService){
+        this.materialService = materialService;
+        this.authService = authService;
+    }
 
     @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity<MaterialResponseDTO> createMaterial(
