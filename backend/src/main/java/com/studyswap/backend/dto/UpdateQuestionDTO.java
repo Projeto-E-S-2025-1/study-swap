@@ -4,8 +4,6 @@ public class UpdateQuestionDTO {
     private String title;      
     private String description;
 
-    public UpdateQuestionDTO() {}
-
     public String getTitle() {
         return title;
     }
