@@ -1,6 +1,5 @@
 package com.studyswap.backend.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
@@ -13,11 +12,14 @@ import com.studyswap.backend.repository.TransactionRepository;
 
 @Service
 public class ReviewService {
-    @Autowired
     private ReviewRepository avaliacaoRepository;
 
-    @Autowired
     private TransactionRepository transacaoRepository;
+
+    public ReviewService(ReviewRepository avaliacaoRepository, TransactionRepository transacaoRepository) {
+        this.avaliacaoRepository = avaliacaoRepository;
+        this.transacaoRepository = transacaoRepository;
+    }
 
     @Transactional
     public Review createReview(ReviewRequestDTO dto, Authentication authentication){
