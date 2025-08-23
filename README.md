@@ -6,12 +6,12 @@
 
 ## 👥 Equipe
 
-- David Saymmon dos Santos Felipe  
-- Edielson Rodrigues de Souza Silva  
-- José Matheus Nogueira Luciano  
-- Luís Filipe de Barros Ferreira  
-- Stênio Medeiros Freitas  
-- Jeasiel Abner Silva Maciel  
+* David Saymmon dos Santos Felipe
+* Edielson Rodrigues de Souza Silva
+* José Matheus Nogueira Luciano
+* Luís Filipe de Barros Ferreira
+* Stênio Medeiros Freitas
+* Jeasiel Abner Silva Maciel
 
 ---
 
@@ -19,10 +19,10 @@
 
 A plataforma tem como objetivo **reduzir o descarte desnecessário de materiais acadêmicos** e fomentar a **economia circular** na comunidade universitária. Usuários podem anunciar ou buscar por:
 
-- Livros didáticos usados  
-- Cadernos, apostilas e anotações  
-- Equipamentos de laboratório em bom estado  
-- Mobiliário acadêmico (mesas, cadeiras, suportes etc.)
+* Livros didáticos usados
+* Cadernos, apostilas e anotações
+* Equipamentos de laboratório em bom estado
+* Mobiliário acadêmico (mesas, cadeiras, suportes etc.)
 
 Os itens podem ser **doados, trocados ou vendidos**, promovendo um consumo consciente entre estudantes e professores.
 
@@ -30,22 +30,29 @@ Os itens podem ser **doados, trocados ou vendidos**, promovendo um consumo consc
 
 ## 🧩 Funcionalidades Previstas
 
-- Cadastro de usuários (estudantes e professores)  
-- Publicação de anúncios com fotos, descrições e categorias  
-- Filtros de busca por tipo de material, curso ou disciplina  
-- Chat interno para negociação direta entre usuários  
-- Sistema de reputação/avaliação entre usuários  
-- Interface simples e responsiva  
+* Cadastro de usuários (estudantes e professores)
+* Publicação de anúncios com fotos, descrições e categorias
+* Filtros de busca por tipo de material, curso ou disciplina
+* Chat interno para negociação direta entre usuários
+* Sistema de reputação/avaliação entre usuários
+* Interface simples e responsiva
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
-| Camada     | Tecnologia                       |
-|------------|----------------------------------|
-| Frontend   | [Angular](https://angular.io/)                          |
-| Backend    | [Spring Boot (Java)](https://spring.io/projects/spring-boot) |
-| Gerência   | [GitHub Projects (Scrum Board)](https://github.com/orgs/Projeto-E-S-2025-1/projects/7/views/1?custom_template=2) |
+| Camada   | Tecnologia                                                                                                       |
+| -------- | ---------------------------------------------------------------------------------------------------------------- |
+| Frontend | [Angular](https://angular.io/)                                                                                   |
+| Backend  | [Spring Boot (Java)](https://spring.io/projects/spring-boot)                                                     |
+| Gerência | [GitHub Projects (Scrum Board)](https://github.com/orgs/Projeto-E-S-2025-1/projects/7/views/1?custom_template=2) |
+
+---
+
+## 🌐 Deploy
+
+* 👉 [Study Swap - Frontend](https://study-swap-frontend.onrender.com/)
+* 👉 [Study Swap - Backend](https://study-swap-backend.onrender.com/)
 
 ---
 
@@ -77,6 +84,8 @@ Em seguida, edite o arquivo `application.properties` copiado e preencha com suas
 
 > ⚠️ **Importante:** Não versionar esse arquivo. Ele deve conter apenas suas configurações locais e nunca deve ser enviado para o repositório Git.
 
+---
+
 ## ⚙️ Execução Local
 
 ### 🔹 Backend (Spring Boot)
@@ -87,8 +96,6 @@ cd backend
 # ou, se estiver usando Gradle:
 # ./gradlew bootRun
 ```
-
-
 
 ### 🔹 Frontend (Angular)
 
