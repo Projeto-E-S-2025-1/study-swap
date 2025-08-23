@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/report")
 public class ReportController {
 
-    private ReportService reportService;
+    private final ReportService reportService;
 
     public ReportController(ReportService reportService) {
         this.reportService = reportService;

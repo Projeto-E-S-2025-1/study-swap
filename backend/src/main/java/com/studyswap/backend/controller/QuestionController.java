@@ -21,7 +21,7 @@ import com.studyswap.backend.service.QuestionService;
 @RequestMapping("/questions")
 public class QuestionController{
 	
-	private QuestionService questionService;
+	private final QuestionService questionService;
 
 	public QuestionController(QuestionService questionService) {
 		this.questionService = questionService;
