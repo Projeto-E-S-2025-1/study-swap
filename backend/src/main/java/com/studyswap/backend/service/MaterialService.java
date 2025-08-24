@@ -137,8 +137,9 @@ public class MaterialService {
             String uploadDir = "uploads/";
             Files.createDirectories(Paths.get(uploadDir));
 
-            String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-            Path path = Paths.get(uploadDir + fileName).normalize();
+            String originalFileName = Paths.get(file.getOriginalFilename()).getFileName().toString();
+            String fileName = UUID.randomUUID() + "_" + originalFileName;
+            Path path = Paths.get(uploadDir).resolve(fileName).normalize();
             Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
             return "/uploads/" + fileName;
