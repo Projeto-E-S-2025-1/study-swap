@@ -44,7 +44,7 @@ public class TransactionService {
 			throw new ResponseStatusException(	
                     HttpStatus.BAD_REQUEST, "Material indisponível");
         }
-		Transaction transaction = new Transaction(material, announcer,
+		Transaction transaction = new Transaction(idMaterial, material, announcer,
 receiver, TransactionStatus.PENDING	);
 		return convertToResponseDTO(transactionRepository.save(transaction));
 	}

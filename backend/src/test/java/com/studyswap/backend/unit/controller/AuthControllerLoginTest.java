@@ -1,5 +1,5 @@
 //study-swap/backend/src/test/unity/app/services/autenticacao
-package com.studyswap.api;
+package com.studyswap.backend.unit.controller;
 
 import com.studyswap.backend.controller.AuthController;
 import com.studyswap.backend.dto.LoginResponseDTO;
@@ -35,7 +35,7 @@ public class AuthControllerLoginTest {
     private TokenService tokenService;
 
     @Mock
-    private AuthService authService; // Pode ser útil em outros testes, mas não neste de login.
+    private AuthService authService; 
 
     @InjectMocks
     private AuthController authController;
@@ -46,14 +46,11 @@ public class AuthControllerLoginTest {
 
     @BeforeEach
     void setUp() {
-        // Prepara os dados de teste
         userLoginDTO = new UserLoginDTO("test@example.com", "password123");
         userPrincipal = new User("Test User", "test@example.com", "encodedPassword", null);
 
-        // Prepara o stub de autenticação
         authentication = new UsernamePasswordAuthenticationToken(userPrincipal, null);
 
-        // Define o comportamento dos stubs (o que eles fazem quando são chamados)
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .thenReturn(authentication);
         when(tokenService.generateToken(any(User.class)))
@@ -62,10 +59,8 @@ public class AuthControllerLoginTest {
 
     @Test
     void testLogin_Success() {
-        // 1. Executa o método que queremos testar
         ResponseEntity<LoginResponseDTO> response = authController.login(userLoginDTO);
 
-        // 2. Verifica se o resultado está correto
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals("mocked-jwt-token-123", response.getBody().getToken());
