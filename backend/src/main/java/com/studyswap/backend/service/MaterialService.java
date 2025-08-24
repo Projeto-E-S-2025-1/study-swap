@@ -21,6 +21,7 @@ import com.studyswap.backend.model.MaterialType;
 import com.studyswap.backend.model.TransactionType;
 import com.studyswap.backend.model.User;
 import com.studyswap.backend.repository.MaterialRepository;
+import com.studyswap.backend.service.exception.FileStorageException;
 
 @Service
 public class MaterialService {
@@ -142,7 +143,7 @@ public class MaterialService {
 
             return "/uploads/" + fileName;
         } catch (IOException e) {
-            throw new RuntimeException("Erro ao salvar o arquivo", e);
+            throw new FileStorageException("Erro ao salvar o arquivo", e);
         }
     }
 }
