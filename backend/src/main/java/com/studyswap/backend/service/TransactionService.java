@@ -68,6 +68,23 @@ receiver, TransactionStatus.PENDING	);
 		transactionRepository.delete(transaction);
 	}
 	
+    @Transactional
+    public TransactionResponseDTO completeTransaction(Authentication auth, Long idTransaction){
+    	User loggedUser = (User) auth.getPrincipal();
+    	Transaction transaction = transactionRepository.findById(idTransaction).orElseThrow(
+    			()-> new ResponseStatusException(
+    					HttpStatus.NOT_FOUND, "Transação não encontrada")
+    			);
+    	if(!isAnnouncer(loggedUser, transaction)) {
+    		throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Apenas o dono do material pode confirmar a transação")
+    	}
+    	if(transaction.getStatus()!=TransactionStatus.PENDING) {
+    		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Só pode-se confirmar transação pendente");
+    	}
+		transaction.setStatus(TransactionStatus.CONCLUDED);
+    	return convertToResponseDTO(transactionRepository.save(transaction));
+    }
+	
     private TransactionResponseDTO convertToResponseDTO(Transaction transaction) {
 		return new TransactionResponseDTO(transaction.getId(), transaction.getTransactionDate(), transaction.getMaterial().getId(), 
 				transaction.getStatus(), transaction.getReceiver().getId(), transaction.getReceiver().getName(),
