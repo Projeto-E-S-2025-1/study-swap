@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
-public class QuestionControllerTest {
+class QuestionControllerTest {
 
     private MockMvc mockMvc;
 
@@ -148,13 +148,13 @@ public class QuestionControllerTest {
                 LocalDateTime.now());
         List<QuestionResponseDTO> questions = Collections.singletonList(responseDTO);
 
-        when(questionService.getQuestionsByMaterial(eq(1L))).thenReturn(questions);
+        when(questionService.getQuestionsByMaterial(1L)).thenReturn(questions);
 
         mockMvc.perform(get("/questions/material/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[0].title").value("Dúvida sobre o livro de física"));
 
-        verify(questionService, times(1)).getQuestionsByMaterial(eq(1L));
+        verify(questionService, times(1)).getQuestionsByMaterial(1L);
     }
 }

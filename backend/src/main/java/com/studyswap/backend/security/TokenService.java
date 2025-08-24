@@ -10,6 +10,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.studyswap.backend.model.User;
+import com.studyswap.backend.security.exception.InvalidTokenException;
+import com.studyswap.backend.security.exception.TokenCreationException;
 
 @Service
 public class TokenService {
@@ -28,7 +30,7 @@ public class TokenService {
                 .withExpiresAt(this.getExpirationAt())
                 .sign(algorithm);
         } catch (JWTCreationException e) {
-            throw new RuntimeException("Error creating token", e);
+            throw new TokenCreationException("Erro ao criar token", e);
         }
     }
 
@@ -41,7 +43,7 @@ public class TokenService {
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException e) {
-            return "";
+            throw new InvalidTokenException("Token inválido ou expirado", e);
         }
     }
 

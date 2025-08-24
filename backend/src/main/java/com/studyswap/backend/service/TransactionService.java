@@ -2,7 +2,6 @@ package com.studyswap.backend.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -21,11 +20,14 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class TransactionService {
-	@Autowired
-	private TransactionRepository transactionRepository;
-	@Autowired
-	private MaterialRepository materialRepository;
+	private final TransactionRepository transactionRepository;
+	private final MaterialRepository materialRepository;
 		
+	public TransactionService(TransactionRepository transactionRepository, MaterialRepository materialRepository) {
+		this.transactionRepository = transactionRepository;
+		this.materialRepository = materialRepository;
+	}
+
 	@Transactional
 	public TransactionResponseDTO createTransaction(Authentication auth, Long idMaterial){
 		Material material = materialRepository.findById(idMaterial).orElseThrow(
@@ -62,7 +64,7 @@ receiver, TransactionStatus.PENDING	);
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "usuário não autorizado");
 		}
 		//verifica se a transação está pendente
-		if(!(transaction.getStatus()==TransactionStatus.PENDING)){
+		if(transaction.getStatus()!=TransactionStatus.PENDING){
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "não pode cancelar transação que não está pendente");
 		}
 		transactionRepository.delete(transaction);	
