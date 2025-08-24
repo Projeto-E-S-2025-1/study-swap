@@ -3,13 +3,13 @@ package com.studyswap.backend.model;
 public enum Role {
     STUDENT("STUDENT");
 
-    private final String role;
+    private final String roleName;
 
-    Role(String role) {
-        this.role = role;
+    Role(String roleName) {
+        this.roleName = roleName;
     }
 
     public String getRole() {
-        return role;
+        return roleName;
     }
 }
