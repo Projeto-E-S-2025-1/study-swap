@@ -150,9 +150,10 @@ class MaterialControllerTest {
         ResponseEntity<MaterialResponseDTO> response = materialController.createMaterial(materialRequestDTO, testFile);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(materialResponseDTO.getTitle(), response.getBody().getTitle());
-        assertEquals(materialResponseDTO.getUserId(), response.getBody().getUserId());
+        MaterialResponseDTO body = response.getBody();
+        assertNotNull(body);
+        assertEquals(materialResponseDTO.getTitle(), body.getTitle());
+        assertEquals(materialResponseDTO.getUserId(), body.getUserId());
     }
 
     // ---------------------- DELETE ----------------------
@@ -258,7 +259,9 @@ class MaterialControllerTest {
         ResponseEntity<MaterialResponseDTO> response = materialController.updateMaterial(1L, updatedMaterialDTO, updatedFile);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Livro de Teste Atualizado", response.getBody().getTitle());
+        MaterialResponseDTO body = response.getBody();
+        assertNotNull(body);
+        assertEquals("Livro de Teste Atualizado", body.getTitle());
     }
 
     @Test

@@ -62,7 +62,8 @@ class AuthControllerLoginTest {
         ResponseEntity<LoginResponseDTO> response = authController.login(userLoginDTO);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals("mocked-jwt-token-123", response.getBody().getToken());
+        LoginResponseDTO body = response.getBody();
+        assertNotNull(body);
+        assertEquals("mocked-jwt-token-123", body.getToken());
     }
 }
