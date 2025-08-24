@@ -18,6 +18,12 @@ import com.studyswap.backend.repository.TransactionRepository;
 import jakarta.transaction.Transactional;
 
 public class TransactionService {
+    
+    private TransactionResponseDTO convertToResponseDTO(Transaction transaction) {
+		return new TransactionResponseDTO(transaction.getId(), transaction.getTransactionDate(), transaction.getMaterial().getId(), 
+				transaction.getStatus(), transaction.getReceiver().getId(), transaction.getReceiver().getName(),
+				transaction.getAnnouncer().getId(), transaction.getAnnouncer().getName());
+	}
 	private boolean isParticipantInTransaction(User user, Transaction transaction) {
 		return isAnnouncer(user, transaction) || isReceiver(user, transaction);
 	}
