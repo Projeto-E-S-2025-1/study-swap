@@ -97,6 +97,10 @@ public class Material {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -159,10 +163,5 @@ public class Material {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public void setId(long l) {
-    // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setId'");
     }
 }

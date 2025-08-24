@@ -58,6 +58,10 @@ public class Report {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public User getReporter() {
         return reporter;
     }
