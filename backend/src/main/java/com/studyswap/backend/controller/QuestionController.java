@@ -1,6 +1,6 @@
 package com.studyswap.backend.controller;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -21,8 +21,11 @@ import com.studyswap.backend.service.QuestionService;
 @RequestMapping("/questions")
 public class QuestionController{
 	
-	@Autowired
-	private QuestionService questionService;
+	private final QuestionService questionService;
+
+	public QuestionController(QuestionService questionService) {
+		this.questionService = questionService;
+	}
 
 	@PostMapping
 	public ResponseEntity<Question> createQuestion(@RequestBody CreateQuestionDTO dto, Authentication auth) {

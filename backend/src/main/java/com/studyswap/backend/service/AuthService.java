@@ -1,6 +1,5 @@
 package com.studyswap.backend.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,8 +17,11 @@ import com.studyswap.backend.repository.UserRepository;
 @Service
 public class AuthService implements UserDetailsService{
 
-    @Autowired
     private UserRepository userRepository;
+
+    public AuthService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

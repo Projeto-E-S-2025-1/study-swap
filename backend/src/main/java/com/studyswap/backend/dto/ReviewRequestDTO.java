@@ -18,10 +18,6 @@ public class ReviewRequestDTO {
     @NotNull(message = "A transação avaliada é obrigatória")
     private Long transactionId;
 
-    public ReviewRequestDTO(){
-        
-    }
-
     public Integer getRating() {
         return rating;
     }

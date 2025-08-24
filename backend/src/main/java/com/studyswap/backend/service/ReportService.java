@@ -1,6 +1,5 @@
 package com.studyswap.backend.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,17 +16,20 @@ import com.studyswap.backend.repository.UserRepository;
 @Service
 public class ReportService {
 
-    @Autowired
     private ReportRepository reportRepository;
 
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
     private MaterialRepository materialRepository;
 
-    @Autowired
     private AuthService authService;
+
+    public ReportService(ReportRepository reportRepository, UserRepository userRepository, MaterialRepository materialRepository, AuthService authService) {
+        this.reportRepository = reportRepository;
+        this.userRepository = userRepository;
+        this.materialRepository = materialRepository;
+        this.authService = authService;
+    }
 
     public ReportResponseDTO createReport(CreateReportDTO dto) {
         User reporter = authService.getAuthenticatedUser();

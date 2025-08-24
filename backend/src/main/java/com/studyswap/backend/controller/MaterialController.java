@@ -2,7 +2,6 @@ package com.studyswap.backend.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,13 +19,17 @@ import com.studyswap.backend.service.MaterialService;
 
 @RestController
 @RequestMapping("/material")
+
 public class MaterialController {
 
-    @Autowired
-    private MaterialService materialService;
+    private final MaterialService materialService;
 
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
+
+    public MaterialController(MaterialService materialService, AuthService authService){
+        this.materialService = materialService;
+        this.authService = authService;
+    }
 
     @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity<MaterialResponseDTO> createMaterial(
