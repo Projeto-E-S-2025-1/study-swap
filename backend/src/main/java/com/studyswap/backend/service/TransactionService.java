@@ -49,7 +49,25 @@ public class TransactionService {
 receiver, TransactionStatus.PENDING	);
 		return convertToResponseDTO(transactionRepository.save(transaction));
 	}
-    
+	@Transactional
+	public void CancelTransaction(Authentication auth, Long idTransaction) {
+		User user = (User) auth.getPrincipal();
+		//verifica se a transação está no BD
+		Transaction transaction = transactionRepository.findById(idTransaction).orElseThrow(()
+				-> new ResponseStatusException(
+				HttpStatus.NOT_FOUND, "Transação não encontrada")
+				);	
+		//verifica se o usuário participa da transação
+		if(!isParticipantInTransaction(user, transaction)) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "usuário não autorizado");
+		}
+		//verifica se a transação está pendente
+		if(!(transaction.getStatus()==TransactionStatus.PENDING)){
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "não pode cancelar transação que não está pendente");
+		}
+		transactionRepository.delete(transaction);
+	}
+	
     private TransactionResponseDTO convertToResponseDTO(Transaction transaction) {
 		return new TransactionResponseDTO(transaction.getId(), transaction.getTransactionDate(), transaction.getMaterial().getId(), 
 				transaction.getStatus(), transaction.getReceiver().getId(), transaction.getReceiver().getName(),
