@@ -160,4 +160,9 @@ public class Material {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public void setId(long l) {
+    // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setId'");
+    }
 }
