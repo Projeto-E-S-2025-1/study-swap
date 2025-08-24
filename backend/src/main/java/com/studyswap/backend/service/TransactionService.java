@@ -1,8 +1,11 @@
 package com.studyswap.backend.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.studyswap.backend.dto.TransactionResponseDTO;
@@ -16,21 +19,19 @@ import com.studyswap.backend.repository.TransactionRepository;
 import jakarta.transaction.Transactional;
 
 
-
+@Service
 public class TransactionService {
 	@Autowired
-	TransactionRepository transactionRepository;
+	private TransactionRepository transactionRepository;
 	@Autowired
 	private MaterialRepository materialRepository;
 		
 	@Transactional
 	public TransactionResponseDTO createTransaction(Authentication auth, Long idMaterial){
-	
 		Material material = materialRepository.findById(idMaterial).orElseThrow(
 				()-> new ResponseStatusException(
 						HttpStatus.NOT_FOUND, "Material não encontrado")
 		);
-		
 		User  receiver = (User) auth.getPrincipal();
 		User announcer = material.getUser();
 		
@@ -43,14 +44,13 @@ public class TransactionService {
 			throw new ResponseStatusException(	
                     HttpStatus.BAD_REQUEST, "Material indisponível");
         }
-		
-		material.setAvailable(false);
 		Transaction transaction = new Transaction(material, announcer,
 receiver, TransactionStatus.PENDING	);
 		return convertToResponseDTO(transactionRepository.save(transaction));
 	}
+	
 	@Transactional
-	public void CancelTransaction(Authentication auth, Long idTransaction) {
+	public void cancelTransaction(Authentication auth, Long idTransaction) {
 		User user = (User) auth.getPrincipal();
 		//verifica se a transação está no BD
 		Transaction transaction = transactionRepository.findById(idTransaction).orElseThrow(()
@@ -65,7 +65,7 @@ receiver, TransactionStatus.PENDING	);
 		if(!(transaction.getStatus()==TransactionStatus.PENDING)){
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "não pode cancelar transação que não está pendente");
 		}
-		transactionRepository.delete(transaction);
+		transactionRepository.delete(transaction);	
 	}
 	
     @Transactional
@@ -81,10 +81,25 @@ receiver, TransactionStatus.PENDING	);
     	if(transaction.getStatus()!=TransactionStatus.PENDING) {
     		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Só pode-se confirmar transação pendente");
     	}
+    	transaction.getMaterial().setAvailable(false);
 		transaction.setStatus(TransactionStatus.CONCLUDED);
     	return convertToResponseDTO(transactionRepository.save(transaction));
     }
-	
+    
+    public List<TransactionResponseDTO> findAllTransactionsByMaterial(Authentication auth, Long idMaterial) {
+    	User loggedUser = (User) auth.getPrincipal();
+
+		Material material = materialRepository.findById(idMaterial).orElseThrow(
+				()-> new ResponseStatusException(
+						HttpStatus.NOT_FOUND, "Material não encontrado")
+		);    	
+		if(!loggedUser.equals(material.getUser())) {
+    		throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Apenas o dono do material pode ver todas suas transações");
+    	}
+        List<Transaction> transactions = transactionRepository.findByMaterial(material);
+        return transactions.stream().map(this::convertToResponseDTO).toList();
+    }
+    
     private TransactionResponseDTO convertToResponseDTO(Transaction transaction) {
 		return new TransactionResponseDTO(transaction.getId(), transaction.getTransactionDate(), transaction.getMaterial().getId(), 
 				transaction.getStatus(), transaction.getReceiver().getId(), transaction.getReceiver().getName(),
