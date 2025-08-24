@@ -1,7 +1,5 @@
 package com.studyswap.backend.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -17,7 +15,14 @@ import com.studyswap.backend.repository.TransactionRepository;
 
 import jakarta.transaction.Transactional;
 
+
+
 public class TransactionService {
+	@Autowired
+	TransactionRepository transactionRepository;
+	@Autowired
+	private MaterialRepository materialRepository;
+		
 	@Transactional
 	public TransactionResponseDTO createTransaction(Authentication auth, Long idMaterial){
 	
