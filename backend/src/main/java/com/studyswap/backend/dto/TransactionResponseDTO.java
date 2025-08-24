@@ -2,29 +2,32 @@ package com.studyswap.backend.dto;
 
 import java.time.LocalDateTime;
 
-import com.studyswap.backend.model.Material;
 import com.studyswap.backend.model.TransactionStatus;
-import com.studyswap.backend.model.User;
 
 public class TransactionResponseDTO {
     private Long id;
     private LocalDateTime transactionDate;
-    private User receiver;
-    private User announcer;
-    private Material material;
+
+    private Long idMaterial;
     private TransactionStatus status;
-
-    public TransactionResponseDTO(Long id, LocalDateTime transactionDate, User receiver,
-    		User announcer, Material material, TransactionStatus status) {
-        this.id = id;
-        this.transactionDate = transactionDate;
-        this.receiver = receiver;
-        this.announcer = announcer;
-        this.material= material; 
-        this.status = status;
-    }
-
-    public Long getId() {
+    private Long receiverId;
+    private String receiverName;
+    private Long announcerId;
+    private String announcerName;
+    
+    
+    public TransactionResponseDTO(Long id, LocalDateTime transactionDate, Long idMaterial, TransactionStatus status,
+			Long receiverId, String receiverName, Long announcerId, String announcerName) {
+		this.id = id;
+		this.transactionDate = transactionDate;
+		this.idMaterial = idMaterial;
+		this.status = status;
+		this.receiverId = receiverId;
+		this.receiverName = receiverName;
+		this.announcerId = announcerId;
+		this.announcerName = announcerName;
+	}
+	public Long getId() {
         return id;
     }
 
@@ -40,21 +43,39 @@ public class TransactionResponseDTO {
         this.transactionDate = transactionDate;
     }
 
-    public User getReceiver() {
-        return receiver;
-    }
+    public Long getReceiverId() {
+		return receiverId;
+	}
 
-    public void setReceiver(User receiver) {
-        this.receiver = receiver;
-    }
+	public void setReceiverId(Long receiverId) {
+		this.receiverId = receiverId;
+	}
 
-    public User getAnnouncer() {
-        return announcer;
-    }
-    public void setAnnouncer(User announcer) {
-        this.announcer = announcer;
-    }
-    public TransactionStatus getStatus() {
+	public String getReceiverName() {
+		return receiverName;
+	}
+
+	public void setReceiverName(String receiverName) {
+		this.receiverName = receiverName;
+	}
+
+	public Long getAnnouncerId() {
+		return announcerId;
+	}
+
+	public void setAnnouncerId(Long announcerId) {
+		this.announcerId = announcerId;
+	}
+
+	public String getAnnouncerName() {
+		return announcerName;
+	}
+
+	public void setAnnouncerName(String announcerName) {
+		this.announcerName = announcerName;
+	}
+
+	public TransactionStatus getStatus() {
         return status;
     }
 
@@ -62,12 +83,10 @@ public class TransactionResponseDTO {
         this.status = status;
     }
 
-	public Material getMaterial() {
-		return material;
+	public Long getIdMaterial() {
+		return idMaterial;
 	}
-
-	public void setMaterial(Material material) {
-		this.material = material;
+	public void setIdMaterial(Long idMaterial) {
+		this.idMaterial = idMaterial;
 	}
-
 }
