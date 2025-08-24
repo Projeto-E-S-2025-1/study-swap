@@ -1,4 +1,4 @@
-package com.studyswap.api;
+package com.studyswap.backend.unit.controller;
 
 import com.studyswap.backend.controller.AuthController;
 import com.studyswap.backend.dto.UserRegistrationDTO;
@@ -35,22 +35,17 @@ public class AuthControllerRegisterTest {
 
     @BeforeEach
     void setUp() {
-        // Prepara os dados de teste
         registrationDTO = new UserRegistrationDTO("New User", "newuser@example.com", "password123", Role.STUDENT);
         registeredUser = new User("New User", "newuser@example.com", "encodedPassword", Role.STUDENT);
     }
 
     @Test
     void testRegister_Success() {
-        // Define o comportamento do stub: quando o método register() é chamado, retorne
-        // um objeto User
         when(authService.register(any(UserRegistrationDTO.class)))
                 .thenReturn(registeredUser);
 
-        // 1. Executa o método que queremos testar
         ResponseEntity<User> response = authController.register(registrationDTO);
 
-        // 2. Verifica se o resultado está correto
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals("New User", response.getBody().getName());
@@ -59,16 +54,13 @@ public class AuthControllerRegisterTest {
 
     @Test
     void testRegister_EmailAlreadyExists() {
-        // Define o comportamento do stub para simular uma falha
         when(authService.register(any(UserRegistrationDTO.class)))
                 .thenThrow(new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email já cadastrado"));
 
-        // 1. Executa e verifica se uma exceção é lançada
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
             authController.register(registrationDTO);
         });
 
-        // 2. Verifica a exceção
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
         assertEquals("400 BAD_REQUEST \"Email já cadastrado\"", exception.getMessage());
     }

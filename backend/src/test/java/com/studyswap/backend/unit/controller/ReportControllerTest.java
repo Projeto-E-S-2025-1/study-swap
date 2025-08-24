@@ -1,4 +1,4 @@
-package com.studyswap.api;
+package com.studyswap.backend.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.studyswap.backend.controller.ReportController;
