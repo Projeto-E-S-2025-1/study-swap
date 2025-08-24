@@ -1,7 +1,6 @@
 package com.studyswap.backend.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -94,6 +93,6 @@ public class QuestionService {
                 q.getAuthor().getId(),
                 q.getCreatedAt()
             ))
-            .collect(Collectors.toList());
+            .toList();
     }
 }
