@@ -18,5 +18,13 @@ import com.studyswap.backend.repository.TransactionRepository;
 import jakarta.transaction.Transactional;
 
 public class TransactionService {
-
+	private boolean isParticipantInTransaction(User user, Transaction transaction) {
+		return isAnnouncer(user, transaction) || isReceiver(user, transaction);
+	}
+	private boolean isAnnouncer(User user, Transaction transaction){
+		return transaction.getAnnouncer().getId().equals(user.getId());
+	}
+	private boolean isReceiver(User user, Transaction transaction) {
+		return transaction.getReceiver().getId().equals(user.getId());
+	}
 }
