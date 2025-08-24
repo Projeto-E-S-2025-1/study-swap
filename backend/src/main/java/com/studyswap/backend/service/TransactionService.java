@@ -76,7 +76,7 @@ receiver, TransactionStatus.PENDING	);
     					HttpStatus.NOT_FOUND, "Transação não encontrada")
     			);
     	if(!isAnnouncer(loggedUser, transaction)) {
-    		throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Apenas o dono do material pode confirmar a transação")
+    		throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Apenas o dono do material pode confirmar a transação");
     	}
     	if(transaction.getStatus()!=TransactionStatus.PENDING) {
     		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Só pode-se confirmar transação pendente");
