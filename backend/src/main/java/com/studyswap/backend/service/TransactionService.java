@@ -64,7 +64,7 @@ receiver, TransactionStatus.PENDING	);
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "usuário não autorizado");
 		}
 		//verifica se a transação está pendente
-		if(!(transaction.getStatus()==TransactionStatus.PENDING)){
+		if(transaction.getStatus()!=TransactionStatus.PENDING){
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "não pode cancelar transação que não está pendente");
 		}
 		transactionRepository.delete(transaction);	
