@@ -47,7 +47,7 @@ public class MaterialService {
 
     public MaterialResponseDTO updateMaterial(Long idMaterial, MaterialRequestDTO materialDTO, User user, MultipartFile file) {
         Material entity = materialRepository.findById(idMaterial).orElseThrow(
-            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Material não encontrado"));
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Material não encontrado para edição"));
         
         if (!entity.getUser().getId().equals(user.getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não tem permissão para editar este material");
@@ -67,7 +67,7 @@ public class MaterialService {
 
     public MaterialResponseDTO getMaterialById(Long id) {
         Material material = materialRepository.findById(id).orElseThrow(
-            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Material não encontrado"));
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Material não encontrado para leitura"));
         return convertToResponseDTO(material);
     }
 
@@ -87,7 +87,7 @@ public class MaterialService {
 
     public void deleteMaterial(Long idMaterial, User user) {
         Material entity = materialRepository.findById(idMaterial).orElseThrow(
-            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Material não encontrado"));
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Material não encontrado para deleção"));
         
         if (!entity.getUser().getId().equals(user.getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não tem permissão para remover este material");
@@ -137,7 +137,7 @@ public class MaterialService {
             Files.createDirectories(Paths.get(uploadDir));
 
             String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-            Path path = Paths.get(uploadDir + fileName);
+            Path path = Paths.get(uploadDir + fileName).normalize();
             Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
             return "/uploads/" + fileName;
