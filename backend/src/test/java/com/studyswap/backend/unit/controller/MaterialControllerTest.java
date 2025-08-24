@@ -165,7 +165,7 @@ class MaterialControllerTest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("Material deletado com sucesso!", response.getBody());
-        verify(materialService, times(1)).deleteMaterial(eq(1L), eq(testUser));
+        verify(materialService, times(1)).deleteMaterial(1L, testUser);
     }
 
     @Test
