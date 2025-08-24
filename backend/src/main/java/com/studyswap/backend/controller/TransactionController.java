@@ -21,9 +21,12 @@ import com.studyswap.backend.service.TransactionService;
 @RestController
 @RequestMapping("/transactions")
 public class TransactionController {
-	@Autowired
-	private TransactionService transactionService;
+	private final TransactionService transactionService;
 	
+	public TransactionController(TransactionService transactionService) {
+		this.transactionService = transactionService;
+	}
+
 	@DeleteMapping("/{idTransaction}")
 	public ResponseEntity<Void> cancelTransaction(Authentication auth, @PathVariable("idTransaction") Long idTransaction){
 		transactionService.cancelTransaction(auth, idTransaction);
