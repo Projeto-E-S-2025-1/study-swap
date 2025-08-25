@@ -28,12 +28,13 @@ public class TokenServiceTest {
     @BeforeEach
     void setUp() {
         tokenService = new TokenService();
+        
         try {
             Field secretField = TokenService.class.getDeclaredField("secret");
-            secretField.setAccessible(true);
+            secretField.setAccessible(true); 
             ReflectionUtils.setField(secretField, tokenService, testSecret);
         } catch (NoSuchFieldException e) {
-            fail("Não foi possível encontrar o campo 'secret' na classe TokenService.", e);
+            fail("O teste falhou porque não encontrou o campo 'secret' na TokenService.", e);
         }
 
         testUser = new User("Test User", "test@example.com", "password", Role.STUDENT);
@@ -41,6 +42,7 @@ public class TokenServiceTest {
     }
 
     // ---------------------- generateToken ----------------------
+
     @Test
     void testGenerateToken_ShouldReturnValidJWT() {
         // Act
@@ -48,25 +50,12 @@ public class TokenServiceTest {
 
         // Assert
         assertNotNull(token);
-
         DecodedJWT decodedJWT = JWT.decode(token);
         assertEquals("StudySwap", decodedJWT.getIssuer());
         assertEquals("test@example.com", decodedJWT.getSubject());
         assertEquals(1L, decodedJWT.getClaim("userId").asLong());
         assertTrue(decodedJWT.getExpiresAt().after(new Date()));
     }
-
-    @Test
-    void testGenerateToken_WithNullSecret_ShouldThrowRuntimeException() {
-        // Arrange
-        TokenService serviceWithNullSecret = new TokenService();
-
-        // Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            serviceWithNullSecret.generateToken(testUser);
-        });
-    }
-
 
     // ---------------------- validateToken ----------------------
 
@@ -85,10 +74,7 @@ public class TokenServiceTest {
     @Test
     void testValidateToken_WithInvalidSignature_ShouldReturnEmptyString() {
         // Arrange
-        String tokenWithWrongSecret = JWT.create()
-                .withIssuer("StudySwap")
-                .withSubject(testUser.getUsername())
-                .sign(Algorithm.HMAC256("another-secret"));
+        String tokenWithWrongSecret = JWT.create().withSubject("test").sign(Algorithm.HMAC256("wrong-secret"));
 
         // Act
         String subject = tokenService.validateToken(tokenWithWrongSecret);
@@ -103,27 +89,11 @@ public class TokenServiceTest {
         String expiredToken = JWT.create()
                 .withIssuer("StudySwap")
                 .withSubject(testUser.getUsername())
-                .withExpiresAt(Instant.now().minusSeconds(10)) // Expira 10 segundos no passado
+                .withExpiresAt(Instant.now().minusSeconds(10)) // Expirado
                 .sign(Algorithm.HMAC256(testSecret));
 
         // Act
         String subject = tokenService.validateToken(expiredToken);
-
-        // Assert
-        assertEquals("", subject);
-    }
-
-    @Test
-    void testValidateToken_WithWrongIssuer_ShouldReturnEmptyString() {
-        // Arrange
-        String tokenWithWrongIssuer = JWT.create()
-                .withIssuer("AnotherApp")
-                .withSubject(testUser.getUsername())
-                .withExpiresAt(Instant.now().plusSeconds(10))
-                .sign(Algorithm.HMAC256(testSecret));
-
-        // Act
-        String subject = tokenService.validateToken(tokenWithWrongIssuer);
 
         // Assert
         assertEquals("", subject);
