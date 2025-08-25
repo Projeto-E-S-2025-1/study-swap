@@ -155,6 +155,24 @@ class MaterialServiceTest {
         assertTrue(exception.getMessage().contains("Você não tem permissão para editar este material"));
     }
 
+    @Test
+    void testUpdateMaterial_WithFile_ShouldUpdatePhoto() {
+        when(materialRepository.findById(1L)).thenReturn(Optional.of(materialEntity));
+        when(materialRepository.save(any(Material.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        // Salva a foto antiga antes de atualizar
+        String oldPhoto = materialEntity.getPhoto();
+
+        MaterialResponseDTO result = materialService.updateMaterial(1L, updateRequestDTO, testUser, testFile);
+
+        assertNotNull(result);
+        assertEquals(updateRequestDTO.getTitle(), result.getTitle());
+        assertEquals(testUser.getId(), result.getUserId());
+        assertNotNull(result.getPhoto());
+        assertNotEquals(oldPhoto, result.getPhoto()); // compara com o valor antigo
+        verify(materialRepository, times(1)).findById(1L);
+        verify(materialRepository, times(1)).save(any(Material.class));
+    }
 
     // ---------------------- getMaterialById ----------------------
 

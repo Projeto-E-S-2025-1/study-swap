@@ -182,6 +182,19 @@ class TransactionServiceTest {
         });
     }
 
+    @Test
+    void testCompleteTransaction_NotPending() {
+        when(authentication.getPrincipal()).thenReturn(announcerUser);
+        when(transactionRepository.findById(101L)).thenReturn(Optional.of(concludedTransaction));
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            transactionService.completeTransaction(authentication, 101L);
+        });
+
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
+        assertTrue(exception.getMessage().contains("Só pode-se confirmar transação pendente"));
+    }
+
     // ---------------------- findAllTransactionsByMaterial ----------------------
 
     @Test
@@ -205,5 +218,18 @@ class TransactionServiceTest {
         assertThrows(ResponseStatusException.class, () -> {
             transactionService.findAllTransactionsByMaterial(authentication, 10L);
         });
+    }
+
+    @Test
+    void testFindAllByMaterial_MaterialNotFound() {
+        when(authentication.getPrincipal()).thenReturn(announcerUser);
+        when(materialRepository.findById(99L)).thenReturn(Optional.empty());
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            transactionService.findAllTransactionsByMaterial(authentication, 99L);
+        });
+
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+        assertTrue(exception.getMessage().contains("Material não encontrado"));
     }
 }
