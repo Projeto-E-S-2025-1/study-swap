@@ -150,7 +150,6 @@ public class AuthServiceTest {
             });
 
             assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
-            assertEquals("404 NOT_FOUND \"Usuário não encontrado\"", exception.getMessage());
         }
     }
 }

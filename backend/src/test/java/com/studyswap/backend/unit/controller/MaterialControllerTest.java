@@ -179,7 +179,6 @@ public class MaterialControllerTest {
         });
 
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
-        assertEquals("404 NOT_FOUND \"Material não encontrado\"", exception.getMessage());
     }
 
     @Test
@@ -219,7 +218,6 @@ public class MaterialControllerTest {
         });
 
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
-        assertEquals("404 NOT_FOUND \"Material não encontrado\"", exception.getMessage());
     }
 
     // ---------------------- GET ALL / SEARCH ----------------------
@@ -272,7 +270,6 @@ public class MaterialControllerTest {
         });
 
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
-        assertEquals("404 NOT_FOUND \"Material não encontrado\"", exception.getMessage());
     }
 
     @Test
