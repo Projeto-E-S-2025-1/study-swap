@@ -18,7 +18,7 @@
         </span>
       </div>
       <div class="detalhe-material-acoes" *ngIf="isOwner == true">
-        <button class="botao-editar">Editar material</button>
+        <button class="botao-editar" (click) = "showModal = true">Editar material</button>
         <button class="botao-excluir" (click) = "apagarMaterial()">Excluir material</button>
       </div>
       <div class="denuncia-menu-wrapper" (clickOutside)="showMenu = false">
@@ -48,5 +48,12 @@
 
   <div class="question-list-wrapper">
     <app-question-list *ngIf="materialId !== null" [materialId]="materialId"></app-question-list>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showModal">
+    <div class="modal-content">
+      <button class="close-btn" (click)="closeModal()">×</button>
+      <app-update-materials (materialAtualizado)="onMaterialAtualizado($event)"></app-update-materials>
+    </div>
   </div>
 </div>
