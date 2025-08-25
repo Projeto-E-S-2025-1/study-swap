@@ -262,4 +262,24 @@ class TransactionServiceTest {
 
         assertTrue(result, "Announcer deve ser considerado participante da transação");
     }
+
+    @Test
+    void testIsParticipantInTransaction_NullUserOrIds() throws Exception {
+        // transaction com announcer null
+        Transaction t1 = new Transaction(10L, testMaterial, null, receiverUser, TransactionStatus.PENDING);
+        assertFalse(invokeIsParticipantInTransaction(announcerUser, t1));
+        
+        // transaction com receiver null
+        Transaction t2 = new Transaction(10L, testMaterial, announcerUser, null, TransactionStatus.PENDING);
+        assertFalse(invokeIsParticipantInTransaction(receiverUser, t2));
+        
+        // user null
+        assertFalse(invokeIsParticipantInTransaction(null, pendingTransaction));
+        
+        // IDs null
+        User u = new User();
+        u.setId(null);
+        Transaction t3 = new Transaction(10L, testMaterial, u, receiverUser, TransactionStatus.PENDING);
+        assertFalse(invokeIsParticipantInTransaction(u, t3));
+    }
 }
