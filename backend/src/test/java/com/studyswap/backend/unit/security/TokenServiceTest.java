@@ -6,8 +6,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.studyswap.backend.model.Role;
 import com.studyswap.backend.model.User;
 import com.studyswap.backend.security.TokenService;
+import com.studyswap.backend.security.exception.InvalidTokenException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -45,7 +45,6 @@ public class TokenServiceTest {
     // ---------------------- generateToken ----------------------
 
     @Test
-    @DisplayName("Deve gerar um token JWT válido com as informações corretas")
     void testGenerateToken_ShouldReturnValidJWT() {
         // Act
         String token = tokenService.generateToken(testUser);
@@ -61,7 +60,6 @@ public class TokenServiceTest {
     }
 
     @Test
-    @DisplayName("Deve lançar RuntimeException ao gerar token com segredo nulo")
     void testGenerateToken_WhenSecretIsInvalid_ShouldThrowRuntimeException() {
         // Arrange
         TokenService serviceWithNullSecret = new TokenService();
@@ -75,7 +73,6 @@ public class TokenServiceTest {
     // ---------------------- validateToken ----------------------
 
     @Test
-    @DisplayName("Deve retornar o 'subject' (email) de um token válido")
     void testValidateToken_WithValidToken_ShouldReturnSubject() {
         // Arrange
         String validToken = tokenService.generateToken(testUser);
@@ -88,51 +85,45 @@ public class TokenServiceTest {
     }
 
     @Test
-    @DisplayName("Deve retornar string vazia para token com assinatura inválida")
-    void testValidateToken_WithInvalidSignature_ShouldReturnEmptyString() {
-        // Arrange: Cria um token com um segredo diferente
+    void testValidateToken_WithInvalidSignature_ShouldThrowException() {
+        // Arrange
         String tokenWithWrongSecret = JWT.create()
                 .withSubject(testUser.getUsername())
                 .sign(Algorithm.HMAC256("another-wrong-secret"));
 
-        // Act
-        String subject = tokenService.validateToken(tokenWithWrongSecret);
-
-        // Assert
-        assertEquals("", subject);
+        // Act & Assert
+        assertThrows(InvalidTokenException.class, () -> {
+            tokenService.validateToken(tokenWithWrongSecret);
+        });
     }
 
     @Test
-    @DisplayName("Deve retornar string vazia para token expirado")
-    void testValidateToken_WithExpiredToken_ShouldReturnEmptyString() {
-        // Arrange: Cria um token que já expirou
+    void testValidateToken_WithExpiredToken_ShouldThrowException() {
+        // Arrange
         String expiredToken = JWT.create()
                 .withIssuer("StudySwap")
                 .withSubject(testUser.getUsername())
-                .withExpiresAt(Instant.now().minusSeconds(10)) // Expira 10 segundos no passado
+                .withExpiresAt(Instant.now().minusSeconds(10))
                 .sign(Algorithm.HMAC256(testSecret));
 
-        // Act
-        String subject = tokenService.validateToken(expiredToken);
-
-        // Assert
-        assertEquals("", subject);
+        // Act & Assert
+        assertThrows(InvalidTokenException.class, () -> {
+            tokenService.validateToken(expiredToken);
+        });
     }
 
     @Test
-    @DisplayName("Deve retornar string vazia para token com emissor (issuer) incorreto")
-    void testValidateToken_WithWrongIssuer_ShouldReturnEmptyString() {
-        // Arrange: Cria um token com um emissor diferente
+    void testValidateToken_WithWrongIssuer_ShouldThrowException() {
+        // Arrange
         String tokenWithWrongIssuer = JWT.create()
                 .withIssuer("AnotherApp")
                 .withSubject(testUser.getUsername())
                 .withExpiresAt(Instant.now().plusSeconds(10))
                 .sign(Algorithm.HMAC256(testSecret));
 
-        // Act
-        String subject = tokenService.validateToken(tokenWithWrongIssuer);
-
-        // Assert
-        assertEquals("", subject);
+        // Act & Assert
+        assertThrows(InvalidTokenException.class, () -> {
+            tokenService.validateToken(tokenWithWrongIssuer);
+        });
     }
 }
