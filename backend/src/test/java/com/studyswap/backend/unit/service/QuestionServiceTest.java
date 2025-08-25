@@ -27,7 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class QuestionServiceTest {
+class QuestionServiceTest {
 
     @Mock
     private QuestionRepository questionRepository;

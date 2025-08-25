@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class SecurityConfigTest {
+class SecurityConfigTest {
 
     @Mock
     private SecurityFilter securityFilter;
