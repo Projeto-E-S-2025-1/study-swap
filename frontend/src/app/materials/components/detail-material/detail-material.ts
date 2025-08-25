@@ -7,11 +7,12 @@ import { Material } from '../../models/material.model';
 import { QuestionListComponent } from '../question-list/question-list';
 import { AuthService } from '../../../auth/auth.service';
 import { environment } from '../../../../environments/environment';
+import { UpdateMaterial } from '../update-material/update-material';
 
 @Component({
   selector: 'app-detail-material',
   standalone: true,
-  imports: [CommonModule, RouterModule, QuestionListComponent],
+  imports: [CommonModule, RouterModule, QuestionListComponent, UpdateMaterial],
   templateUrl: './detail-material.html',
   styleUrls: ['./detail-material.css']
 })
@@ -21,6 +22,7 @@ export class DetailMaterial implements OnInit {
   errorMessage: string = '';
   isOwner: boolean = false;
   showMenu: boolean = false;
+  showModal: boolean = false;
 
   apiUrl = environment.apiUrl;
 
@@ -71,6 +73,26 @@ export class DetailMaterial implements OnInit {
           console.error(error.message);
         }
       });
-    this.router.navigate(['/material']);
+    setTimeout(() => this.router.navigate(['/material']), 250);
+  }
+
+  closeModal(): void {
+    this.showModal = false;
+  }
+
+  onMaterialAtualizado(novoMaterial: Material): void {
+    this.closeModal();
+    const id = Number(novoMaterial.id);
+    this.materialService.getById(id).subscribe({
+        next: (data) => {
+          this.material = data as any;
+          this.isOwner = this.authService.getUserId() == this.material?.userId;
+          this.isLoading = false;
+        },
+        error: () => {
+          this.errorMessage = 'Não foi possível carregar o material.';
+          this.isLoading = false;
+        }
+      });
   }
 }

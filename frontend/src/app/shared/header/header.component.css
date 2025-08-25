@@ -25,8 +25,23 @@
     margin-left: 1.5rem;
     font-weight: 500;
     transition: color 0.3s ease;
-  }
+}
   
-  .nav-links a:hover {
-    color: #c8e6c9;
-  }
+.nav-links a:hover {
+  color: #c8e6c9;
+}
+
+.nav-links button {
+    background-color: ghostwhite;
+    border-style: none;
+    text-decoration: none;
+    margin-left: 1.5rem;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    padding: 4px 8px;
+    border-radius: 5px;
+}
+  
+.nav-links button:hover {
+  background-color: #d63d3d;
+}
