@@ -41,7 +41,13 @@ export class MaterialService {
   }
 
   update(id: number, material: Partial<Material>): Observable<Material> {
-    return this.http.put<Material>(`${this.API_URL}/${id}`, material);
+    const formData = new FormData();
+
+    // Transforma o DTO em string JSON
+    const jsonBlob = new Blob([JSON.stringify(material)], { type: 'application/json' });
+    formData.append('materialDTO', jsonBlob);
+
+    return this.http.put<Material>(`${this.API_URL}/${id}`, formData);
   }
 
   delete(id: number): Observable<void> {
