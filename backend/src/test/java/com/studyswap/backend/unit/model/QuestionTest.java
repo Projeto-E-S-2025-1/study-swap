@@ -59,13 +59,13 @@ class QuestionTest {
         // Mesmo objeto (this == obj)
         assertEquals(q1, q1);
 
-        // Comparar com null
+        // Comparar com null (obj == null)
         assertNotEquals(null, q1);
 
-        // Comparar com objeto de outra classe
+        // Comparar com objeto de outra classe (getClass() != obj.getClass())
         assertNotEquals("string qualquer", q1);
 
-        // Ambos IDs nulos → equals deve ser true
+        // Ambos IDs nulos (Objects.equals(null, null) == true)
         assertEquals(q1, q2);
 
         // ID de q1 nulo, q2 não nulo
@@ -82,8 +82,13 @@ class QuestionTest {
         assertEquals(q1, q2);
         assertEquals(q1.hashCode(), q2.hashCode());
 
-        // IDs diferentes
+        // IDs diferentes (Objects.equals diferente)
         q2.setId(2L);
         assertNotEquals(q1, q2);
+
+        // Caso explícito: obj != null e mesma classe (já cai em Objects.equals)
+        Question q3 = new Question();
+        q3.setId(1L);
+        assertEquals(q1, q3);
     }
 }

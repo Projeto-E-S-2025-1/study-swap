@@ -115,6 +115,23 @@ class MaterialServiceTest {
         verify(materialRepository, times(1)).save(any(Material.class));
     }
 
+    @Test
+    void testCreateMaterial_WithEmptyFile_ShouldUseDefaultPhoto() {
+        MultipartFile emptyFile = new MockMultipartFile("file", "empty.jpg", "image/jpeg", new byte[0]);
+
+        when(materialRepository.save(any(Material.class))).thenAnswer(invocation -> {
+            Material saved = invocation.getArgument(0);
+            saved.setId(1L);
+            return saved;
+        });
+
+        MaterialResponseDTO result = materialService.createMaterial(createRequestDTO, testUser, emptyFile);
+
+        assertNotNull(result);
+        assertEquals("/images/default-photo.png", result.getPhoto()); // Deve usar a foto padrão
+        verify(materialRepository, times(1)).save(any(Material.class));
+    }
+
     // ---------------------- updateMaterial ----------------------
 
     @Test
@@ -170,6 +187,23 @@ class MaterialServiceTest {
         assertEquals(testUser.getId(), result.getUserId());
         assertNotNull(result.getPhoto());
         assertNotEquals(oldPhoto, result.getPhoto()); // compara com o valor antigo
+        verify(materialRepository, times(1)).findById(1L);
+        verify(materialRepository, times(1)).save(any(Material.class));
+    }
+
+    @Test
+    void testUpdateMaterial_WithEmptyFile_ShouldNotChangePhoto() {
+        MultipartFile emptyFile = new MockMultipartFile("file", "empty.jpg", "image/jpeg", new byte[0]);
+
+        when(materialRepository.findById(1L)).thenReturn(Optional.of(materialEntity));
+        when(materialRepository.save(any(Material.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        String oldPhoto = materialEntity.getPhoto();
+
+        MaterialResponseDTO result = materialService.updateMaterial(1L, updateRequestDTO, testUser, emptyFile);
+
+        assertNotNull(result);
+        assertEquals(oldPhoto, result.getPhoto()); // Foto não deve mudar
         verify(materialRepository, times(1)).findById(1L);
         verify(materialRepository, times(1)).save(any(Material.class));
     }
