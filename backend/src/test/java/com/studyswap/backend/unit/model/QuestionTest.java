@@ -97,4 +97,25 @@ class QuestionTest {
         q5.setId(5L);
         assertNotEquals(q4, q5);
     }
+
+    @Test
+    void testEquals_FullBranchCoverage() {
+        Question q = new Question();
+
+        // obj == null → true branch
+        assertFalse(q.equals(null));
+
+        // obj != null → false branch
+        Question q2 = new Question();
+        assertTrue(q.equals(q2));
+
+        // getClass() != obj.getClass() → true branch
+        Object obj = "uma string";
+        assertFalse(q.equals(obj));
+
+        // getClass() == obj.getClass() → false branch
+        Question q3 = new Question();
+        assertTrue(q.equals(q3));
+    }
+
 }
