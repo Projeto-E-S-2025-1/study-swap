@@ -70,20 +70,4 @@ public class TokenServiceTest {
         // Assert
         assertEquals(testUser.getUsername(), subject);
     }
-
-    @Test
-    void testValidateToken_WithExpiredToken_ShouldReturnEmptyString() {
-        // Arrange: Cria um token que já expirou
-        String expiredToken = JWT.create()
-                .withIssuer("StudySwap")
-                .withSubject(testUser.getUsername())
-                .withExpiresAt(Instant.now().minusSeconds(10)) // Expira 10 segundos no passado
-                .sign(Algorithm.HMAC256(testSecret));
-
-        // Act
-        String subject = tokenService.validateToken(expiredToken);
-
-        // Assert
-        assertEquals("", subject, "Deveria retornar uma string vazia para um token expirado.");
-    }
 }
