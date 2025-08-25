@@ -12,6 +12,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -57,14 +60,23 @@ class SecurityFilterTest {
 
     // ---------------------- Teste de comportamento do filtro ----------------------
 
-    @Test
-    void testDoFilter_ForPublicPath_ShouldSkipAuthentication() throws ServletException, IOException {
-        when(request.getRequestURI()).thenReturn("/auth/login");
+    @ParameterizedTest
+    @ValueSource(strings = {
+        "/auth/login",
+        "/auth/register",
+        "/uploads/file.png",
+        "/images/logo.png"
+    })
+    void testDoFilter_ForPublicPaths_ShouldSkipAuthentication(String uri) throws ServletException, IOException {
+        when(request.getRequestURI()).thenReturn(uri);
+
         securityFilter.doFilter(request, response, filterChain);
+
         verify(tokenService, never()).validateToken(anyString());
         verify(filterChain, times(1)).doFilter(request, response);
+        assertNull(SecurityContextHolder.getContext().getAuthentication());
     }
-    
+
     @Test
     void testDoFilter_WithValidToken_ShouldAuthenticateUser() throws ServletException, IOException {
         String token = "valid-jwt-token";
@@ -82,17 +94,6 @@ class SecurityFilterTest {
     }
 
     @Test
-    void testDoFilter_WithoutToken_ShouldNotAuthenticate() throws ServletException, IOException {
-        when(request.getRequestURI()).thenReturn("/api/materials");
-        when(request.getHeader("Authorization")).thenReturn(null);
-
-        securityFilter.doFilter(request, response, filterChain);
-
-        assertNull(SecurityContextHolder.getContext().getAuthentication());
-        verify(filterChain, times(1)).doFilter(request, response);
-    }
-
-    @Test
     void testDoFilter_WithInvalidToken_ShouldNotAuthenticate() throws ServletException, IOException {
         String token = "invalid-jwt-token";
         when(request.getRequestURI()).thenReturn("/api/materials");
@@ -105,48 +106,13 @@ class SecurityFilterTest {
         verify(filterChain, times(1)).doFilter(request, response);
     }
 
-    @Test
-    void testDoFilter_ForRegisterPath_ShouldSkipAuthentication() throws ServletException, IOException {
-        when(request.getRequestURI()).thenReturn("/auth/register");
-        securityFilter.doFilter(request, response, filterChain);
-
-        verify(tokenService, never()).validateToken(anyString());
-        verify(filterChain, times(1)).doFilter(request, response);
-    }
-
-    @Test
-    void testDoFilter_ForUploadsPath_ShouldSkipAuthentication() throws ServletException, IOException {
-        when(request.getRequestURI()).thenReturn("/uploads/file.png");
-        securityFilter.doFilter(request, response, filterChain);
-
-        verify(tokenService, never()).validateToken(anyString());
-        verify(filterChain, times(1)).doFilter(request, response);
-    }
-
-    @Test
-    void testDoFilter_ForImagesPath_ShouldSkipAuthentication() throws ServletException, IOException {
-        when(request.getRequestURI()).thenReturn("/images/logo.png");
-        securityFilter.doFilter(request, response, filterChain);
-
-        verify(tokenService, never()).validateToken(anyString());
-        verify(filterChain, times(1)).doFilter(request, response);
-    }
-
-    @Test
-    void testDoFilter_HeaderWithoutBearer_ShouldNotAuthenticate() throws ServletException, IOException {
+    // Unificação dos 3 testes em 1 parametrizado
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(strings = {"", "Token abcdef"})
+    void testDoFilter_WithMissingOrMalformedToken_ShouldNotAuthenticate(String headerValue) throws ServletException, IOException {
         when(request.getRequestURI()).thenReturn("/api/materials");
-        when(request.getHeader("Authorization")).thenReturn("Token abcdef");
-
-        securityFilter.doFilter(request, response, filterChain);
-
-        assertNull(SecurityContextHolder.getContext().getAuthentication());
-        verify(filterChain, times(1)).doFilter(request, response);
-    }
-
-    @Test
-    void testDoFilter_HeaderEmpty_ShouldNotAuthenticate() throws ServletException, IOException {
-        when(request.getRequestURI()).thenReturn("/api/materials");
-        when(request.getHeader("Authorization")).thenReturn("");
+        when(request.getHeader("Authorization")).thenReturn(headerValue);
 
         securityFilter.doFilter(request, response, filterChain);
 
