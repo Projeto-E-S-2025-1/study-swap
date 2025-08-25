@@ -60,10 +60,10 @@ class QuestionTest {
         assertEquals(q1, q1);
 
         // Comparar com null
-        assertNotEquals(q1, null);
+        assertNotEquals(null, q1);
 
         // Comparar com objeto de outra classe
-        assertNotEquals(q1, "string qualquer");
+        assertNotEquals("string qualquer", q1);
 
         // Ambos IDs nulos → equals deve ser true
         assertEquals(q1, q2);

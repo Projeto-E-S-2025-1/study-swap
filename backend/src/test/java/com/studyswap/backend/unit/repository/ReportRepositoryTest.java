@@ -23,7 +23,7 @@ import java.util.Optional;
 
 @DataJpaTest
 @DisplayName("ReportRepository Integration Tests")
-public class ReportRepositoryTest {
+class ReportRepositoryTest {
 
     @Autowired
     private ReportRepository reportRepository;

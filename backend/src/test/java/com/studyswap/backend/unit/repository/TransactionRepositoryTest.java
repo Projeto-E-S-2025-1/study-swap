@@ -23,7 +23,7 @@ import java.util.Optional;
 
 @DataJpaTest
 @DisplayName("TransactionRepository Integration Tests")
-public class TransactionRepositoryTest {
+class TransactionRepositoryTest {
 
     @Autowired
     private TransactionRepository transactionRepository;
