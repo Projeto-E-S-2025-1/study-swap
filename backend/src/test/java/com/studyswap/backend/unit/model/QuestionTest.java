@@ -103,15 +103,15 @@ class QuestionTest {
         Question q = new Question();
 
         // obj == null → true branch
-        assertNotEquals(null, q);
+        assertEquals(false, q.equals(null));
 
         // obj != null → false branch
         Question q2 = new Question();
-        assertEquals(q2, q);
+        assertEquals(true, q.equals(q2));
 
         // getClass() != obj.getClass() → true branch
         Object obj = "uma string";
-        assertNotEquals(obj, q);
+        assertEquals(false, q.equals(obj));
 
         // getClass() == obj.getClass() → false branch
         Question q3 = new Question();
