@@ -246,4 +246,20 @@ class TransactionServiceTest {
 
         assertFalse(result, "Usuário que não é announcer nem receiver não deve ser participante");
     }
+
+    @Test
+    void testIsParticipantInTransaction_TrueAsReceiver() throws Exception {
+        // Usuário é o receiver da transação
+        boolean result = invokeIsParticipantInTransaction(receiverUser, pendingTransaction);
+
+        assertTrue(result, "Receiver deve ser considerado participante da transação");
+    }
+
+    @Test
+    void testIsParticipantInTransaction_TrueAsAnnouncer() throws Exception {
+        // Usuário é o announcer da transação
+        boolean result = invokeIsParticipantInTransaction(announcerUser, pendingTransaction);
+
+        assertTrue(result, "Announcer deve ser considerado participante da transação");
+    }
 }
