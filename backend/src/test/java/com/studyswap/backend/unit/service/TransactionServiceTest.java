@@ -232,4 +232,18 @@ class TransactionServiceTest {
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
         assertTrue(exception.getMessage().contains("Material não encontrado"));
     }
+
+    private boolean invokeIsParticipantInTransaction(User user, Transaction transaction) throws Exception {
+        var method = TransactionService.class.getDeclaredMethod("isParticipantInTransaction", User.class, Transaction.class);
+        method.setAccessible(true);
+        return (boolean) method.invoke(transactionService, user, transaction);
+    }
+
+    @Test
+    void testIsParticipantInTransaction_FalseCase() throws Exception {
+        // Usuário que não é nem announcer nem receiver
+        boolean result = invokeIsParticipantInTransaction(anotherUser, pendingTransaction);
+
+        assertFalse(result, "Usuário que não é announcer nem receiver não deve ser participante");
+    }
 }
