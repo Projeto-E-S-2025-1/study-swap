@@ -282,4 +282,45 @@ class TransactionServiceTest {
         Transaction t3 = new Transaction(10L, testMaterial, u, receiverUser, TransactionStatus.PENDING);
         assertFalse(invokeIsParticipantInTransaction(u, t3));
     }
+
+    private boolean invokeIsReceiver(User user, Transaction transaction) throws Exception {
+        var method = TransactionService.class.getDeclaredMethod("isReceiver", User.class, Transaction.class);
+        method.setAccessible(true);
+        return (boolean) method.invoke(transactionService, user, transaction);
+    }
+
+    @Test
+    void testIsReceiver_AllBranches() throws Exception {
+        User u1 = new User();
+        u1.setId(1L);
+        User u2 = new User();
+        u2.setId(2L);
+
+        Transaction tx = new Transaction();
+
+        // Branch 1: receiver null
+        tx.setReceiver(null);
+        assertFalse(invokeIsReceiver(u1, tx));
+
+        // Branch 2: user null
+        tx.setReceiver(u1);
+        assertFalse(invokeIsReceiver(null, tx));
+
+        // Branch 3: receiver id null
+        User u3 = new User(); // id null
+        tx.setReceiver(u3);
+        assertFalse(invokeIsReceiver(u1, tx));
+
+        // Branch 4: receiver id igual ao user
+        u3.setId(1L);
+        tx.setReceiver(u3);
+        assertTrue(invokeIsReceiver(u1, tx));
+
+        // Branch 5: receiver id diferente do user
+        User u4 = new User();
+        u4.setId(99L);
+        tx.setReceiver(u4);
+        assertFalse(invokeIsReceiver(u1, tx));
+    }
+
 }
