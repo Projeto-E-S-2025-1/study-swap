@@ -104,7 +104,9 @@ public class Question {
 		if (obj == null || getClass() != obj.getClass())
 			return false;
 		Question other = (Question) obj;
-		return Objects.equals(id, other.id);
+		if (this.id == null && other.id == null) return true;
+		if (this.id == null || other.id == null) return false;
+		return this.id.equals(other.id);
 	}
 
 		public Question() {

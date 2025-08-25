@@ -62,34 +62,39 @@ class QuestionTest {
         // Comparar com null (obj == null)
         assertNotEquals(null, q1);
 
-        // Comparar com objeto de outra classe (getClass() != obj.getClass())
+        // Comparar com objeto de outra classe
         assertNotEquals("string qualquer", q1);
 
-        // Ambos IDs nulos (Objects.equals(null, null) == true)
+        // Ambos IDs nulos → deve ser true
         assertEquals(q1, q2);
-        assertEquals(q1.hashCode(), q2.hashCode()); // cobre branch do hashCode com id null
+        assertEquals(q1.hashCode(), q2.hashCode());
 
-        // ID de q1 nulo, q2 não nulo
+        // ID de q1 nulo, q2 não nulo → deve ser false
         q2.setId(1L);
         assertNotEquals(q1, q2);
 
-        // ID de q1 não nulo, q2 nulo
+        // ID de q1 não nulo, q2 nulo → deve ser false
         q1.setId(1L);
         q2.setId(null);
         assertNotEquals(q1, q2);
 
-        // Ambos IDs iguais
+        // Ambos IDs iguais → deve ser true
         q2.setId(1L);
         assertEquals(q1, q2);
         assertEquals(q1.hashCode(), q2.hashCode());
 
-        // IDs diferentes (Objects.equals diferente)
+        // IDs diferentes → deve ser false
         q2.setId(2L);
         assertNotEquals(q1, q2);
 
-        // Caso explícito: obj != null e mesma classe (já cai em Objects.equals)
+        // Caso extra: obj != null, mesma classe, ambos IDs null (novo objeto)
         Question q3 = new Question();
-        q3.setId(1L);
-        assertEquals(q1, q3);
+        assertEquals(q3, new Question());
+
+        // Caso extra: obj != null, mesma classe, id null x id não null
+        Question q4 = new Question();
+        Question q5 = new Question();
+        q5.setId(5L);
+        assertNotEquals(q4, q5);
     }
 }
