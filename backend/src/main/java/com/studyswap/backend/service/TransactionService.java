@@ -111,9 +111,13 @@ receiver, TransactionStatus.PENDING	);
 		return isAnnouncer(user, transaction) || isReceiver(user, transaction);
 	}
 	private boolean isAnnouncer(User user, Transaction transaction){
-		return transaction.getAnnouncer().getId().equals(user.getId());
+		return transaction.getAnnouncer() != null && user != null
+				&& transaction.getAnnouncer().getId() != null
+				&& transaction.getAnnouncer().getId().equals(user.getId());
 	}
-	private boolean isReceiver(User user, Transaction transaction) {
-		return transaction.getReceiver().getId().equals(user.getId());
+	private boolean isReceiver(User user, Transaction transaction){
+		return transaction.getReceiver() != null && user != null
+				&& transaction.getReceiver().getId() != null
+				&& transaction.getReceiver().getId().equals(user.getId());
 	}
 }
