@@ -1,16 +1,18 @@
 package com.studyswap.backend.unit.dto;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
 import com.studyswap.backend.dto.ReviewRequestDTO;
-
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,39 +33,32 @@ class ReviewRequestDTOTest {
         assertTrue(violations.isEmpty(), "Não deveria haver violações para um DTO válido");
     }
 
-    @Test
-    void testInvalidRatingTooLow() {
-        ReviewRequestDTO dto = new ReviewRequestDTO(1L, 0, "Comentário válido");
-        Set<ConstraintViolation<ReviewRequestDTO>> violations = validator.validate(dto);
+    static Stream<Arguments> invalidDTOs() {
+        return Stream.of(
+                Arguments.of(new ReviewRequestDTO(1L, 0, "Comentário válido"), "A nota mínima é 1"),
+                Arguments.of(new ReviewRequestDTO(1L, 6, "Comentário válido"), "A nota máxima é 5"),
+                Arguments.of(new ReviewRequestDTO(1L, 3, "   "), "O comentário é obrigatório"),
+                Arguments.of(new ReviewRequestDTO(null, 4, "Comentário válido"), "A transação avaliada é obrigatória")
+        );
+    }
 
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("A nota mínima é 1")));
+    @ParameterizedTest
+    @MethodSource("invalidDTOs")
+    void testInvalidDTOs(ReviewRequestDTO dto, String expectedMessage) {
+        Set<ConstraintViolation<ReviewRequestDTO>> violations = validator.validate(dto);
+        assertFalse(violations.isEmpty(), "Deveria haver violações para o DTO inválido");
+        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains(expectedMessage)));
     }
 
     @Test
-    void testInvalidRatingTooHigh() {
-        ReviewRequestDTO dto = new ReviewRequestDTO(1L, 6, "Comentário válido");
-        Set<ConstraintViolation<ReviewRequestDTO>> violations = validator.validate(dto);
+    void testSettersAndGetters() {
+        ReviewRequestDTO dto = new ReviewRequestDTO();
+        dto.setTransactonId(123L);
+        dto.setRating(4);
+        dto.setDescription("Teste");
 
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("A nota máxima é 5")));
-    }
-
-    @Test
-    void testBlankDescription() {
-        ReviewRequestDTO dto = new ReviewRequestDTO(1L, 3, "   ");
-        Set<ConstraintViolation<ReviewRequestDTO>> violations = validator.validate(dto);
-
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("O comentário é obrigatório")));
-    }
-
-    @Test
-    void testNullTransactionId() {
-        ReviewRequestDTO dto = new ReviewRequestDTO(null, 4, "Comentário válido");
-        Set<ConstraintViolation<ReviewRequestDTO>> violations = validator.validate(dto);
-
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("A transação avaliada é obrigatória")));
+        assertEquals(123L, dto.getTransactionId());
+        assertEquals(4, dto.getRating());
+        assertEquals("Teste", dto.getDescription());
     }
 }
