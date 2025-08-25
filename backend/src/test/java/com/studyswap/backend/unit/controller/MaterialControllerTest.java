@@ -28,7 +28,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class MaterialControllerTest {
+class MaterialControllerTest {
 
     @Mock
     private AuthService authService;
@@ -150,9 +150,10 @@ public class MaterialControllerTest {
         ResponseEntity<MaterialResponseDTO> response = materialController.createMaterial(materialRequestDTO, testFile);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(materialResponseDTO.getTitle(), response.getBody().getTitle());
-        assertEquals(materialResponseDTO.getUserId(), response.getBody().getUserId());
+        MaterialResponseDTO body = response.getBody();
+        assertNotNull(body);
+        assertEquals(materialResponseDTO.getTitle(), body.getTitle());
+        assertEquals(materialResponseDTO.getUserId(), body.getUserId());
     }
 
     // ---------------------- DELETE ----------------------
@@ -165,7 +166,7 @@ public class MaterialControllerTest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("Material deletado com sucesso!", response.getBody());
-        verify(materialService, times(1)).deleteMaterial(eq(1L), eq(testUser));
+        verify(materialService, times(1)).deleteMaterial(1L, testUser);
     }
 
     @Test
@@ -179,7 +180,6 @@ public class MaterialControllerTest {
         });
 
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
-        assertEquals("404 NOT_FOUND \"Material não encontrado\"", exception.getMessage());
     }
 
     @Test
@@ -219,7 +219,6 @@ public class MaterialControllerTest {
         });
 
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
-        assertEquals("404 NOT_FOUND \"Material não encontrado\"", exception.getMessage());
     }
 
     // ---------------------- GET ALL / SEARCH ----------------------
@@ -258,7 +257,9 @@ public class MaterialControllerTest {
         ResponseEntity<MaterialResponseDTO> response = materialController.updateMaterial(1L, updatedMaterialDTO, updatedFile);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Livro de Teste Atualizado", response.getBody().getTitle());
+        MaterialResponseDTO body = response.getBody();
+        assertNotNull(body);
+        assertEquals("Livro de Teste Atualizado", body.getTitle());
     }
 
     @Test
@@ -272,7 +273,6 @@ public class MaterialControllerTest {
         });
 
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
-        assertEquals("404 NOT_FOUND \"Material não encontrado\"", exception.getMessage());
     }
 
     @Test

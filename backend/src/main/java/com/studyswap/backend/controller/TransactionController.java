@@ -2,7 +2,6 @@ package com.studyswap.backend.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -21,9 +20,12 @@ import com.studyswap.backend.service.TransactionService;
 @RestController
 @RequestMapping("/transactions")
 public class TransactionController {
-	@Autowired
-	private TransactionService transactionService;
+	private final TransactionService transactionService;
 	
+	public TransactionController(TransactionService transactionService) {
+		this.transactionService = transactionService;
+	}
+
 	@DeleteMapping("/{idTransaction}")
 	public ResponseEntity<Void> cancelTransaction(Authentication auth, @PathVariable("idTransaction") Long idTransaction){
 		transactionService.cancelTransaction(auth, idTransaction);

@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class AuthControllerRegisterTest {
+class AuthControllerRegisterTest {
 
     @Mock
     private AuthService authService;
@@ -47,9 +47,10 @@ public class AuthControllerRegisterTest {
         ResponseEntity<User> response = authController.register(registrationDTO);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals("New User", response.getBody().getName());
-        assertEquals("newuser@example.com", response.getBody().getEmail());
+        User body = response.getBody();
+        assertNotNull(body);
+        assertEquals("New User", body.getName());
+        assertEquals("newuser@example.com", body.getEmail());
     }
 
     @Test
