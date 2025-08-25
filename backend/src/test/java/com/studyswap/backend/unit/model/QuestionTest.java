@@ -68,8 +68,16 @@ class QuestionTest {
         // Ambos IDs nulos → equals deve ser true
         assertEquals(q1, q2);
 
-        // IDs iguais
+        // ID de q1 nulo, q2 não nulo
+        q2.setId(1L);
+        assertNotEquals(q1, q2);
+
+        // ID de q1 não nulo, q2 nulo
         q1.setId(1L);
+        q2.setId(null);
+        assertNotEquals(q1, q2);
+
+        // Ambos IDs iguais
         q2.setId(1L);
         assertEquals(q1, q2);
         assertEquals(q1.hashCode(), q2.hashCode());

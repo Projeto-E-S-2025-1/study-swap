@@ -214,4 +214,36 @@ class QuestionServiceTest {
             questionService.getQuestionsByMaterial(99L);
         });
     }
+
+    @Test
+    void testUpdateQuestion_TitleNull_ShouldUpdateOnlyDescription() {
+        UpdateQuestionDTO dto = new UpdateQuestionDTO();
+        dto.setTitle(null);
+        dto.setDescription("Nova descrição apenas");
+
+        when(authentication.getPrincipal()).thenReturn(authorUser);
+        when(questionRepository.findById(1L)).thenReturn(Optional.of(testQuestion));
+        when(questionRepository.save(any(Question.class))).thenAnswer(i -> i.getArgument(0));
+
+        Question result = questionService.updateQuestion(1L, dto, authentication);
+
+        assertEquals(testQuestion.getTitle(), result.getTitle()); // título não mudou
+        assertEquals("Nova descrição apenas", result.getDescription()); // descrição mudou
+    }
+
+    @Test
+    void testUpdateQuestion_DescriptionNull_ShouldUpdateOnlyTitle() {
+        UpdateQuestionDTO dto = new UpdateQuestionDTO();
+        dto.setTitle("Título alterado apenas");
+        dto.setDescription(null);
+
+        when(authentication.getPrincipal()).thenReturn(authorUser);
+        when(questionRepository.findById(1L)).thenReturn(Optional.of(testQuestion));
+        when(questionRepository.save(any(Question.class))).thenAnswer(i -> i.getArgument(0));
+
+        Question result = questionService.updateQuestion(1L, dto, authentication);
+
+        assertEquals("Título alterado apenas", result.getTitle()); // título mudou
+        assertEquals(testQuestion.getDescription(), result.getDescription()); // descrição não mudou
+    }
 }

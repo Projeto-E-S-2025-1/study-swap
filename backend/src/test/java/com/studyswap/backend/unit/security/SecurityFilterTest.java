@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -97,6 +98,55 @@ class SecurityFilterTest {
         when(request.getRequestURI()).thenReturn("/api/materials");
         when(request.getHeader("Authorization")).thenReturn("Bearer " + token);
         when(tokenService.validateToken(token)).thenReturn("");
+
+        securityFilter.doFilter(request, response, filterChain);
+
+        assertNull(SecurityContextHolder.getContext().getAuthentication());
+        verify(filterChain, times(1)).doFilter(request, response);
+    }
+
+    @Test
+    void testDoFilter_ForRegisterPath_ShouldSkipAuthentication() throws ServletException, IOException {
+        when(request.getRequestURI()).thenReturn("/auth/register");
+        securityFilter.doFilter(request, response, filterChain);
+
+        verify(tokenService, never()).validateToken(anyString());
+        verify(filterChain, times(1)).doFilter(request, response);
+    }
+
+    @Test
+    void testDoFilter_ForUploadsPath_ShouldSkipAuthentication() throws ServletException, IOException {
+        when(request.getRequestURI()).thenReturn("/uploads/file.png");
+        securityFilter.doFilter(request, response, filterChain);
+
+        verify(tokenService, never()).validateToken(anyString());
+        verify(filterChain, times(1)).doFilter(request, response);
+    }
+
+    @Test
+    void testDoFilter_ForImagesPath_ShouldSkipAuthentication() throws ServletException, IOException {
+        when(request.getRequestURI()).thenReturn("/images/logo.png");
+        securityFilter.doFilter(request, response, filterChain);
+
+        verify(tokenService, never()).validateToken(anyString());
+        verify(filterChain, times(1)).doFilter(request, response);
+    }
+
+    @Test
+    void testDoFilter_HeaderWithoutBearer_ShouldNotAuthenticate() throws ServletException, IOException {
+        when(request.getRequestURI()).thenReturn("/api/materials");
+        when(request.getHeader("Authorization")).thenReturn("Token abcdef");
+
+        securityFilter.doFilter(request, response, filterChain);
+
+        assertNull(SecurityContextHolder.getContext().getAuthentication());
+        verify(filterChain, times(1)).doFilter(request, response);
+    }
+
+    @Test
+    void testDoFilter_HeaderEmpty_ShouldNotAuthenticate() throws ServletException, IOException {
+        when(request.getRequestURI()).thenReturn("/api/materials");
+        when(request.getHeader("Authorization")).thenReturn("");
 
         securityFilter.doFilter(request, response, filterChain);
 
