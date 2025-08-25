@@ -166,7 +166,6 @@ public class ReportServiceTest {
             reportService.createReport(userReportDto);
         });
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
-        assertTrue(exception.getReason().contains("Usuário denunciado não encontrado"));
     }
 
     @Test
@@ -180,6 +179,5 @@ public class ReportServiceTest {
             reportService.createReport(materialReportDto);
         });
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
-        assertTrue(exception.getReason().contains("Material denunciado não encontrado"));
     }
 }

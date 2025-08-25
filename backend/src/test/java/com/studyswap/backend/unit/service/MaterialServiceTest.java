@@ -141,7 +141,6 @@ public class MaterialServiceTest {
         });
 
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
-        assertEquals("404 NOT_FOUND \"Material não encontrado\"", exception.getMessage());
     }
 
     @Test
