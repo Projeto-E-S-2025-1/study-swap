@@ -21,7 +21,7 @@ import java.util.Optional;
 
 @DataJpaTest
 @DisplayName("MaterialRepository Integration Tests")
-public class MaterialRepositoryTest {
+class MaterialRepositoryTest {
 
 
     @Autowired

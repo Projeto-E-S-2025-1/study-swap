@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TransactionTest {
+class TransactionTest {
 
     @Test
     void testTransactionConstructorAndGetters() {

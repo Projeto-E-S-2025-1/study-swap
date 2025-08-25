@@ -24,7 +24,7 @@ import java.util.Optional;
 
 @DataJpaTest
 @DisplayName("ReviewRepository Integration Tests")
-public class ReviewRepositoryTest {
+class ReviewRepositoryTest {
 
     @Autowired
     private ReviewRepository reviewRepository;

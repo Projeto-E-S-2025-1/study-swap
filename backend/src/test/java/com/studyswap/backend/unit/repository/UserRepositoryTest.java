@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @DataJpaTest
 @DisplayName("UserRepository Integration Tests")
-public class UserRepositoryTest {
+class UserRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
