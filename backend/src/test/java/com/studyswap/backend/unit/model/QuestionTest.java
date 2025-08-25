@@ -67,6 +67,7 @@ class QuestionTest {
 
         // Ambos IDs nulos (Objects.equals(null, null) == true)
         assertEquals(q1, q2);
+        assertEquals(q1.hashCode(), q2.hashCode()); // cobre branch do hashCode com id null
 
         // ID de q1 nulo, q2 não nulo
         q2.setId(1L);
