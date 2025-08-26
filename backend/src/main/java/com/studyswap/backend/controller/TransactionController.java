@@ -29,7 +29,7 @@ public class TransactionController {
 	}
 
 	@DeleteMapping("/{idMaterial}")
-	public ResponseEntity<Void> cancelTransaction(Authentication auth, @PathVariable("idTransaction") Long idMaterial){
+	public ResponseEntity<Void> cancelTransaction(Authentication auth, @PathVariable Long idMaterial){
 		transactionService.cancelTransaction(auth, idMaterial);
 		return ResponseEntity.noContent().build();		
 	}

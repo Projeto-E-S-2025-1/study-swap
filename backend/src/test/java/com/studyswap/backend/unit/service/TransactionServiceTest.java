@@ -1,7 +1,10 @@
 package com.studyswap.backend.unit.service;
 
+import com.studyswap.backend.dto.MaterialRequestDTO;
 import com.studyswap.backend.dto.TransactionResponseDTO;
+import com.studyswap.backend.model.ConservationStatus;
 import com.studyswap.backend.model.Material;
+import com.studyswap.backend.model.MaterialType;
 import com.studyswap.backend.model.Transaction;
 import com.studyswap.backend.model.TransactionStatus;
 import com.studyswap.backend.model.TransactionType;
@@ -125,6 +128,44 @@ class TransactionServiceTest {
         });
     }
 
+    @Test
+    void testCreateTransaction_Success_Exchange() {
+        // Tipo de transação TROCA
+        testMaterial.setTransactionType(TransactionType.TROCA);
+        when(authentication.getPrincipal()).thenReturn(receiverUser);
+        when(materialRepository.findById(10L)).thenReturn(Optional.of(testMaterial));
+        when(transactionRepository.save(any(Transaction.class))).thenAnswer(i -> i.getArgument(0));
+
+        // Material oferecido
+        var offeredMaterialDTO = new MaterialRequestDTO();
+        offeredMaterialDTO.setTitle("Livro Oferta");
+        offeredMaterialDTO.setDescription("Descrição oferta");
+        offeredMaterialDTO.setConservationStatus(ConservationStatus.NOVO);
+        offeredMaterialDTO.setMaterialType(MaterialType.LIVRO);
+
+        TransactionResponseDTO result = transactionService.createTransaction(authentication, 10L, offeredMaterialDTO);
+
+        assertNotNull(result);
+        assertEquals(TransactionStatus.PENDING, result.getStatus());
+        assertEquals(TransactionType.TROCA, result.getTransactionType());
+        verify(transactionRepository, times(1)).save(any(Transaction.class));
+    }
+
+    @Test
+    void testCreateTransaction_Exchange_MissingOfferedMaterial() {
+        // Tipo de transação TROCA
+        testMaterial.setTransactionType(TransactionType.TROCA);
+        when(authentication.getPrincipal()).thenReturn(receiverUser);
+        when(materialRepository.findById(10L)).thenReturn(Optional.of(testMaterial));
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            transactionService.createTransaction(authentication, 10L, null);
+        });
+
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
+        assertTrue(exception.getMessage().contains("É necessário enviar um material"));
+    }
+
     // ---------------------- cancelTransaction ----------------------
 
     @Test
@@ -157,8 +198,9 @@ class TransactionServiceTest {
         doReturn(Optional.of(pendingTransaction))
                 .when(transactionRepository).findByMaterialAndAnnouncer(any(Material.class), any(User.class));
 
+        Long materialId = pendingTransaction.getMaterial().getId();
         assertThrows(ResponseStatusException.class, () ->
-                transactionService.cancelTransaction(authentication, pendingTransaction.getMaterial().getId())
+                transactionService.cancelTransaction(authentication, materialId)
         );
 
         verify(transactionRepository, never()).delete(any());
@@ -175,8 +217,9 @@ class TransactionServiceTest {
         doReturn(Optional.of(concludedTransaction))
                 .when(transactionRepository).findByMaterialAndAnnouncer(any(Material.class), any(User.class));
 
+        Long materialId = concludedTransaction.getMaterial().getId();
         assertThrows(ResponseStatusException.class, () ->
-                transactionService.cancelTransaction(authentication, concludedTransaction.getMaterial().getId())
+                transactionService.cancelTransaction(authentication, materialId)
         );
 
         verify(transactionRepository, never()).delete(any());
