@@ -1,0 +1,22 @@
+.stars {
+  font-size: 1.8rem;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.star {
+  transition: color 0.2s;
+}
+
+.star.filled {
+  color: #2e7d32; /* verde elegante */
+}
+
+textarea {
+  resize: none;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

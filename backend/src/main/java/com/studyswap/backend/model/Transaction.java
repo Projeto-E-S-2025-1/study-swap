@@ -2,6 +2,7 @@ package com.studyswap.backend.model;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.NotNull;
 
@@ -40,7 +42,15 @@ public class Transaction {
     @Column(nullable = false)
     @NotNull(message = "O Status da transação é obrigatório")
     private TransactionStatus status;
-    
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @NotNull(message = "O Tipo da transação é obrigatório")
+    private TransactionType type;   
+
+    @JoinColumn(name="material_trade_id", nullable=true)
+    @OneToOne(cascade = CascadeType.PERSIST)
+    private Material materialTrade;
     
     public Long getId() {
 		return id;
@@ -69,12 +79,22 @@ public class Transaction {
 
     public Transaction() {
     }
-    public Transaction(Long id, Material material, User announcer, User receiver, TransactionStatus status) {
-        this.id = id;
+
+    public Transaction(Material material, User announcer, User receiver, TransactionStatus status, TransactionType type, Material materialTrade) {
         this.material = material;
         this.announcer = announcer;
         this.receiver = receiver;
         this.status=status;
+        this.type = type;
+        this.materialTrade = materialTrade;
+    }
+
+    public Transaction(Material material, User announcer, User receiver, TransactionStatus status, TransactionType type) {
+        this.material = material;
+        this.announcer = announcer;
+        this.receiver = receiver;
+        this.status=status;
+        this.type = type;
     }
 
     public void setMaterial(Material material) {
@@ -91,6 +111,18 @@ public class Transaction {
     }
     public void setReceiver(User receiver) {
         this.receiver = receiver;
+    }
+    public TransactionType getType() {
+        return type;
+    }
+    public void setType(TransactionType type) {
+        this.type = type;
+    }
+    public Material getMaterialTrade() {
+        return materialTrade;
+    }
+    public void setMaterialTrade(Material materialTrade) {
+        this.materialTrade = materialTrade;
     }
     public LocalDateTime getTransactionDate() {
         return transactionDate;

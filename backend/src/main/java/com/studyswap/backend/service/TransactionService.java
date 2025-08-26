@@ -11,8 +11,11 @@ import com.studyswap.backend.dto.TransactionResponseDTO;
 import com.studyswap.backend.model.Material;
 import com.studyswap.backend.model.Transaction;
 import com.studyswap.backend.model.TransactionStatus;
+import com.studyswap.backend.model.TransactionType;
 import com.studyswap.backend.model.User;
 import com.studyswap.backend.repository.MaterialRepository;
+import com.studyswap.backend.dto.MaterialDTO;
+import com.studyswap.backend.dto.MaterialRequestDTO;
 import com.studyswap.backend.repository.TransactionRepository;
 
 import jakarta.transaction.Transactional;
@@ -29,13 +32,14 @@ public class TransactionService {
 	}
 
 	@Transactional
-	public TransactionResponseDTO createTransaction(Authentication auth, Long idMaterial){
+	public TransactionResponseDTO createTransaction(Authentication auth, Long idMaterial, MaterialRequestDTO offeredMaterialDTO) {
 		Material material = materialRepository.findById(idMaterial).orElseThrow(
 				()-> new ResponseStatusException(
 						HttpStatus.NOT_FOUND, "Material não encontrado")
 		);
 		User  receiver = (User) auth.getPrincipal();
 		User announcer = material.getUser();
+		TransactionType type = material.getTransactionType();
 		
 		if(announcer.equals(receiver)) {
 		    throw new ResponseStatusException(
@@ -46,16 +50,37 @@ public class TransactionService {
 			throw new ResponseStatusException(	
                     HttpStatus.BAD_REQUEST, "Material indisponível");
         }
-		Transaction transaction = new Transaction(idMaterial, material, announcer,
-receiver, TransactionStatus.PENDING	);
+		Transaction transaction;
+
+		if (type == TransactionType.TROCA) {
+			if (offeredMaterialDTO == null) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "É necessário enviar um material para realizar a troca");
+			}
+			Material offered = new Material();
+			offered.setTitle(offeredMaterialDTO.getTitle());
+			offered.setDescription(offeredMaterialDTO.getDescription());
+			offered.setConservationStatus(offeredMaterialDTO.getConservationStatus());
+			offered.setMaterialType(offeredMaterialDTO.getMaterialType());
+			offered.setTransactionType(TransactionType.TROCA);
+			offered.setAvailable(true);
+			offered.setUser(receiver);
+
+			transaction = new Transaction(material, announcer, receiver, TransactionStatus.PENDING, type, offered);
+		} else {
+			transaction = new Transaction(material, announcer, receiver, TransactionStatus.PENDING, type);
+    }
 		return convertToResponseDTO(transactionRepository.save(transaction));
 	}
 	
 	@Transactional
-	public void cancelTransaction(Authentication auth, Long idTransaction) {
+	public void cancelTransaction(Authentication auth, Long idMaterial) {
 		User user = (User) auth.getPrincipal();
 		//verifica se a transação está no BD
-		Transaction transaction = transactionRepository.findById(idTransaction).orElseThrow(()
+		Material material = materialRepository.findById(idMaterial).orElseThrow(()
+				-> new ResponseStatusException(
+				HttpStatus.NOT_FOUND, "Material não encontrado")
+				);
+		Transaction transaction = transactionRepository.findByMaterialAndAnnouncer(material, user).orElseThrow(()
 				-> new ResponseStatusException(
 				HttpStatus.NOT_FOUND, "Transação não encontrada")
 				);	
@@ -95,17 +120,26 @@ receiver, TransactionStatus.PENDING	);
 				()-> new ResponseStatusException(
 						HttpStatus.NOT_FOUND, "Material não encontrado")
 		);    	
-		if(!loggedUser.equals(material.getUser())) {
+		if(!material.getUser().getId().equals(loggedUser.getId())) {
     		throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Apenas o dono do material pode ver todas suas transações");
     	}
         List<Transaction> transactions = transactionRepository.findByMaterial(material);
         return transactions.stream().map(this::convertToResponseDTO).toList();
     }
+
+	public List<TransactionResponseDTO> findAllTransactionsByUser(Authentication auth) {
+		User loggedUser = (User) auth.getPrincipal();
+		List<Transaction> transactions = transactionRepository.findByAnnouncer(loggedUser);
+		transactions.addAll(transactionRepository.findByReceiver(loggedUser));
+		return transactions.stream().map(this::convertToResponseDTO).toList();
+	}
     
     private TransactionResponseDTO convertToResponseDTO(Transaction transaction) {
+		MaterialDTO offeredMaterial =  new MaterialDTO(transaction.getMaterial().getId(), transaction.getMaterial().getTitle(), 
+													   transaction.getMaterial().getMaterialType(), transaction.getMaterial().getConservationStatus());
 		return new TransactionResponseDTO(transaction.getId(), transaction.getTransactionDate(), transaction.getMaterial().getId(), 
 				transaction.getStatus(), transaction.getReceiver().getId(), transaction.getReceiver().getName(),
-				transaction.getAnnouncer().getId(), transaction.getAnnouncer().getName());
+				transaction.getAnnouncer().getId(), transaction.getAnnouncer().getName(), transaction.getType(), offeredMaterial);
 	}
 	private boolean isParticipantInTransaction(User user, Transaction transaction) {
 		return isAnnouncer(user, transaction) || isReceiver(user, transaction);

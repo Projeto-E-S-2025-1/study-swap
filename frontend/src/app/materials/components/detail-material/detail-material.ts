@@ -8,11 +8,14 @@ import { QuestionListComponent } from '../question-list/question-list';
 import { AuthService } from '../../../auth/auth.service';
 import { environment } from '../../../../environments/environment';
 import { UpdateMaterial } from '../update-material/update-material';
+import { OpenTransactionComponent } from '../../../transaction/components/open-transaction/open-transaction.component';
+import { TransactionProposalsComponent } from '../../../transaction/components/list-options/list-transactions';
+import { TransactionService } from '../../../transaction/services/transaction.service';
 
 @Component({
   selector: 'app-detail-material',
   standalone: true,
-  imports: [CommonModule, RouterModule, QuestionListComponent, UpdateMaterial],
+  imports: [CommonModule, RouterModule, QuestionListComponent, UpdateMaterial, OpenTransactionComponent, TransactionProposalsComponent],
   templateUrl: './detail-material.html',
   styleUrls: ['./detail-material.css']
 })
@@ -21,14 +24,17 @@ export class DetailMaterial implements OnInit {
   isLoading: boolean = true;
   errorMessage: string = '';
   isOwner: boolean = false;
+  isDone: boolean = false;
   showMenu: boolean = false;
-  showModal: boolean = false;
+  showModalUpdate: boolean = false;
+  showModalTransaction: boolean = false;
 
   apiUrl = environment.apiUrl;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private transactionService: TransactionService,
     private materialService: MaterialService,
     private authService: AuthService
   ) {}
@@ -77,7 +83,8 @@ export class DetailMaterial implements OnInit {
   }
 
   closeModal(): void {
-    this.showModal = false;
+    this.showModalUpdate = false;
+    this.showModalTransaction = false;
   }
 
   onMaterialAtualizado(novoMaterial: Material): void {
@@ -94,5 +101,15 @@ export class DetailMaterial implements OnInit {
           this.isLoading = false;
         }
       });
+  }
+
+  onTransactionDone() {
+    this.isDone = true;  
+    this.showModalTransaction = false;
+  }
+
+  onCancelTransaction() {
+    this.isDone = false;
+    this.showModalTransaction = false;
   }
 }

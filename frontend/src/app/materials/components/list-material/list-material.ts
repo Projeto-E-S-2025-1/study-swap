@@ -41,7 +41,7 @@ export class ListMaterial implements OnInit {
   }
 
   carregarMateriais(): void {
-    this.materialService.getAll().subscribe({
+    this.materialService.getAvailableMaterials().subscribe({
       next: (data) => {
         this.materials = data;
         this.isLoading = false;

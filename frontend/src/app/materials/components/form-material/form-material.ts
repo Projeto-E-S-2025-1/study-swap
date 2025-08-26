@@ -25,7 +25,8 @@ export class FormMaterial implements OnInit {
     conservationStatus: ConservationStatus.NOVO,
     transactionType: TransactionType.DOACAO,
     price: 0 as number | null,
-    userId: 0 as number
+    userId: 0 as number,
+    available: true
   };
 
   materialFile?: File;

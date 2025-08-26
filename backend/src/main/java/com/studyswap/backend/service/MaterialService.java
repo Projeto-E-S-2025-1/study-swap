@@ -76,6 +76,16 @@ public class MaterialService {
         return materialRepository.findAll().stream().map(this::convertToResponseDTO).toList();
     }
 
+    public List<MaterialResponseDTO> getMaterialsByUser(User user) {
+        List<Material> materials = materialRepository.findByUser(user);
+        return materials.stream().map(this::convertToResponseDTO).toList();
+    }
+
+    public List<MaterialResponseDTO> getAvailableMaterials() {
+        List<Material> materials = materialRepository.findByAvailableTrue();
+        return materials.stream().map(this::convertToResponseDTO).toList();
+    }
+
     public List<MaterialResponseDTO> searchMaterials(
         String title,
         MaterialType materialType,

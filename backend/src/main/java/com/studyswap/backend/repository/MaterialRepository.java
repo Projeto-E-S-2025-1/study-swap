@@ -25,4 +25,6 @@ public interface MaterialRepository extends JpaRepository<Material, Long>{
         @Param("conservationStatus") ConservationStatus conservationStatus,
         @Param("transactionType") TransactionType transactionType
     );
+    List<Material> findByUser(com.studyswap.backend.model.User user);
+    List<Material> findByAvailableTrue();
 }
