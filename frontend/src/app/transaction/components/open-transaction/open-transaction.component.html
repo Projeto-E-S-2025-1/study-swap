@@ -1,0 +1,67 @@
+<div class="modal">
+  <div class="modal-header">
+    <h2 *ngIf="!isDone">
+      {{ transactionType === 'TROCA' ? 'Troca de Material' : 'Confirmar Transação' }}
+    </h2>
+    <h2 *ngIf="isDone">
+      Cancelar Transação
+    </h2>
+    <button type="button" class="close" (click)="onClose()">&times;</button>
+  </div>
+
+  <div class="modal-body" *ngIf="!isDone">
+    <!-- Para VENDA ou DOAÇÃO -->
+    <div *ngIf="transactionType !== 'TROCA'">
+      <p><strong>Material:</strong> {{ material.title }}</p>
+      <p><strong>Descrição:</strong> {{ material.description }}</p>
+      <p><strong>Tipo:</strong> {{ transactionType }}</p>
+    </div>
+
+    <!-- Para TROCA -->
+    <div *ngIf="transactionType === 'TROCA'">
+      <p>Por favor, preencha os detalhes do material que deseja trocar:</p>
+      <form #trocaForm="ngForm">
+        <div class="form-group">
+          <label>Nome do material</label>
+          <input class="form-control" [(ngModel)]="materialDTO.title" name="nome" required />
+        </div>
+        <div class="form-group">
+          <label>Descrição</label>
+          <textarea class="form-control" [(ngModel)]="materialDTO.description" name="descricao"></textarea>
+        </div>
+        <div>
+          <label>Tipo de Material</label>
+          <select class="form-control" [(ngModel)]="materialDTO.materialType" name="materialType" required>
+            <option [ngValue]="MaterialType.LIVRO">Livro</option>
+            <option [ngValue]="MaterialType.APOSTILA">Apostila</option>
+            <option [ngValue]="MaterialType.EQUIPAMENTO">Equipamento</option>
+            <option [ngValue]="MaterialType.MOBILIARIO">Mobiliário</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Estado de Conservação</label>
+          <select class="form-control" [(ngModel)]="materialDTO.conservationStatus" name="condition" required>
+            <option [ngValue]="ConservationStatus.NOVO">Novo</option>
+            <option [ngValue]="ConservationStatus.BOM">Bom</option>
+            <option [ngValue]="ConservationStatus.RAZOAVEL">Razoável</option>
+            <option [ngValue]="ConservationStatus.VELHO">Velho</option>
+          </select>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Resumo do material ofertado -->
+  <div class="modal-body" *ngIf="isDone">
+    <h3>Material ofertado:</h3>
+    <p><strong>Material:</strong> {{ material.title }}</p>
+    <p><strong>Descrição:</strong> {{ material.description }}</p>
+    <p><strong>Tipo:</strong> {{ transactionType }}</p>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="onCancel()" >Cancelar</button>
+    <button type="button" class="btn btn-primary" (click)="onConfirm()">Enviar</button>
+  </div>
+</div>
