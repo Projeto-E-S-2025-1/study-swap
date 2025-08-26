@@ -1,0 +1,29 @@
+<div class="transactions-container">
+  <h2>Minhas Transações</h2>
+
+  <div *ngIf="transactions.length === 0" class="empty-message">
+    Você ainda não participou de nenhuma transação.
+  </div>
+
+  <div *ngFor="let t of transactions" class="transaction-card">
+    <div class="transaction-info">
+      <p><strong>Material:</strong> {{ t.material.title }}</p>
+      <p><strong>Tipo:</strong> {{ t.transactionType }}</p>
+      <p><strong>Status:</strong> {{ t.status }}</p>
+      <p><strong>Anunciante:</strong> {{ t.announcer.name }}</p>
+      <p><strong>Interessado:</strong> {{ t.interested.name }}</p>
+    </div>
+
+    <div class="transaction-actions">
+      <!-- botão aparece só quando concluída -->
+      <button
+        class="btn btn-primary"
+        *ngIf="t.status === 'COMPLETED'"
+        [routerLink]="['/review/:id']"
+        [queryParams]="{ transactionId: t.id }"
+      >
+        Avaliar Transação
+      </button>
+    </div>
+  </div>
+</div>
