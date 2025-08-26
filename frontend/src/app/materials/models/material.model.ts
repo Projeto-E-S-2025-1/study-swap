@@ -9,6 +9,7 @@ export interface Material {
     photo?: string;
     userId?: number;
     userName?: string;
+    available?: boolean;
 }
 
 export enum MaterialType {

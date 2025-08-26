@@ -18,10 +18,13 @@
         </span>
       </div>
       <div class="detalhe-material-acoes" *ngIf="isOwner == true">
-        <button class="botao-editar" (click) = "showModal = true">Editar material</button>
+        <button class="botao-editar" (click) = "showModalUpdate = true">Editar material</button>
         <button class="botao-excluir" (click) = "apagarMaterial()">Excluir material</button>
       </div>
-      <div class="denuncia-menu-wrapper" (clickOutside)="showMenu = false">
+      <div class="denuncia-menu-wrapper" (clickOutside)="showMenu = false" *ngIf="isOwner == false">
+        <button class="transacao-btn" (click)="showModalTransaction = true">
+          {{isDone ? 'Cancelar' : 'Realizar'}} {{ material?.transactionType | lowercase }}
+        </button>
         <button class="denunciar-btn" (click)="toggleMenu()">
           Denunciar
         </button>
@@ -50,10 +53,25 @@
     <app-question-list *ngIf="materialId !== null" [materialId]="materialId"></app-question-list>
   </div>
 
-  <div class="modal-overlay" *ngIf="showModal">
+  <div *ngIf="isOwner" class="transaction-proposals-wrapper">
+    <app-transaction-proposals *ngIf="materialId !== null" [materialId]="materialId"></app-transaction-proposals>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showModalUpdate">
     <div class="modal-content">
       <button class="close-btn" (click)="closeModal()">×</button>
       <app-update-materials (materialAtualizado)="onMaterialAtualizado($event)"></app-update-materials>
     </div>
+  </div>
+
+  <div class="modal-backdrop" *ngIf="showModalTransaction && material">
+  <app-open-transaction
+    [material]="material"
+    [transactionType]="material.transactionType"
+    [isDone]="isDone"
+    (close)="closeModal()"
+    (confirm)="onTransactionDone()"
+    (cancel)="onCancelTransaction()"
+  ></app-open-transaction>
   </div>
 </div>
