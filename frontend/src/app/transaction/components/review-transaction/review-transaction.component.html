@@ -1,0 +1,55 @@
+<div class="container mt-4">
+  <h2 class="mb-3">Deixe sua avaliação</h2>
+
+  <form (ngSubmit)="onSubmit()" #reviewForm="ngForm" novalidate>
+    <!-- Avaliação com estrelas -->
+    <div class="form-group mb-3">
+      <label class="form-label d-block">Avaliação</label>
+      <div class="stars">
+        <span
+          *ngFor="let star of stars; let i = index"
+          (click)="setRating(i + 1)"
+          (mouseover)="hoverRating(i + 1)"
+          (mouseleave)="hoverRating(0)"
+          class="star"
+          [class.filled]="i < (hoveredRating || reviewDTO.rating)">
+          ★
+        </span>
+      </div>
+      <small class="text-muted">Selecione de 1 a 5 estrelas</small>
+    </div>
+
+    <!-- Comentário -->
+    <div class="form-group mb-3">
+      <label for="comment" class="form-label">Comentário</label>
+      <textarea
+        id="comment"
+        name="comment"
+        class="form-control"
+        rows="4"
+        [(ngModel)]="reviewDTO.comment"
+        required
+        placeholder="Compartilhe sua experiência...">
+      </textarea>
+      <div *ngIf="reviewForm.submitted && !reviewDTO.comment" class="text-danger small">
+        O comentário é obrigatório.
+      </div>
+    </div>
+
+    <!-- Botão -->
+    <button
+      type="submit"
+      class="btn btn-success px-4"
+      [disabled]="reviewForm.invalid">
+      Enviar Avaliação
+    </button>
+
+    <!-- Feedback -->
+    <div *ngIf="successMessage" class="alert alert-success mt-3">
+      {{ successMessage }}
+    </div>
+    <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+      {{ errorMessage }}
+    </div>
+  </form>
+</div>
