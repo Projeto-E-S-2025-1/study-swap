@@ -1,0 +1,44 @@
+<h2>Propostas</h2>
+
+<div *ngIf="isLoading">Carregando propostas...</div>
+
+<!-- caso não tenha nenhuma proposta -->
+<div *ngIf="!isLoading && proposals.length === 0" class="no-proposals">
+  Nenhuma proposta disponível para este material.
+</div>
+
+<ul *ngIf="!isLoading && proposals.length > 0" class="proposal-list">
+  <li *ngFor="let p of proposals" 
+      (click)="selectProposal(p)" 
+      [class.selected]="p === selectedProposal"
+      class="proposal-item">
+      
+    <strong>{{ p.receiverName }}</strong> fez uma proposta de <b>{{ p.transactionType }}</b>
+    <div *ngIf="p.transactionType === 'TROCA' && p.offeredMaterial">
+      <small>
+        <i>Material oferecido:</i> {{ p.offeredMaterial.title }} - {{ p.offeredMaterial.conservationStatus }}
+      </small>
+    </div>
+  </li>
+</ul>
+<div *ngIf="selectedProposal" class="proposal-detail">
+  <h4>Proposta Selecionada</h4>
+  <p>Usuário: <strong>{{ selectedProposal.receiverName }}</strong></p>
+  <p>Tipo: {{ selectedProposal.transactionType }}</p>
+
+  <div *ngIf="selectedProposal.transactionType === 'TROCA' && selectedProposal.offeredMaterial">
+    <p><b>Material Oferecido:</b> {{ selectedProposal.offeredMaterial.title }}</p>
+    <p><b>Tipo de Material:</b> {{ selectedProposal.offeredMaterial.materialType }}</p>
+    <p><b>Estado:</b> {{ selectedProposal.offeredMaterial.conservationStatus }}</p>
+  </div>
+
+  <!-- primeiro botão de "Selecionar Proposta" -->
+  <button *ngIf="!confirmedSelection" class="btn btn-primary" (click)="confirmSelection()">
+    Selecionar Proposta
+  </button>
+
+  <!-- botão de finalizar só aparece depois -->
+  <button *ngIf="confirmedSelection" class="btn btn-success" (click)="finalizeTransaction()">
+    Finalizar Transação
+  </button>
+</div>
