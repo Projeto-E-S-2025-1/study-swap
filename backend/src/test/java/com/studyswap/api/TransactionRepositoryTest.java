@@ -24,9 +24,6 @@ class TransactionRepositoryTest {
         // Assert básico
         assertNotNull(transactions, "A lista de transações não deve ser nula");
 
-        // Opcional: assert que a lista não está vazia (se houver dados de teste)
-        // assertFalse(transactions.isEmpty(), "A lista de transações não deve estar vazia");
-
         // Mantém o print se quiser visualizar
         transactions.forEach(System.out::println);
     }
