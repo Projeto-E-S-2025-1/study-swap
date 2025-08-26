@@ -25,6 +25,14 @@ export class MaterialService {
     return this.http.get<Material[]>(`${this.API_URL}/search?${filters}`);
   }
 
+  getAvailableMaterials(): Observable<Material[]> {
+    return this.http.get<Material[]>(`${this.API_URL}/available`);
+  }
+
+  getByUser(): Observable<Material[]> {
+    return this.http.get<Material[]>(`${this.API_URL}/user`);
+  }
+
   create(material: Partial<Material>, file?: File): Observable<Material> {
     const formData = new FormData();
 
