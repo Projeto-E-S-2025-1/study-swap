@@ -4,6 +4,7 @@ import com.studyswap.backend.dto.TransactionResponseDTO;
 import com.studyswap.backend.model.Material;
 import com.studyswap.backend.model.Transaction;
 import com.studyswap.backend.model.TransactionStatus;
+import com.studyswap.backend.model.TransactionType;
 import com.studyswap.backend.model.User;
 import com.studyswap.backend.repository.MaterialRepository;
 import com.studyswap.backend.repository.TransactionRepository;
@@ -66,10 +67,10 @@ class TransactionServiceTest {
         testMaterial.setAvailable(true);
 
         // Transações
-        pendingTransaction = new Transaction(10L, testMaterial, announcerUser, receiverUser, TransactionStatus.PENDING);
+        pendingTransaction = new Transaction(testMaterial, announcerUser, receiverUser, TransactionStatus.PENDING, TransactionType.DOACAO);
         pendingTransaction.setId(100L);
 
-        concludedTransaction = new Transaction(10L, testMaterial, announcerUser, receiverUser, TransactionStatus.CONCLUDED);
+        concludedTransaction = new Transaction (testMaterial, announcerUser, receiverUser, TransactionStatus.CONCLUDED, TransactionType.DOACAO);
         concludedTransaction.setId(101L);
     }
 
@@ -83,7 +84,7 @@ class TransactionServiceTest {
         when(transactionRepository.save(any(Transaction.class))).thenReturn(pendingTransaction);
 
         // Act
-        TransactionResponseDTO result = transactionService.createTransaction(authentication, 10L);
+        TransactionResponseDTO result = transactionService.createTransaction(authentication, 10L, null);
 
         // Assert
         assertNotNull(result);
@@ -97,7 +98,7 @@ class TransactionServiceTest {
         when(materialRepository.findById(99L)).thenReturn(Optional.empty());
 
         assertThrows(ResponseStatusException.class, () -> {
-            transactionService.createTransaction(authentication, 99L);
+            transactionService.createTransaction(authentication, 99L, null);
         });
     }
 
@@ -107,7 +108,7 @@ class TransactionServiceTest {
         when(materialRepository.findById(10L)).thenReturn(Optional.of(testMaterial));
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-            transactionService.createTransaction(authentication, 10L);
+            transactionService.createTransaction(authentication, 10L, null);
         });
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
     }
@@ -119,7 +120,7 @@ class TransactionServiceTest {
         when(materialRepository.findById(10L)).thenReturn(Optional.of(testMaterial));
 
         assertThrows(ResponseStatusException.class, () -> {
-            transactionService.createTransaction(authentication, 10L);
+            transactionService.createTransaction(authentication, 10L, null);
         });
     }
 
@@ -266,11 +267,11 @@ class TransactionServiceTest {
     @Test
     void testIsParticipantInTransaction_NullUserOrIds() throws Exception {
         // transaction com announcer null
-        Transaction t1 = new Transaction(10L, testMaterial, null, receiverUser, TransactionStatus.PENDING);
+        Transaction t1 = new Transaction(testMaterial, null, receiverUser, TransactionStatus.PENDING, TransactionType.DOACAO);
         assertFalse(invokeIsParticipantInTransaction(announcerUser, t1));
         
         // transaction com receiver null
-        Transaction t2 = new Transaction(10L, testMaterial, announcerUser, null, TransactionStatus.PENDING);
+        Transaction t2 = new Transaction(testMaterial, announcerUser, null, TransactionStatus.PENDING, TransactionType.DOACAO);
         assertFalse(invokeIsParticipantInTransaction(receiverUser, t2));
         
         // user null
@@ -279,7 +280,7 @@ class TransactionServiceTest {
         // IDs null
         User u = new User();
         u.setId(null);
-        Transaction t3 = new Transaction(10L, testMaterial, u, receiverUser, TransactionStatus.PENDING);
+        Transaction t3 = new Transaction(testMaterial, u, receiverUser, TransactionStatus.PENDING, TransactionType.DOACAO);
         assertFalse(invokeIsParticipantInTransaction(u, t3));
     }
 

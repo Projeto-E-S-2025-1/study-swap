@@ -50,7 +50,7 @@ class ReviewRepositoryTest {
                 ConservationStatus.NOVO, TransactionType.VENDA, 10.0, "/images/book.png", announcerUser);
         entityManager.persist(testMaterial);
 
-        testTransaction = new Transaction(null, testMaterial, announcerUser, reviewerUser, TransactionStatus.CONCLUDED);
+        testTransaction = new Transaction(testMaterial, announcerUser, reviewerUser, TransactionStatus.CONCLUDED, TransactionType.DOACAO);
         entityManager.persist(testTransaction);
         
         entityManager.flush();

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import com.studyswap.backend.model.Material;
 import com.studyswap.backend.model.Transaction;
 import com.studyswap.backend.model.TransactionStatus;
+import com.studyswap.backend.model.TransactionType;
 import com.studyswap.backend.model.User;
 
 import java.time.LocalDateTime;
@@ -19,13 +20,13 @@ class TransactionTest {
         User announcer = new User();
         User receiver = new User();
 
-        Transaction transaction = new Transaction(1L, material, announcer, receiver, TransactionStatus.PENDING);
+        Transaction transaction = new Transaction(material, announcer, receiver, TransactionStatus.PENDING, TransactionType.DOACAO);
 
-        assertEquals(1L, transaction.getId());
         assertEquals(material, transaction.getMaterial());
         assertEquals(announcer, transaction.getAnnouncer());
         assertEquals(receiver, transaction.getReceiver());
         assertEquals(TransactionStatus.PENDING, transaction.getStatus());
+        assertEquals(TransactionType.DOACAO, transaction.getType());
     }
 
     @Test
@@ -40,12 +41,14 @@ class TransactionTest {
         transaction.setAnnouncer(announcer);
         transaction.setReceiver(receiver);
         transaction.setStatus(TransactionStatus.CONCLUDED);
+        transaction.setType(TransactionType.TROCA);
 
         assertEquals(10L, transaction.getId());
         assertEquals(material, transaction.getMaterial());
         assertEquals(announcer, transaction.getAnnouncer());
         assertEquals(receiver, transaction.getReceiver());
         assertEquals(TransactionStatus.CONCLUDED, transaction.getStatus());
+        assertEquals(TransactionType.TROCA, transaction.getType());
     }
 
     @Test

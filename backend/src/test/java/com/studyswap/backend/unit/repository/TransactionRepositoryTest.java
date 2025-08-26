@@ -59,7 +59,7 @@ class TransactionRepositoryTest {
     @DisplayName("Salvar uma transação")
     void testSaveTransaction() {
         // Cenário
-        Transaction transaction = new Transaction(null, testMaterial, announcerUser, receiverUser, TransactionStatus.PENDING);
+        Transaction transaction = new Transaction(testMaterial, announcerUser, receiverUser, TransactionStatus.PENDING, TransactionType.DOACAO);
 
         // Ação
         Transaction savedTransaction = transactionRepository.save(transaction);
@@ -75,7 +75,7 @@ class TransactionRepositoryTest {
     @DisplayName("Buscar transação por ID")
     void testFindById() {
         // Cenário
-        Transaction transaction = new Transaction(null, testMaterial, announcerUser, receiverUser, TransactionStatus.PENDING);
+        Transaction transaction = new Transaction(testMaterial, announcerUser, receiverUser, TransactionStatus.PENDING, TransactionType.VENDA);
         Transaction savedTransaction = entityManager.persistAndFlush(transaction);
 
         // Ação
@@ -90,7 +90,7 @@ class TransactionRepositoryTest {
     @DisplayName("Deletar transação por ID")
     void testDeleteById() {
         // Cenário
-        Transaction transaction = new Transaction(null, testMaterial, announcerUser, receiverUser, TransactionStatus.PENDING);
+        Transaction transaction = new Transaction(testMaterial, announcerUser, receiverUser, TransactionStatus.PENDING, TransactionType.VENDA);
         Transaction savedTransaction = entityManager.persistAndFlush(transaction);
 
         // Ação
@@ -105,10 +105,10 @@ class TransactionRepositoryTest {
     @DisplayName("Buscar transações por status")
     void testFindByStatus() {
         // Cenário
-        Transaction pendingTransaction = new Transaction(null, testMaterial, announcerUser, receiverUser,
-                TransactionStatus.PENDING);
-        Transaction concludedTransaction = new Transaction(null, otherMaterial, announcerUser, receiverUser,
-                TransactionStatus.CONCLUDED);
+        Transaction pendingTransaction = new Transaction(testMaterial, announcerUser, receiverUser,
+                TransactionStatus.PENDING, TransactionType.DOACAO);
+        Transaction concludedTransaction = new Transaction(otherMaterial, announcerUser, receiverUser,
+                TransactionStatus.CONCLUDED, TransactionType.VENDA);
         entityManager.persistAndFlush(pendingTransaction);
         entityManager.persistAndFlush(concludedTransaction);
 
@@ -128,9 +128,9 @@ class TransactionRepositoryTest {
     @DisplayName("Buscar transações por material")
     void testFindByMaterial() {
         // Cenário
-        Transaction transactionForTestMaterial1 = new Transaction(null, testMaterial, announcerUser, receiverUser, TransactionStatus.PENDING);
-        Transaction transactionForTestMaterial2 = new Transaction(null, testMaterial, announcerUser, receiverUser, TransactionStatus.PENDING);
-        Transaction transactionForOtherMaterial = new Transaction(null, otherMaterial, announcerUser, receiverUser, TransactionStatus.PENDING);
+        Transaction transactionForTestMaterial1 = new Transaction(testMaterial, announcerUser, receiverUser, TransactionStatus.PENDING, TransactionType.VENDA);
+        Transaction transactionForTestMaterial2 = new Transaction(testMaterial, announcerUser, receiverUser, TransactionStatus.PENDING, TransactionType.VENDA);
+        Transaction transactionForOtherMaterial = new Transaction(otherMaterial, announcerUser, receiverUser, TransactionStatus.PENDING, TransactionType.VENDA);
         entityManager.persistAndFlush(transactionForTestMaterial1);
         entityManager.persistAndFlush(transactionForTestMaterial2);
         entityManager.persistAndFlush(transactionForOtherMaterial);
