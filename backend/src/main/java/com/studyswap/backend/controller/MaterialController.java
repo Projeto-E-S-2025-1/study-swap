@@ -77,4 +77,15 @@ public class MaterialController {
     public List<MaterialResponseDTO> getAllMaterials() {
         return materialService.getAllMaterials();
     }
+
+    @GetMapping("/user")
+    public List<MaterialResponseDTO> getMaterialsByUser() {
+        User user = authService.getAuthenticatedUser();
+        return materialService.getMaterialsByUser(user);
+    }
+
+    @GetMapping("/available")
+    public List<MaterialResponseDTO> getAvailableMaterials() {
+        return materialService.getAvailableMaterials();
+    }
 }
