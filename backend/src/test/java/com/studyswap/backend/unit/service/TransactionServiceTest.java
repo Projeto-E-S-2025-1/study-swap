@@ -24,6 +24,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -128,33 +129,57 @@ class TransactionServiceTest {
 
     @Test
     void testCancelTransaction_ByReceiver_Success() {
-        when(authentication.getPrincipal()).thenReturn(receiverUser);
-        when(transactionRepository.findById(100L)).thenReturn(Optional.of(pendingTransaction));
-        doNothing().when(transactionRepository).delete(pendingTransaction);
+        // Usuário participante (receiver)
+        lenient().when(authentication.getPrincipal()).thenReturn(receiverUser);
 
-        transactionService.cancelTransaction(authentication, 100L);
+        // Stub do material e transação
+        doReturn(Optional.of(pendingTransaction.getMaterial()))
+                .when(materialRepository).findById(anyLong());
 
+        doReturn(Optional.of(pendingTransaction))
+                .when(transactionRepository).findByMaterialAndAnnouncer(any(Material.class), any(User.class));
+
+        // Act
+        transactionService.cancelTransaction(authentication, pendingTransaction.getMaterial().getId());
+
+        // Assert
         verify(transactionRepository, times(1)).delete(pendingTransaction);
     }
 
     @Test
     void testCancelTransaction_Forbidden() {
-        when(authentication.getPrincipal()).thenReturn(anotherUser);
-        when(transactionRepository.findById(100L)).thenReturn(Optional.of(pendingTransaction));
+        // Usuário que não participa da transação
+        lenient().when(authentication.getPrincipal()).thenReturn(anotherUser);
 
-        assertThrows(ResponseStatusException.class, () -> {
-            transactionService.cancelTransaction(authentication, 100L);
-        });
+        doReturn(Optional.of(pendingTransaction.getMaterial()))
+                .when(materialRepository).findById(anyLong());
+
+        doReturn(Optional.of(pendingTransaction))
+                .when(transactionRepository).findByMaterialAndAnnouncer(any(Material.class), any(User.class));
+
+        assertThrows(ResponseStatusException.class, () ->
+                transactionService.cancelTransaction(authentication, pendingTransaction.getMaterial().getId())
+        );
+
+        verify(transactionRepository, never()).delete(any());
     }
 
     @Test
     void testCancelTransaction_NotPending() {
-        when(authentication.getPrincipal()).thenReturn(receiverUser);
-        when(transactionRepository.findById(101L)).thenReturn(Optional.of(concludedTransaction));
+        // Usuário participante
+        lenient().when(authentication.getPrincipal()).thenReturn(receiverUser);
 
-        assertThrows(ResponseStatusException.class, () -> {
-            transactionService.cancelTransaction(authentication, 101L);
-        });
+        doReturn(Optional.of(concludedTransaction.getMaterial()))
+                .when(materialRepository).findById(anyLong());
+
+        doReturn(Optional.of(concludedTransaction))
+                .when(transactionRepository).findByMaterialAndAnnouncer(any(Material.class), any(User.class));
+
+        assertThrows(ResponseStatusException.class, () ->
+                transactionService.cancelTransaction(authentication, concludedTransaction.getMaterial().getId())
+        );
+
+        verify(transactionRepository, never()).delete(any());
     }
 
     // ---------------------- completeTransaction ----------------------
