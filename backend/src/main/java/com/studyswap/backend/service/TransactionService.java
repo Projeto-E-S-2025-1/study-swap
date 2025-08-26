@@ -25,6 +25,8 @@ import jakarta.transaction.Transactional;
 public class TransactionService {
 	private final TransactionRepository transactionRepository;
 	private final MaterialRepository materialRepository;
+
+	private static final String MATERIAL_NOT_FOUND = "Material não encontrado";
 		
 	public TransactionService(TransactionRepository transactionRepository, MaterialRepository materialRepository) {
 		this.transactionRepository = transactionRepository;
@@ -35,7 +37,7 @@ public class TransactionService {
 	public TransactionResponseDTO createTransaction(Authentication auth, Long idMaterial, MaterialRequestDTO offeredMaterialDTO) {
 		Material material = materialRepository.findById(idMaterial).orElseThrow(
 				()-> new ResponseStatusException(
-						HttpStatus.NOT_FOUND, "Material não encontrado")
+						HttpStatus.NOT_FOUND, MATERIAL_NOT_FOUND)
 		);
 		User  receiver = (User) auth.getPrincipal();
 		User announcer = material.getUser();
@@ -78,7 +80,7 @@ public class TransactionService {
 		//verifica se a transação está no BD
 		Material material = materialRepository.findById(idMaterial).orElseThrow(()
 				-> new ResponseStatusException(
-				HttpStatus.NOT_FOUND, "Material não encontrado")
+				HttpStatus.NOT_FOUND, MATERIAL_NOT_FOUND)
 				);
 		Transaction transaction = transactionRepository.findByMaterialAndAnnouncer(material, user).orElseThrow(()
 				-> new ResponseStatusException(
@@ -118,7 +120,7 @@ public class TransactionService {
 
 		Material material = materialRepository.findById(idMaterial).orElseThrow(
 				()-> new ResponseStatusException(
-						HttpStatus.NOT_FOUND, "Material não encontrado")
+						HttpStatus.NOT_FOUND, MATERIAL_NOT_FOUND)
 		);    	
 		if(!material.getUser().getId().equals(loggedUser.getId())) {
     		throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Apenas o dono do material pode ver todas suas transações");
