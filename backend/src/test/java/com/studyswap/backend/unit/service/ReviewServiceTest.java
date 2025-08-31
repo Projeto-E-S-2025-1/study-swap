@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -199,5 +200,41 @@ class ReviewServiceTest {
             reviewService.deleteReview(100L, authentication);
         });
         verify(reviewRepository, never()).delete(any());
+    }
+
+    // ---------------------- getUserAverageRating ----------------------
+
+    @Test
+    void testGetUserAverageRating_WithReviews() {
+        // Arrange
+        Review r1 = new Review(transactionProvider, 4, "Bom", testTransaction);
+        Review r2 = new Review(transactionProvider, 5, "Excelente", testTransaction);
+        when(reviewRepository.findByTransaction_Receiver_Id(2L))
+            .thenReturn(List.of(r1, r2));
+
+        // Act
+        var result = reviewService.getUserAverageRating(2L);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(2L, result.getUserId());
+        assertEquals(4.5, result.getAverageRating());
+        assertEquals(2L, result.getTotalReviews());
+    }
+
+    @Test
+    void testGetUserAverageRating_NoReviews() {
+        // Arrange
+        when(reviewRepository.findByTransaction_Receiver_Id(2L))
+            .thenReturn(List.of());
+
+        // Act
+        var result = reviewService.getUserAverageRating(2L);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(2L, result.getUserId());
+        assertEquals(0.0, result.getAverageRating());
+        assertEquals(0L, result.getTotalReviews());
     }
 }
