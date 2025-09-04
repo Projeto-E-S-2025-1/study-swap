@@ -72,20 +72,6 @@ Os itens podem ser **doados, trocados ou vendidos**, promovendo um consumo consc
 
 ---
 
-## 🔐 Configuração do `application.properties`
-
-Antes de executar o backend, crie uma cópia do arquivo de exemplo de configurações (application.properties.example):
-
-```bash
-cp backend/src/main/resources/application.properties.example backend/src/main/resources/application.properties
-```
-
-Em seguida, edite o arquivo `application.properties` copiado e preencha com suas **credenciais locais**, como usuário e senha do banco de dados e o secret do JWT.
-
-> ⚠️ **Importante:** Não versionar esse arquivo. Ele deve conter apenas suas configurações locais e nunca deve ser enviado para o repositório Git.
-
----
-
 ## ⚙️ Execução Local
 
 ### 🔹 Backend (Spring Boot)
