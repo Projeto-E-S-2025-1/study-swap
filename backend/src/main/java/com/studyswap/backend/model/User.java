@@ -41,6 +41,12 @@ public class User implements UserDetails {
     @NotNull(message = "Role é obrigatório")
     private Role role;
 
+    @Column(nullable = true)
+    private String photoUrl;
+
+    @Column(nullable = true)
+    private String interests;
+
     public User(String name, String email, String password, Role role) {
         this.name = name;
         this.email = email;
@@ -99,5 +105,21 @@ public class User implements UserDetails {
     @Override
     public String getUsername() {
         return this.email;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
+    public String getInterests() {
+        return interests;
+    }
+
+    public void setInterests(String interests) {
+        this.interests = interests;
     }
 }
