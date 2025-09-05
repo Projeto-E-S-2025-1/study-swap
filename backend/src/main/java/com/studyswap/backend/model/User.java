@@ -42,7 +42,7 @@ public class User implements UserDetails {
     private Role role;
 
     @Column(nullable = true)
-    private String photoUrl;
+    private String photoUrl = "/images/user-photo.png";
 
     @Column(nullable = true)
     private String interests;
