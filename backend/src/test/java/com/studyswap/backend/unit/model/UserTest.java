@@ -35,12 +35,16 @@ class UserTest {
         user.setEmail("ana@example.com");
         user.setPassword("senha123");
         user.setRole(Role.STUDENT);
+        user.setPhotoUrl("/images/default-profile-photo.png");
+        user.setInterests("Comprar materiais");
 
         assertEquals(1L, user.getId());
         assertEquals("Ana", user.getName());
         assertEquals("ana@example.com", user.getEmail());
         assertEquals("senha123", user.getPassword());
         assertEquals(Role.STUDENT, user.getRole());
+        assertEquals("/images/default-profile-photo.png", user.getPhotoUrl());
+        assertEquals("Comprar materiais", user.getInterests());
     }
 
     @Test
