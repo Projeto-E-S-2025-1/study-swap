@@ -2,6 +2,8 @@ package com.studyswap.backend.unit.repository;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +22,7 @@ import com.studyswap.backend.model.TransactionType;
 import com.studyswap.backend.model.User;
 import com.studyswap.backend.repository.ReviewRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @DataJpaTest
@@ -116,5 +119,61 @@ class ReviewRepositoryTest {
         assertThat(foundReview).isNotNull();
         assertThat(foundReview.getDescription()).isEqualTo("Perfect transaction!");
         assertThat(foundReview.getRating()).isEqualTo(5);
+    }
+
+    @Test
+    @DisplayName("Buscar avaliações pelo ID do usuário receiver")
+    void testFindByTransactionReceiverId() {
+        // Cria receiver (usuário que vai receber as reviews)
+        User receiver = new User();
+        receiver.setName("Destinatário");
+        receiver.setEmail("receiver@test.com");
+        receiver.setPassword("123456");
+        receiver.setRole(Role.STUDENT);
+        entityManager.persist(receiver);
+
+        // Cria author (usuário que criou a review)
+        User author = new User();
+        author.setName("Autor");
+        author.setEmail("author@test.com");
+        author.setPassword("123456");
+        author.setRole(Role.STUDENT);
+        entityManager.persist(author);
+
+        // Cria material obrigatório
+        Material material = new Material();
+        material.setTitle("Material Teste");                    
+        material.setDescription("Descrição do material");
+        material.setMaterialType(MaterialType.LIVRO);           
+        material.setConservationStatus(ConservationStatus.NOVO); 
+        material.setTransactionType(TransactionType.VENDA);     
+        material.setPrice(10.0);
+        material.setPhoto("/images/test.png");
+        material.setUser(author);                                
+        entityManager.persist(material);
+
+        // Cria uma transação associada ao material
+        Transaction transaction = new Transaction();
+        transaction.setReceiver(receiver);
+        transaction.setAnnouncer(author);
+        transaction.setMaterial(material);                      
+        transaction.setType(TransactionType.DOACAO);           
+        transaction.setStatus(TransactionStatus.CONCLUDED);    
+        entityManager.persist(transaction);
+
+        // Cria review
+        Review review = new Review();
+        review.setTransaction(transaction);
+        review.setAuthor(author);
+        review.setDescription("Review da transação");
+        review.setRating(5);
+        entityManager.persist(review);
+
+        entityManager.flush();
+
+        // Testa query
+        List<Review> reviews = reviewRepository.findByTransaction_Receiver_Id(receiver.getId());
+        assertEquals(1, reviews.size());
+        assertEquals("Review da transação", reviews.get(0).getDescription());
     }
 }

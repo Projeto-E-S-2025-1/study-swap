@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 
 import com.studyswap.backend.dto.ReviewRequestDTO;
+import com.studyswap.backend.dto.UserReviewAverageDTO;
 import com.studyswap.backend.model.Review;
 import com.studyswap.backend.model.User;
 import com.studyswap.backend.repository.ReviewRepository;
@@ -75,5 +76,21 @@ public class ReviewService {
         }
 
         avaliacaoRepository.delete(avaliacao);
+    }
+
+    @Transactional
+    public UserReviewAverageDTO getUserAverageRating(Long userId) {
+        var reviews = avaliacaoRepository.findByTransaction_Receiver_Id(userId);
+
+        if (reviews.isEmpty()) {
+            return new UserReviewAverageDTO(userId, 0.0, 0L);
+        }
+
+        double average = reviews.stream()
+            .mapToInt(Review::getRating)
+            .average()
+            .orElse(0.0);
+
+        return new UserReviewAverageDTO(userId, average, (long) reviews.size());
     }
 }

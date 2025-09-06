@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import jakarta.validation.Valid;
 
 import com.studyswap.backend.dto.ReviewResponseDTO;
+import com.studyswap.backend.dto.UserReviewAverageDTO;
 import com.studyswap.backend.dto.ReviewRequestDTO;
 import com.studyswap.backend.model.Review;
 import com.studyswap.backend.service.ReviewService;
@@ -57,5 +59,11 @@ public class ReviewController {
     public ResponseEntity<Void> delete(@PathVariable Long id, Authentication auth) {
         reviewService.deleteReview(id, auth);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/user/{userId}/average")
+    public ResponseEntity<UserReviewAverageDTO> getUserAverageReview(@PathVariable Long userId) {
+        UserReviewAverageDTO response = reviewService.getUserAverageRating(userId);
+        return ResponseEntity.ok(response);
     }
 }
