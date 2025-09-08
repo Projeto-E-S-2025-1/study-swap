@@ -84,6 +84,20 @@ public class UserService {
 		loggedUser.getFavoriteMaterials().add(material);
 		userRepository.save(loggedUser);
     }
+    
+    //2
+    public void unfavoriteMaterial(Long id_material){
+    	User loggedUser = authService.getAuthenticatedUser();
+    	Material material = materialRepository.findById(id_material).orElseThrow(
+    			()-> new ResponseStatusException(
+				HttpStatus.NOT_FOUND, "Material não encontrado")
+		);
+		if(!loggedUser.getFavoriteMaterials().contains(material)){ 
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Material não encontrado na lista de favoritos");
+		}
+		loggedUser.getFavoriteMaterials().remove(material);
+		userRepository.save(loggedUser);
+    }
     private String storeFile(MultipartFile file){
         try {
             String uploadDir = "uploads/";
