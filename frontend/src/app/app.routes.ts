@@ -9,6 +9,7 @@ import { ReportFormComponent } from './reports/report-form/report-form';
 
 // Importações corretas para os componentes
 import { Home } from './home/home';
+import { Favorite } from './favorite/favorite';
 
 export const routes: Routes = [
   { path: '', component: Home, title: 'Home - StudySwap' },
@@ -17,5 +18,6 @@ export const routes: Routes = [
   { path: 'material', canActivate: [AuthGuard], children: MATERIALS_ROUTES},
   { path: 'transaction', canActivate: [AuthGuard], children: TRANSACTION_ROUTES},
   { path: 'report', canActivate: [AuthGuard], component: ReportFormComponent, title: 'Denunciar - StudySwap' },
+  { path: 'favorite', component: Favorite, title: 'Favoritos - StudySwap' },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

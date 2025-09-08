@@ -51,14 +51,12 @@ class MaterialServiceTest {
         // DTOs
         createRequestDTO = new MaterialRequestDTO(
                 "Livro de Teste", "Descrição do livro", MaterialType.LIVRO,
-                ConservationStatus.NOVO, TransactionType.VENDA, 50.0,
-                null, true
+                ConservationStatus.NOVO, TransactionType.VENDA, 50.0, true
         );
 
         updateRequestDTO = new MaterialRequestDTO(
                 "Livro Atualizado", "Descrição atualizada", MaterialType.LIVRO,
-                ConservationStatus.BOM, TransactionType.VENDA, 45.0,
-                "/uploads/old_image.jpg", true
+                ConservationStatus.BOM, TransactionType.VENDA, 45.0, true
         );
 
         // Arquivo

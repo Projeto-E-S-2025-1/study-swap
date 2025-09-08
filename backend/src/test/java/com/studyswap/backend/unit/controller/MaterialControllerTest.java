@@ -70,7 +70,6 @@ class MaterialControllerTest {
             ConservationStatus.NOVO,
             TransactionType.VENDA,
             50.0,
-            null,
             true
         );
 
@@ -103,7 +102,6 @@ class MaterialControllerTest {
             ConservationStatus.BOM,
             TransactionType.VENDA,
             45.0,
-            "/uploads/test_image.jpg",
             true
         );
 

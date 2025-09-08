@@ -38,7 +38,7 @@ class ReviewRequestDTOTest {
                 Arguments.of(new ReviewRequestDTO(1L, 3L, 0, "Comentário válido"), "A nota mínima é 1"),
                 Arguments.of(new ReviewRequestDTO(1L, 4L, 6, "Comentário válido"), "A nota máxima é 5"),
                 Arguments.of(new ReviewRequestDTO(1L, 5L, 3, "   "), "O comentário é obrigatório"),
-                Arguments.of(new ReviewRequestDTO(null,6L, 4, "Comentário válido"), "A transação avaliada é obrigatória")
+                Arguments.of(new ReviewRequestDTO(1L, null, 4, "Comentário válido"), "Transação não identificado")
         );
     }
 

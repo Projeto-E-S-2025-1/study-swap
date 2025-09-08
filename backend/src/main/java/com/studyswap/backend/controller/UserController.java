@@ -1,6 +1,9 @@
 package com.studyswap.backend.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.studyswap.backend.dto.MaterialResponseDTO;
 import com.studyswap.backend.dto.UserResponseDTO;
 import com.studyswap.backend.dto.UserUpdateDTO;
 import com.studyswap.backend.service.UserService;
@@ -36,4 +40,20 @@ public class UserController {
             @RequestPart(value = "file", required = false) MultipartFile file) {
         return ResponseEntity.ok(userService.updateProfile(userDTO, file));
     }
+
+    @PutMapping("/favorites/{id}")
+    public ResponseEntity<Void> favoriteMaterial (@PathVariable("id") Long id_Material){
+    	userService.favoriteMaterial(id_Material);
+    	return  ResponseEntity.noContent().build();
+    }
+    @DeleteMapping("/favorites/{id}")
+    public ResponseEntity<Void> unfavoriteMaterial (@PathVariable("id") Long id_Material){
+    	userService.unfavoriteMaterial(id_Material);
+    	return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/favorites")
+    public ResponseEntity<List<MaterialResponseDTO>> listFavorites(){
+    	return ResponseEntity.ok().body(userService.listFavoriteMaterials());
+    }
+    
 }

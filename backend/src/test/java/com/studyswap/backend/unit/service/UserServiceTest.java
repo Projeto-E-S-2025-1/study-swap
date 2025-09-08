@@ -1,39 +1,46 @@
 package com.studyswap.backend.unit.service;
 
-import com.studyswap.backend.dto.UserResponseDTO;
-import com.studyswap.backend.dto.UserUpdateDTO;
-import com.studyswap.backend.model.Role;
-import com.studyswap.backend.model.User;
-import com.studyswap.backend.repository.UserRepository;
-import com.studyswap.backend.service.AuthService;
-import com.studyswap.backend.service.UserService;
-import com.studyswap.backend.service.exception.FileStorageException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import com.studyswap.backend.dto.UserResponseDTO;
+import com.studyswap.backend.dto.UserUpdateDTO;
+import com.studyswap.backend.model.Role;
+import com.studyswap.backend.model.User;
+import com.studyswap.backend.repository.MaterialRepository;
+import com.studyswap.backend.repository.UserRepository;
+import com.studyswap.backend.service.AuthService;
+import com.studyswap.backend.service.UserService;
+import com.studyswap.backend.service.exception.FileStorageException;
 
 class UserServiceTest {
 
     private UserRepository userRepository;
     private AuthService authService;
     private UserService userService;
-
+    private MaterialRepository materialRepository;
     private User user;
 
     @BeforeEach
     void setUp() {
         userRepository = mock(UserRepository.class);
         authService = mock(AuthService.class);
-        userService = new UserService(userRepository, authService);
+        materialRepository=mock(MaterialRepository.class);
+        
+        userService = new UserService(userRepository, authService, materialRepository);
 
         user = new User();
         user.setId(1L);
