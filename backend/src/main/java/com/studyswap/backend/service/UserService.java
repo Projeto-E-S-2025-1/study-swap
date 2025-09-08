@@ -85,7 +85,6 @@ public class UserService {
 		userRepository.save(loggedUser);
     }
     
-    //2
     public void unfavoriteMaterial(Long id_material){
     	User loggedUser = authService.getAuthenticatedUser();
     	Material material = materialRepository.findById(id_material).orElseThrow(
@@ -97,6 +96,28 @@ public class UserService {
 		}
 		loggedUser.getFavoriteMaterials().remove(material);
 		userRepository.save(loggedUser);
+    }
+    public List<MaterialResponseDTO> listFavoriteMaterials() {
+    	User loggedUser = authService.getAuthenticatedUser();
+    	return loggedUser.getFavoriteMaterials()
+                   .stream()
+                   .map(this::convertToResponseDTO)
+                   .toList();
+    }
+    private MaterialResponseDTO convertToResponseDTO(Material material) {
+        return new MaterialResponseDTO(
+            material.getId(),
+            material.getTitle(),
+            material.getDescription(),
+            material.getMaterialType(),
+            material.getConservationStatus(),
+            material.getTransactionType(),
+            material.getPrice(),
+            material.getPhoto(),
+            material.getUser().getId(),
+            material.getUser().getName(),
+            material.isAvailable()
+        );
     }
     private String storeFile(MultipartFile file){
         try {
