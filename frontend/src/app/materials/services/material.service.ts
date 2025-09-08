@@ -48,12 +48,17 @@ export class MaterialService {
     return this.http.post<Material>(this.API_URL, formData);
   }
 
-  update(id: number, material: Partial<Material>): Observable<Material> {
+  update(id: number, material: Partial<Material>, file?: File): Observable<Material> {
     const formData = new FormData();
 
     // Transforma o DTO em string JSON
     const jsonBlob = new Blob([JSON.stringify(material)], { type: 'application/json' });
     formData.append('materialDTO', jsonBlob);
+
+    // Anexa o arquivo (se houver)
+    if (file) {
+      formData.append('file', file);
+    }
 
     return this.http.put<Material>(`${this.API_URL}/${id}`, formData);
   }
