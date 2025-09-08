@@ -101,7 +101,7 @@ export class UpdateMaterial implements OnInit {
     this.materialService.update(id, this.finalMaterial).subscribe({
       next: (response) => {
         this.successMessage = 'Material atualizado com sucesso!';
-        setTimeout(() => this.router.navigate(['/material/' + id]), 500)
+        setTimeout(() => this.router.navigate(['/material/' + id]), 500);
         this.materialAtualizado.emit(response);
       },
       error: (err) => {

@@ -20,6 +20,8 @@
       <div class="detalhe-material-acoes" *ngIf="isOwner == true">
         <button class="botao-editar" (click) = "showModalUpdate = true">Editar material</button>
         <button class="botao-excluir" (click) = "apagarMaterial()">Excluir material</button>
+        <button class="estrela" (click) = "favorite()" *ngIf="!isFavorite">Fav</button>
+        <button class="estrela" (click) = "unfavorite()" *ngIf="isFavorite">Unfav</button>
       </div>
       <div class="denuncia-menu-wrapper" (clickOutside)="showMenu = false" *ngIf="isOwner == false">
         <button class="transacao-btn" (click)="showModalTransaction = true">
