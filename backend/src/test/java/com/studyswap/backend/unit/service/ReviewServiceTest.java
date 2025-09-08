@@ -1,8 +1,10 @@
 package com.studyswap.backend.unit.service;
 
 import com.studyswap.backend.dto.ReviewRequestDTO;
+import com.studyswap.backend.dto.ReviewResponseDTO;
 import com.studyswap.backend.model.Review;
 import com.studyswap.backend.model.Transaction;
+import com.studyswap.backend.model.Material;
 import com.studyswap.backend.model.User;
 import com.studyswap.backend.repository.ReviewRepository;
 import com.studyswap.backend.repository.TransactionRepository;
@@ -39,6 +41,7 @@ class ReviewServiceTest {
 
     private User transactionProvider;
     private User transactionReceiver;
+    private Material testMaterial;
     private Transaction testTransaction;
     private Review testReview;
     private ReviewRequestDTO createDto;
@@ -53,17 +56,24 @@ class ReviewServiceTest {
         transactionReceiver = new User("Receiver", "receiver@example.com", "pass", null);
         transactionReceiver.setId(2L);
 
+        // Material
+
+        testMaterial = new Material();
+        testMaterial.setId(5L);
+        testMaterial.setTitle("Calculo II");
+
         // Transação
         testTransaction = new Transaction();
         testTransaction.setId(10L);
         testTransaction.setReceiver(transactionReceiver);
+        testTransaction.setMaterial(testMaterial);
 
         // Avaliação (Review)
         testReview = new Review(transactionReceiver, 5, "Ótimo material!", testTransaction);
         testReview.setId(100L);
 
         // DTOs
-        createDto = new ReviewRequestDTO(10L, 5, "Ótimo material!");
+        createDto = new ReviewRequestDTO(2L, 10L, 5, "Ótimo material!");
 
         updateDto = new ReviewRequestDTO();
         updateDto.setRating(4);
@@ -77,16 +87,16 @@ class ReviewServiceTest {
         // Arrange
         when(authentication.getPrincipal()).thenReturn(transactionReceiver);
         when(transactionRepository.findById(10L)).thenReturn(Optional.of(testTransaction));
-        when(reviewRepository.findByTransactionId(10L)).thenReturn(null);
+        when(reviewRepository.findByTransaction_Id(10L)).thenReturn(null);
         when(reviewRepository.save(any(Review.class))).thenReturn(testReview);
 
         // Act
-        Review result = reviewService.createReview(createDto, authentication);
+        ReviewResponseDTO result = reviewService.createReview(createDto, authentication);
 
         // Assert
         assertNotNull(result);
         assertEquals(createDto.getRating(), result.getRating());
-        assertEquals(transactionReceiver.getId(), result.getAuthor().getId());
+        assertEquals(transactionReceiver.getId(), result.getAuthorId());
         verify(reviewRepository, times(1)).save(any(Review.class));
     }
 
@@ -95,7 +105,7 @@ class ReviewServiceTest {
         // Arrange
         when(authentication.getPrincipal()).thenReturn(transactionReceiver);
         when(transactionRepository.findById(99L)).thenReturn(Optional.empty());
-        ReviewRequestDTO dtoWithWrongId = new ReviewRequestDTO(99L, 5, "Test");
+        ReviewRequestDTO dtoWithWrongId = new ReviewRequestDTO(2L, 99L, 5, "Test");
 
         // Act & Assert
         assertThrows(RuntimeException.class, () -> {
@@ -120,7 +130,7 @@ class ReviewServiceTest {
         // Arrange
         when(authentication.getPrincipal()).thenReturn(transactionReceiver);
         when(transactionRepository.findById(10L)).thenReturn(Optional.of(testTransaction));
-        when(reviewRepository.findByTransactionId(10L)).thenReturn(testReview); // Simula que já existe
+        when(reviewRepository.findByTransaction_Id(10L)).thenReturn(testReview); // Simula que já existe
 
         // Act & Assert
         assertThrows(IllegalStateException.class, () -> {
@@ -138,7 +148,7 @@ class ReviewServiceTest {
         when(reviewRepository.save(any(Review.class))).thenAnswer(i -> i.getArgument(0));
 
         // Act
-        Review result = reviewService.updateReview(100L, updateDto, authentication);
+        ReviewResponseDTO result = reviewService.updateReview(100L, updateDto, authentication);
 
         // Assert
         assertNotNull(result);
@@ -207,25 +217,25 @@ class ReviewServiceTest {
     @Test
     void testGetUserAverageRating_WithReviews() {
         // Arrange
-        Review r1 = new Review(transactionProvider, 4, "Bom", testTransaction);
-        Review r2 = new Review(transactionProvider, 5, "Excelente", testTransaction);
-        when(reviewRepository.findByTransaction_Receiver_Id(2L))
+        Review r1 = new Review(transactionReceiver, 4, "Bom", testTransaction);
+        Review r2 = new Review(transactionReceiver, 5, "Excelente", testTransaction);
+        when(reviewRepository.findByTransaction_Announcer_Id(1L))
             .thenReturn(List.of(r1, r2));
 
         // Act
-        var result = reviewService.getUserAverageRating(2L);
+        var result = reviewService.getUserAverageRating(1L);
 
         // Assert
         assertNotNull(result);
-        assertEquals(2L, result.getUserId());
+        assertEquals(1L, result.getUserId());
         assertEquals(4.5, result.getAverageRating());
-        assertEquals(2L, result.getTotalReviews());
+        assertEquals(2, result.getTotalReviews());
     }
 
     @Test
     void testGetUserAverageRating_NoReviews() {
         // Arrange
-        when(reviewRepository.findByTransaction_Receiver_Id(2L))
+        when(reviewRepository.findByTransaction_Announcer_Id(2L))
             .thenReturn(List.of());
 
         // Act
