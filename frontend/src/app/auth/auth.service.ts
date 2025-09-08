@@ -1,3 +1,4 @@
+//src/app/auth/auth.service.ts
 import { Injectable, PLATFORM_ID, Inject, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';

@@ -1,3 +1,4 @@
+//src/app/materials/components/form-material/form-material.ts
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MaterialType, ConservationStatus, TransactionType } from '../../models/material.model';

@@ -1,3 +1,4 @@
+//src/app/transaction/models/review.model.ts
 export interface Review {
     id: number;
     author: {

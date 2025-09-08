@@ -1,3 +1,4 @@
+//src/app/materials/models/material.model.ts
 export interface Material {
     id?: number;
     title: string;

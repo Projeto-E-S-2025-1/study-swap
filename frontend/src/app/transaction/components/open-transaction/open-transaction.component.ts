@@ -1,3 +1,4 @@
+//src/app/transaction/components/open-transaction/open-transaction.component.ts
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
