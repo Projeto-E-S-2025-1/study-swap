@@ -113,7 +113,7 @@ class ReviewRepositoryTest {
         entityManager.persistAndFlush(review);
 
         // Ação
-        Review foundReview = reviewRepository.findByTransactionId(testTransaction.getId());
+        Review foundReview = reviewRepository.findByTransaction_Id(testTransaction.getId());
 
         // Verificação
         assertThat(foundReview).isNotNull();
@@ -172,7 +172,7 @@ class ReviewRepositoryTest {
         entityManager.flush();
 
         // Testa query
-        List<Review> reviews = reviewRepository.findByTransaction_Receiver_Id(receiver.getId());
+        List<Review> reviews = reviewRepository.findByTransaction_Announcer_Id(author.getId());
         assertEquals(1, reviews.size());
         assertEquals("Review da transação", reviews.get(0).getDescription());
     }

@@ -15,14 +15,18 @@ public class ReviewRequestDTO {
     @NotBlank(message = "O comentário é obrigatório")
     private String description;
 
-    @NotNull(message = "A transação avaliada é obrigatória")
+    @NotNull(message = "Usuário não identificado")
+    private Long authorId;
+
+    @NotNull(message = "Transação não identificado")
     private Long transactionId;
 
     public ReviewRequestDTO() {
     }
 
 
-    public ReviewRequestDTO(Long transactionId, int rating, String description) {
+    public ReviewRequestDTO(Long authorId, Long transactionId, int rating, String description) {
+        this.authorId = authorId;
         this.transactionId = transactionId;
         this.rating = rating;
         this.description = description;
@@ -44,11 +48,19 @@ public class ReviewRequestDTO {
         this.description = description;
     }
 
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
+    }
+
     public Long getTransactionId() {
         return transactionId;
     }
 
-    public void setTransactonId(Long transactionId) {
+    public void setTransactionId(Long transactionId) {
         this.transactionId = transactionId;
-    }
+    }    
 }
