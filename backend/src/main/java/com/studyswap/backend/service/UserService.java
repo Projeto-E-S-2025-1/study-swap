@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -12,9 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.studyswap.backend.dto.MaterialResponseDTO;
 import com.studyswap.backend.dto.UserResponseDTO;
 import com.studyswap.backend.dto.UserUpdateDTO;
+import com.studyswap.backend.model.Material;
 import com.studyswap.backend.model.User;
+import com.studyswap.backend.repository.MaterialRepository;
 import com.studyswap.backend.repository.UserRepository;
 import com.studyswap.backend.service.exception.FileStorageException;
 
@@ -23,16 +27,17 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final AuthService authService; // Para pegar o usuário autenticado
-
-    public UserService(UserRepository userRepository, AuthService authService) {
+    private MaterialRepository materialRepository;
+    public UserService(UserRepository userRepository, AuthService authService, 
+    		MaterialRepository materialRepository) {
         this.userRepository = userRepository;
         this.authService = authService;
+        this.materialRepository = materialRepository;
     }
 
-    public UserResponseDTO getUserProfile(Long id) {
+    public UserResponseDTO getUserProfile(Long id){
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
-
         return new UserResponseDTO(
                 user.getId(),
                 user.getName(),
@@ -67,8 +72,54 @@ public class UserService {
                 updated.getRole()
         );
     }
-
-    private String storeFile(MultipartFile file) {
+    public void favoriteMaterial(Long id_material){
+    	User loggedUser = authService.getAuthenticatedUser();
+    	Material material = materialRepository.findById(id_material).orElseThrow(
+    			()-> new ResponseStatusException(
+				HttpStatus.NOT_FOUND, "Material não encontrado")
+		);
+		if(loggedUser.getFavoriteMaterials().contains(material)){ 
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Material já favoritado");
+		}
+		loggedUser.getFavoriteMaterials().add(material);
+		userRepository.save(loggedUser);
+    }
+    
+    public void unfavoriteMaterial(Long id_material){
+    	User loggedUser = authService.getAuthenticatedUser();
+    	Material material = materialRepository.findById(id_material).orElseThrow(
+    			()-> new ResponseStatusException(
+				HttpStatus.NOT_FOUND, "Material não encontrado")
+		);
+		if(!loggedUser.getFavoriteMaterials().contains(material)){ 
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Material não encontrado na lista de favoritos");
+		}
+		loggedUser.getFavoriteMaterials().remove(material);
+		userRepository.save(loggedUser);
+    }
+    public List<MaterialResponseDTO> listFavoriteMaterials() {
+    	User loggedUser = authService.getAuthenticatedUser();
+    	return loggedUser.getFavoriteMaterials()
+                   .stream()
+                   .map(this::convertToResponseDTO)
+                   .toList();
+    }
+    private MaterialResponseDTO convertToResponseDTO(Material material) {
+        return new MaterialResponseDTO(
+            material.getId(),
+            material.getTitle(),
+            material.getDescription(),
+            material.getMaterialType(),
+            material.getConservationStatus(),
+            material.getTransactionType(),
+            material.getPrice(),
+            material.getPhoto(),
+            material.getUser().getId(),
+            material.getUser().getName(),
+            material.isAvailable()
+        );
+    }
+    private String storeFile(MultipartFile file){
         try {
             String uploadDir = "uploads/";
             Files.createDirectories(Paths.get(uploadDir));

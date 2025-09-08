@@ -1,7 +1,9 @@
 package com.studyswap.backend.model;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,6 +16,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -46,7 +51,14 @@ public class User implements UserDetails {
 
     @Column(nullable = true)
     private String interests;
-
+    
+    @ManyToMany
+    @JoinTable(
+        name = "user_favorites",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "material_id")
+    )
+    private Set<Material> favoriteMaterials = new HashSet<>();
     public User(String name, String email, String password, Role role) {
         this.name = name;
         this.email = email;
@@ -121,5 +133,12 @@ public class User implements UserDetails {
 
     public void setInterests(String interests) {
         this.interests = interests;
+    }  
+    public Set<Material> getFavoriteMaterials() {
+        return favoriteMaterials;
+    }
+
+    public void setFavoriteMaterials(Set<Material> favoriteMaterials) {
+        this.favoriteMaterials = favoriteMaterials;
     }
 }
