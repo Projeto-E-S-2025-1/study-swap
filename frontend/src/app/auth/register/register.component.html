@@ -35,7 +35,9 @@
         <div class="form-group">
             <label for="role">Tipo de Usuário:</label>
             <select id="role" formControlName="role">
-                <option *ngFor="let role of roles" [value]="role">{{ role === 'STUDENT' ? 'Estudante' : role }}</option>
+                <option *ngFor="let role of roles" [value]="role">
+                {{ role === 'STUDENT' ? 'Estudante' : role === 'PROFESSOR' ? 'Professor' : role }}
+                </option>
             </select>
             <div *ngIf="registerForm.get('role')?.invalid && registerForm.get('role')?.touched" class="error-message">
                 <span *ngIf="registerForm.get('role')?.errors?.['required']">O tipo de usuário é obrigatório.</span>
