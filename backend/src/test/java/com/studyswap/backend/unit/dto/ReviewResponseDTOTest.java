@@ -15,20 +15,26 @@ class ReviewResponseDTOTest {
         ReviewResponseDTO dto = new ReviewResponseDTO();
 
         Long id = 1L;
+        String authorName = "Carlos";
+        Long authorId = 10L;
+        String materialTitle = "O conto da aia";
         Integer rating = 5;
-        Long userId = 10L;
         String description = "Ótima transação!";
         LocalDateTime createdAt = LocalDateTime.now();
 
         dto.setId(id);
+        dto.setAuthorName(authorName);
+        dto.setAuthorId(authorId);
+        dto.setMaterialTitle(materialTitle);
         dto.setRating(rating);
-        dto.setUserId(userId);
         dto.setDescription(description);
         dto.setCreatedAt(createdAt);
 
         assertEquals(id, dto.getId());
+        assertEquals(authorName, dto.getAuthorName());
+        assertEquals(authorId, dto.getAuthorId());
+        assertEquals(materialTitle, dto.getMaterialTitle());
         assertEquals(rating, dto.getRating());
-        assertEquals(userId, dto.getUserId());
         assertEquals(description, dto.getDescription());
         assertEquals(createdAt, dto.getCreatedAt());
     }
@@ -38,8 +44,10 @@ class ReviewResponseDTOTest {
         ReviewResponseDTO dto = new ReviewResponseDTO();
 
         assertNull(dto.getId());
+        assertNull(dto.getAuthorName());
+        assertNull(dto.getAuthorId());
+        assertNull(dto.getMaterialTitle());
         assertNull(dto.getRating());
-        assertNull(dto.getUserId());
         assertNull(dto.getDescription());
         assertNull(dto.getCreatedAt());
     }

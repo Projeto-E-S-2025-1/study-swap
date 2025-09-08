@@ -8,7 +8,6 @@ import com.studyswap.backend.model.Review;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long>{
-    Review findByTransactionId(Long transactionId);
-
-    List<Review> findByTransaction_Receiver_Id(Long userId);
+    Review findByTransaction_Id(Long transactionId);
+    List<Review> findByTransaction_Announcer_Id(Long userId);
 }
