@@ -45,8 +45,11 @@
       <div class="form-group">
         <label for="photo">Foto do Material</label>
         <input id="photo" name="photo" type="file" class="form-control" 
-               (change)="onFileSelected($event)" accept="image/*">
-        
+              (change)="onFileSelected($event)" accept="image/png, image/jpeg">
+        <small class="form-text text-muted">
+          Tamanho máximo: 5MB. Tipos permitidos: JPG, PNG, JPEG.
+        </small>
+
         <!-- Preview da imagem -->
         <div *ngIf="imagePreview" class="mt-2">
           <img [src]="imagePreview" alt="Preview" style="max-width: 200px; max-height: 200px;" class="img-thumbnail">

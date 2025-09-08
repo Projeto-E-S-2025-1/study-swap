@@ -28,21 +28,18 @@ public class MaterialRequestDTO {
     @Positive(message = "O preço deve ser maior que zero")
     private Double price;
 
-    private String photo;
-
     public MaterialRequestDTO() {
     }
 
     public MaterialRequestDTO(String title, String description, MaterialType materialType,
             ConservationStatus conservationStatus, TransactionType transactionType,
-            Double price, String photo, boolean available) {
+            Double price, boolean available) {
         this.title = title;
         this.description = description;
         this.materialType = materialType;
         this.conservationStatus = conservationStatus;
         this.transactionType = transactionType;
         this.price = price;
-        this.photo = photo;
         this.available=available;
     }
     public boolean isAvailable() {
@@ -99,13 +96,5 @@ public class MaterialRequestDTO {
 
     public void setPrice(Double price) {
         this.price = price;
-    }
-
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
     }
 }

@@ -34,7 +34,6 @@ class MaterialRequestDTOTest {
                 ConservationStatus.BOM,
                 TransactionType.VENDA,
                 50.0,
-                "foto.png",
                 true
         );
     }
@@ -119,7 +118,6 @@ class MaterialRequestDTOTest {
         dto.setConservationStatus(ConservationStatus.RAZOAVEL);
         dto.setTransactionType(TransactionType.TROCA);
         dto.setPrice(100.0);
-        dto.setPhoto("imagem.jpg");
 
         assertTrue(dto.isAvailable());
         assertEquals("Novo título", dto.getTitle());
@@ -128,6 +126,5 @@ class MaterialRequestDTOTest {
         assertEquals(ConservationStatus.RAZOAVEL, dto.getConservationStatus());
         assertEquals(TransactionType.TROCA, dto.getTransactionType());
         assertEquals(100.0, dto.getPrice());
-        assertEquals("imagem.jpg", dto.getPhoto());
     }
 }
