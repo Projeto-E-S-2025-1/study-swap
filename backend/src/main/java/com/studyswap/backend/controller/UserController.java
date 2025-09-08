@@ -46,6 +46,10 @@ public class UserController {
     	userService.favoriteMaterial(id_Material);
     	return  ResponseEntity.noContent().build();
     }
+    @DeleteMapping("/favorites/{id}")
+    public ResponseEntity<Void> unfavoriteMaterial (@PathVariable("id") Long id_Material){
+    	userService.unfavoriteMaterial(id_Material);
+    	return ResponseEntity.noContent().build();
+    }
 
-    
 }
