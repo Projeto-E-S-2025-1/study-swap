@@ -64,7 +64,7 @@ public class TransactionService {
 			offered.setConservationStatus(offeredMaterialDTO.getConservationStatus());
 			offered.setMaterialType(offeredMaterialDTO.getMaterialType());
 			offered.setTransactionType(TransactionType.TROCA);
-			offered.setAvailable(true);
+			offered.setAvailable(false);
 			offered.setUser(receiver);
 
 			transaction = new Transaction(material, announcer, receiver, TransactionStatus.PENDING, type, offered);

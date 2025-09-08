@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.security.core.Authentication;
@@ -15,7 +18,6 @@ import jakarta.validation.Valid;
 import com.studyswap.backend.dto.ReviewResponseDTO;
 import com.studyswap.backend.dto.UserReviewAverageDTO;
 import com.studyswap.backend.dto.ReviewRequestDTO;
-import com.studyswap.backend.model.Review;
 import com.studyswap.backend.service.ReviewService;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,15 +32,10 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
-    @PostMapping
+    @PostMapping("/{id}")
     public ResponseEntity<ReviewResponseDTO> createReview(@RequestBody @Valid ReviewRequestDTO dto, Authentication auth) {
-        Review created = reviewService.createReview(dto, auth);
-        ReviewResponseDTO response = new ReviewResponseDTO();
-        response.setId(created.getId());
-        response.setRating(created.getRating());
-        response.setUserId(created.getAuthor().getId());
-        response.setDescription(created.getDescription());
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        ReviewResponseDTO created = reviewService.createReview(dto, auth);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/{id}")
@@ -46,19 +43,30 @@ public class ReviewController {
             @PathVariable Long id,
             @RequestBody @Valid ReviewRequestDTO dto,
             Authentication auth) {
-        Review updated = reviewService.updateReview(id, dto, auth);
-        ReviewResponseDTO response = new ReviewResponseDTO();
-        response.setId(updated.getId());
-        response.setRating(updated.getRating());
-        response.setUserId(updated.getAuthor().getId());
-        response.setDescription(updated.getDescription());
-        return ResponseEntity.ok(response);
+        ReviewResponseDTO updated = reviewService.updateReview(id, dto, auth);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id, Authentication auth) {
         reviewService.deleteReview(id, auth);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{transactionId}")
+    public ResponseEntity<ReviewResponseDTO> getByTransactionId(@PathVariable Long transactionId) {
+        ReviewResponseDTO dto = reviewService.getByTransactionId(transactionId);
+
+        if (dto == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<ReviewResponseDTO>> getByUser(@PathVariable Long userId){
+        return ResponseEntity.ok().body(reviewService.getByUser(userId));
     }
 
     @GetMapping("/user/{userId}/average")
