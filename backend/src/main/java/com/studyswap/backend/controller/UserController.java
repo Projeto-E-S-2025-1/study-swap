@@ -51,5 +51,9 @@ public class UserController {
     	userService.unfavoriteMaterial(id_Material);
     	return ResponseEntity.noContent().build();
     }
-
+    @GetMapping("/favorites")
+    public ResponseEntity<List<MaterialResponseDTO>> listFavorites(){
+    	return ResponseEntity.ok().body(userService.listFavoriteMaterials());
+    }
+    
 }
