@@ -166,4 +166,44 @@ public class ReviewControllerTest {
                         .with(testUser))
                 .andExpect(status().isForbidden());
     }
+
+    @Test
+    @DisplayName("Deve retornar review existente para a transação")
+    void shouldReturnReviewWhenExists() throws Exception {
+        when(reviewService.getByTransactionId(1L)).thenReturn(reviewResponseDTO);
+
+        mockMvc.perform(get("/review/{transactionId}", 1)
+                        .with(testUser))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(reviewResponseDTO.getId()))
+                .andExpect(jsonPath("$.authorName").value(reviewResponseDTO.getAuthorName()));
+    }
+
+    @Test
+    @DisplayName("Deve atualizar review existente e retornar 200 OK")
+    void shouldUpdateReviewSuccessfully() throws Exception {
+        when(reviewService.updateReview(eq(1L), any(ReviewRequestDTO.class), any()))
+                .thenReturn(reviewResponseDTO);
+
+        mockMvc.perform(put("/review/{id}", 1)
+                        .with(testUser)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(reviewRequestDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(reviewResponseDTO.getId()))
+                .andExpect(jsonPath("$.authorName").value("Test User"))
+                .andExpect(jsonPath("$.description").value(reviewResponseDTO.getDescription()));
+    }
+
+    @Test
+    @DisplayName("Deve deletar review existente e retornar 204 No Content")
+    void shouldDeleteReviewSuccessfully() throws Exception {
+        doNothing().when(reviewService).deleteReview(eq(1L), any());
+
+        mockMvc.perform(delete("/review/{id}", 1)
+                        .with(testUser))
+                .andExpect(status().isNoContent());
+
+        verify(reviewService, times(1)).deleteReview(eq(1L), any());
+    }
 }
