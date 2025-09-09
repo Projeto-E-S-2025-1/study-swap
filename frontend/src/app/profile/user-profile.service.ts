@@ -17,12 +17,22 @@ export class ProfileService {
     getUserById(id: number): Observable<UserProfile>{
         return this.http.get<UserProfile>(`${this.API_URL}/${id}`)
     }
+
+    updateProfile(userDTO: any, file?: File) {
+    const formData = new FormData();
+    formData.append("userDTO", new Blob([JSON.stringify(userDTO)], { type: "application/json" }));
+    if (file) {
+        formData.append("file", file);
+    }
+
+    return this.http.put<UserProfile>(`${this.API_URL}/me`, formData);
+    }
 }
 
 export interface UserProfile {
     id: number;
     name: string;
-    photo_url: string;
+    photoUrl: string;
     interests: string;
     role: Role;
 }
