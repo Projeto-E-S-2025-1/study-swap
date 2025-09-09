@@ -33,7 +33,7 @@ public class ReviewController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<ReviewResponseDTO> createReview(@RequestBody @Valid ReviewRequestDTO dto, Authentication auth) {
+    public ResponseEntity<ReviewResponseDTO> createReview(@RequestBody @Valid ReviewRequestDTO dto, Authentication auth, @PathVariable Long id) {
         ReviewResponseDTO created = reviewService.createReview(dto, auth);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
