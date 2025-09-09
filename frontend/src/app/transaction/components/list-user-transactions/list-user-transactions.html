@@ -10,8 +10,8 @@
       <h3><strong>{{ t.materialName }}</strong></h3>
       <p><strong>Tipo:</strong> {{ t.transactionType }}</p>
       <p><strong>Status:</strong> {{ t.status }}</p>
-      <p><strong>Anunciante:</strong> {{ t.announcerName }}</p>
-      <p><strong>Interessado:</strong> {{ t.receiverName }}</p>
+      <p><strong>Anunciante: </strong> <a [routerLink]="[ '/profile', t.announcerId ]">{{ t.announcerName }}</a></p>
+      <p><strong>Interessado: </strong>{{ t.receiverName }}</p>
     </div>
 
     <div class="transaction-actions">

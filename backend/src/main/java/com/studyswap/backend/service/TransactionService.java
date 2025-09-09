@@ -77,25 +77,26 @@ public class TransactionService {
 	@Transactional
 	public void cancelTransaction(Authentication auth, Long idMaterial) {
 		User user = (User) auth.getPrincipal();
-		//verifica se a transação está no BD
-		Material material = materialRepository.findById(idMaterial).orElseThrow(()
-				-> new ResponseStatusException(
-				HttpStatus.NOT_FOUND, MATERIAL_NOT_FOUND)
-				);
-		Transaction transaction = transactionRepository.findByMaterialAndAnnouncer(material, user).orElseThrow(()
-				-> new ResponseStatusException(
-				HttpStatus.NOT_FOUND, "Transação não encontrada")
-				);	
-		//verifica se o usuário participa da transação
-		if(!isParticipantInTransaction(user, transaction)) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "usuário não autorizado");
+
+		Material material = materialRepository.findById(idMaterial)
+				.orElseThrow(() -> new ResponseStatusException(
+						HttpStatus.NOT_FOUND, "Material não encontrado"));
+
+		List<Transaction> transactions = transactionRepository.findByMaterial(material);
+
+		Transaction transaction = transactions.stream()
+				.filter(t -> isParticipantInTransaction(user, t))
+				.findFirst()
+				.orElseThrow(() -> new ResponseStatusException(
+						HttpStatus.FORBIDDEN, "Usuário não autorizado a cancelar esta transação"));
+
+		if (transaction.getStatus() != TransactionStatus.PENDING) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não é possível cancelar transação que não está pendente");
 		}
-		//verifica se a transação está pendente
-		if(transaction.getStatus()!=TransactionStatus.PENDING){
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "não pode cancelar transação que não está pendente");
-		}
-		transactionRepository.delete(transaction);	
+
+		transactionRepository.delete(transaction);
 	}
+
 	
     @Transactional
     public TransactionResponseDTO completeTransaction(Authentication auth, Long idTransaction){

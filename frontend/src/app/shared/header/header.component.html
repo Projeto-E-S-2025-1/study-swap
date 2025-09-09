@@ -12,8 +12,8 @@
         <ng-container *ngIf="isUserAuthenticated; else loggedOutLinks">
             <a routerLink="/favorite">Meus Favoritos</a>
             <a routerLink="/material">Catálogo</a>
-            <a routerLink="/transaction">Minhas transações</a>
-            <a [routerLink]="['/profile', userId]">Meu profile</a>
+            <a routerLink="/transaction">Minhas Transações</a>
+            <a [routerLink]="['/profile', userId]">Meu Perfil</a>
             <button (click)="logout()">Logout</button>
         </ng-container>
         <ng-template #loggedOutLinks>
