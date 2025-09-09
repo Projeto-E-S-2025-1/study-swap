@@ -1,7 +1,10 @@
 package com.studyswap.backend.service;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import jakarta.transaction.Transactional;
 import java.util.List;
 
@@ -74,10 +77,10 @@ public class ReviewService {
         User user = (User) authentication.getPrincipal();
 
         Review avaliacao = reviewRepository.findById(avaliacaoId)
-            .orElseThrow(() -> new IllegalArgumentException("Avaliação não encontrada."));
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avaliação não encontrada"));
 
         if (!avaliacao.getAuthor().getId().equals(user.getId())) {
-            throw new SecurityException("Você não tem permissão para excluir esta avaliação.");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não tem permissão para excluir esta avaliação");
         }
 
         reviewRepository.delete(avaliacao);

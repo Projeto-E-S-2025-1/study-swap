@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -392,4 +393,81 @@ class TransactionServiceTest {
         assertFalse(invokeIsReceiver(u1, tx));
     }
 
+    @Test
+    void testCompleteTransaction_WithMultiplePendingTransactions() {
+        // Usuário anunciante
+        when(authentication.getPrincipal()).thenReturn(announcerUser);
+
+        // Outra transação pendente do mesmo material
+        Transaction otherPending = new Transaction(testMaterial, announcerUser, anotherUser, TransactionStatus.PENDING, TransactionType.DOACAO);
+        otherPending.setId(200L);
+
+        // Outra transação concluída (não deve ser alterada)
+        Transaction concludedTx = new Transaction(testMaterial, announcerUser, anotherUser, TransactionStatus.CONCLUDED, TransactionType.DOACAO);
+        concludedTx.setId(300L);
+
+        when(transactionRepository.findById(100L)).thenReturn(Optional.of(pendingTransaction));
+        when(transactionRepository.findByMaterial(testMaterial)).thenReturn(List.of(pendingTransaction, otherPending, concludedTx));
+        when(transactionRepository.save(any(Transaction.class))).thenAnswer(i -> i.getArgument(0));
+
+        TransactionResponseDTO result = transactionService.completeTransaction(authentication, 100L);
+
+        assertEquals(TransactionStatus.CONCLUDED, result.getStatus());
+        assertEquals(TransactionStatus.DENIED, otherPending.getStatus());
+        assertEquals(TransactionStatus.CONCLUDED, concludedTx.getStatus());
+        assertFalse(testMaterial.isAvailable());
+        verify(transactionRepository, times(2)).save(any(Transaction.class)); // pendingTransaction + otherPending + concludedTx (salvo mesmo que não alterado)
+    }
+
+    @Test
+    void testCompleteTransaction_TransactionNotFound() {
+        when(authentication.getPrincipal()).thenReturn(announcerUser);
+        when(transactionRepository.findById(999L)).thenReturn(Optional.empty());
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () ->
+                transactionService.completeTransaction(authentication, 999L));
+
+        assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
+    }
+
+    @Test
+    void testCancelTransaction_MaterialNotFound() {
+        when(materialRepository.findById(999L)).thenReturn(Optional.empty());
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () ->
+                transactionService.cancelTransaction(authentication, 999L));
+
+        assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
+    }
+
+    @Test
+    void testCancelTransaction_TransactionNotFound() {
+        when(authentication.getPrincipal()).thenReturn(announcerUser);
+        when(materialRepository.findById(10L)).thenReturn(Optional.of(testMaterial));
+        when(transactionRepository.findByMaterialAndAnnouncer(any(Material.class), any(User.class)))
+                .thenReturn(Optional.empty());
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () ->
+                transactionService.cancelTransaction(authentication, 10L));
+
+        assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
+    }
+
+    @Test
+    void testFindAllTransactionsByUser_WithTransactions() {
+        when(authentication.getPrincipal()).thenReturn(receiverUser);
+
+        Transaction tx1 = pendingTransaction;
+        Transaction tx2 = new Transaction(testMaterial, announcerUser, receiverUser, TransactionStatus.PENDING, TransactionType.DOACAO);
+        tx2.setId(201L);
+
+        when(transactionRepository.findByAnnouncer(receiverUser)).thenReturn(new ArrayList<>());
+        when(transactionRepository.findByReceiver(receiverUser)).thenReturn(new ArrayList<>(List.of(tx1, tx2)));
+
+        List<TransactionResponseDTO> result = transactionService.findAllTransactionsByUser(authentication);
+
+        assertEquals(2, result.size());
+        assertEquals(tx1.getId(), result.get(0).getId());
+        assertEquals(tx2.getId(), result.get(1).getId());
+    }
 }

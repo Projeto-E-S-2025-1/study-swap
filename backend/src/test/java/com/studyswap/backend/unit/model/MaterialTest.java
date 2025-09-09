@@ -66,4 +66,33 @@ class MaterialTest {
         // Valor default do booleano
         assertTrue(material.isAvailable());
     }
+
+    @Test
+    void testEqualsAndHashCode() {
+        Material m1 = new Material();
+        m1.setId(1L);
+
+        Material m2 = new Material();
+        m2.setId(1L);
+
+        Material m3 = new Material();
+        m3.setId(2L);
+
+        Object notMaterial = new Object();
+
+        // equals true: mesmo id
+        assertEquals(m1, m2);
+
+        // equals false: id diferente
+        assertNotEquals(m1, m3);
+
+        // equals false: objeto null
+        assertNotEquals(m1, null);
+
+        // equals false: objeto de classe diferente
+        assertNotEquals(m1, notMaterial);
+
+        // hashCode: mesmo id -> mesmo hash
+        assertEquals(m1.hashCode(), m2.hashCode());
+    }
 }
