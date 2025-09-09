@@ -67,4 +67,33 @@ class MaterialResponseDTOTest {
         assertEquals("Outro Usuário", dto.getUserName());
         assertFalse(dto.isAvailable());
     }
+
+    @Test
+    void testEqualsAndHashCode() {
+        MaterialResponseDTO dto1 = new MaterialResponseDTO();
+        dto1.setId(1L);
+
+        MaterialResponseDTO dto2 = new MaterialResponseDTO();
+        dto2.setId(1L);
+
+        MaterialResponseDTO dto3 = new MaterialResponseDTO();
+        dto3.setId(2L);
+
+        Object notADTO = new Object();
+
+        // equals true
+        assertEquals(dto1, dto2);
+
+        // equals false com id diferente
+        assertNotEquals(dto1, dto3);
+
+        // equals false com null
+        assertNotEquals(dto1, null);
+
+        // equals false com classe diferente
+        assertNotEquals(dto1, notADTO);
+
+        // hashCode
+        assertEquals(dto1.hashCode(), dto2.hashCode());
+    }
 }
