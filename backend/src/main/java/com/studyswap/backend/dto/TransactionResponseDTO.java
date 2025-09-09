@@ -10,7 +10,8 @@ public class TransactionResponseDTO {
     private LocalDateTime transactionDate;
 
     private Long idMaterial;
-    private TransactionStatus status;
+	private String materialName;
+	private TransactionStatus status;
     private Long receiverId;
     private String receiverName;
     private Long announcerId;
@@ -18,12 +19,13 @@ public class TransactionResponseDTO {
 	private TransactionType transactionType;
 	private MaterialDTO offeredMaterial;
     
-    public TransactionResponseDTO(Long id, LocalDateTime transactionDate, Long idMaterial, TransactionStatus status,
+    public TransactionResponseDTO(Long id, LocalDateTime transactionDate, Long idMaterial, String materialName, TransactionStatus status,
 			Long receiverId, String receiverName, Long announcerId, String announcerName, TransactionType transactionType,
 			MaterialDTO offeredMaterial) {
 		this.id = id;
 		this.transactionDate = transactionDate;
 		this.idMaterial = idMaterial;
+		this.materialName = materialName;
 		this.status = status;
 		this.receiverId = receiverId;
 		this.receiverName = receiverName;
@@ -91,18 +93,31 @@ public class TransactionResponseDTO {
 	public Long getIdMaterial() {
 		return idMaterial;
 	}
+
 	public void setIdMaterial(Long idMaterial) {
 		this.idMaterial = idMaterial;
 	}
+
+	public String getMaterialName() {
+		return materialName;
+	}
+
+	public void setMaterialName(String materialName) {
+		this.materialName = materialName;
+	}
+
 	public TransactionType getTransactionType() {
 		return transactionType;
 	}
+
 	public void setTransactionType(TransactionType transactionType) {
 		this.transactionType = transactionType;
 	}
+
 	public MaterialDTO getOfferedMaterial() {
 		return offeredMaterial;
 	}
+	
 	public void setOfferedMaterial(MaterialDTO offeredMaterial) {
 		this.offeredMaterial = offeredMaterial;
 	}
