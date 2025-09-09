@@ -1,1 +1,20 @@
-<p>favorite works!</p>
+<div class="vitrine-container">
+    <div class="vitrine-header">
+        <h2 class="vitrine-title">Favoritos</h2>
+    </div>
+
+    <div class="product-grid" *ngIf="!isLoading">
+    <div *ngFor="let produto of materiais" class="product-card" [routerLink]="['/material', produto.id]" style="cursor: pointer;">
+      <img
+      [src]="produto.photo ? 'http://localhost:8080' + produto.photo : 'http://localhost:8080/images/default-photo.png'"
+      [alt]="produto.title"
+      class="product-image"
+      />
+      <div class="product-info">
+        <h3 class="product-name">{{ produto.title }}</h3>
+        <p class="product-price" *ngIf="produto.price !== null">R$ {{ produto.price }}</p>
+        <p class="product-price" *ngIf="produto.price === null">{{ produto.transactionType }}</p>
+      </div>
+    </div>
+    </div>
+</div>
