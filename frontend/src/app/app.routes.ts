@@ -10,11 +10,13 @@ import { ReportFormComponent } from './reports/report-form/report-form';
 // Importações corretas para os componentes
 import { Home } from './home/home';
 import { Favorite } from './favorite/favorite';
+import { UserProfileComponent } from './profile/user-profile.component';
 
 export const routes: Routes = [
   { path: '', component: Home, title: 'Home - StudySwap' },
   { path: 'login', component: LoginComponent, title: 'Login - StudySwap' },
   { path: 'register', component: RegisterComponent, title: 'Cadastro - StudySwap' },
+  { path: 'profile/:id', component: UserProfileComponent, title: 'Perfil - StudySwap'},
   { path: 'material', canActivate: [AuthGuard], children: MATERIALS_ROUTES},
   { path: 'transaction', canActivate: [AuthGuard], children: TRANSACTION_ROUTES},
   { path: 'report', canActivate: [AuthGuard], component: ReportFormComponent, title: 'Denunciar - StudySwap' },
