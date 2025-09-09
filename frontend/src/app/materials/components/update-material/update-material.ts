@@ -25,7 +25,8 @@ export class UpdateMaterial implements OnInit {
     conservationStatus: ConservationStatus.NOVO as ConservationStatus | undefined,
     transactionType: TransactionType.DOACAO as TransactionType | undefined,
     price: 0 as number | null | undefined,
-    userId: 0 as number | undefined
+    userId: 0 as number | undefined,
+    available: true
   };
 
   material: (Material & { id: number }) | null = null;
@@ -73,6 +74,32 @@ export class UpdateMaterial implements OnInit {
     }
   }
 
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      const allowedTypes = ['image/jpeg', 'image/png'];
+      const maxSizeMB = 5; // tamanho máximo em MB
+      const maxSizeBytes = maxSizeMB * 1024 * 1024;
+      if (!allowedTypes.includes(file.type)) {
+        this.errorMessage = 'Tipo de arquivo inválido. Apenas JPG, PNG ou JPEG são permitidos.';
+        this.selectedFile = undefined;
+        return;
+      }
+
+      // Validação do tamanho
+      if (file.size > maxSizeBytes) {
+        this.errorMessage = `Arquivo muito grande. Máximo permitido: ${maxSizeMB}MB.`;
+        this.selectedFile = undefined;
+        return;
+      }
+
+      // Se passar na validação, atribui o arquivo
+      this.selectedFile = file;
+      this.errorMessage = '';
+    }
+  }
+
+
   onSubmit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
     const id = Number(idParam);
@@ -97,8 +124,9 @@ export class UpdateMaterial implements OnInit {
     this.finalMaterial.conservationStatus = materialToSend.conservationStatus;
     this.finalMaterial.transactionType = materialToSend.transactionType;
     this.finalMaterial.price = materialToSend.price;
+    this.finalMaterial.available = true;
 
-    this.materialService.update(id, this.finalMaterial).subscribe({
+    this.materialService.update(id, this.finalMaterial, this.selectedFile).subscribe({
       next: (response) => {
         this.successMessage = 'Material atualizado com sucesso!';
         setTimeout(() => this.router.navigate(['/material/' + id]), 500);

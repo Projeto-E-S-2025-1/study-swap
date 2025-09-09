@@ -1,7 +1,8 @@
 package com.studyswap.backend.model;
 
 public enum Role {
-    STUDENT("STUDENT");
+    STUDENT("STUDENT"),
+    PROFESSOR("PROFESSOR");
 
     private final String roleName;
 
