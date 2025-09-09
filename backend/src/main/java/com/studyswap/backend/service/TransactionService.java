@@ -80,7 +80,7 @@ public class TransactionService {
 
 		Material material = materialRepository.findById(idMaterial)
 				.orElseThrow(() -> new ResponseStatusException(
-						HttpStatus.NOT_FOUND, "Material não encontrado"));
+						HttpStatus.NOT_FOUND, MATERIAL_NOT_FOUND));
 
 		List<Transaction> transactions = transactionRepository.findByMaterial(material);
 

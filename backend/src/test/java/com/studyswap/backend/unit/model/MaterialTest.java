@@ -80,17 +80,20 @@ class MaterialTest {
 
         Object notMaterial = new Object();
 
+        // equals true: mesmo objeto (this == obj)
+        assertTrue(m1.equals(m1));
+
         // equals true: mesmo id
         assertEquals(m1, m2);
 
         // equals false: id diferente
         assertNotEquals(m1, m3);
 
-        // equals false: objeto null
-        assertNotEquals(null, m1);
+        // equals false: obj == null
+        assertFalse(m1.equals(null));
 
-        // equals false: objeto de classe diferente
-        assertNotEquals(m1, notMaterial);
+        // equals false: classe diferente
+        assertFalse(m1.equals(notMaterial));
 
         // hashCode: mesmo id -> mesmo hash
         assertEquals(m1.hashCode(), m2.hashCode());

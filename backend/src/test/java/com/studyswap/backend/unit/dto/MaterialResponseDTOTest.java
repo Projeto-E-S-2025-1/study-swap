@@ -81,19 +81,19 @@ class MaterialResponseDTOTest {
 
         Object notADTO = new Object();
 
-        // equals true
+        // equals true: ids iguais
         assertEquals(dto1, dto2);
 
-        // equals false com id diferente
+        // equals false: ids diferentes
         assertNotEquals(dto1, dto3);
 
-        // equals false com null
-        assertNotEquals(null, dto1);
+        // equals false: obj == null
+        assertFalse(dto1.equals(null)); 
 
-        // equals false com classe diferente
+        // equals false: classe diferente
         assertNotEquals(dto1, notADTO);
 
-        // hashCode
+        // hashCode: mesmo id -> mesmo hash
         assertEquals(dto1.hashCode(), dto2.hashCode());
     }
 
