@@ -3,9 +3,8 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Transaction } from '../models/transaction.model';
+import { Transaction, TransactionDTO } from '../models/transaction.model';
 import { Material } from '../../materials/models/material.model';
-import { stringify } from 'querystring';
 
 @Injectable({
   providedIn: 'root'
@@ -26,15 +25,15 @@ export class TransactionService {
     return this.http.put<Transaction>(`${this.API_URL}/${idTransaction}`, {});
   }
 
-  getTransactionsByMaterial(idMaterial: number): Observable<Transaction[]> {
-    return this.http.get<Transaction[]>(`${this.API_URL}/material/${idMaterial}`);
+  getTransactionsByMaterial(idMaterial: number): Observable<TransactionDTO[]> {
+    return this.http.get<TransactionDTO[]>(`${this.API_URL}/material/${idMaterial}`);
   }
 
-  getById(idTransaction: number): Observable<Transaction> {
-    return this.http.get<Transaction>(`${this.API_URL}/${idTransaction}`);
+  getById(idTransaction: number): Observable<TransactionDTO> {
+    return this.http.get<TransactionDTO>(`${this.API_URL}/${idTransaction}`);
   }
 
-  getTransactionsByUser(): Observable<Transaction[]> {
-    return this.http.get<Transaction[]>(`${this.API_URL}/user`);
+  getTransactionsByUser(): Observable<TransactionDTO[]> {
+    return this.http.get<TransactionDTO[]>(`${this.API_URL}/user`);
   }
 }

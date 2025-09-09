@@ -23,6 +23,7 @@ class TransactionResponseDTOTest {
                 1L,
                 now,
                 100L,
+                "Material Test",
                 TransactionStatus.PENDING,
                 10L,
                 "Receiver Test",
@@ -47,7 +48,7 @@ class TransactionResponseDTOTest {
     @Test
     void testSettersAndGetters() {
         TransactionResponseDTO dto = new TransactionResponseDTO(
-                null, null, null, null, null, null, null, null, null, null
+                null, null, null, null, null, null, null, null, null, null, null
         );
 
         LocalDateTime now = LocalDateTime.now();

@@ -6,7 +6,21 @@ export interface Transaction {
     receiverId: number;
     receiverName: string;
     idMaterial: number;
-    status: 'PENDING' | 'COMPLETED' | 'CANCELLED';
+    status: 'PENDING' | 'SELECTED' | 'CONCLUDED';
+    transactionType: 'DOACAO' | 'TROCA' | 'VENDA';
+    transactionDate: string;
+    offeredMaterial?: MaterialDTO;
+}
+
+export interface TransactionDTO {
+    id: number;
+    announcerId: number;
+    announcerName: string;
+    receiverId: number;
+    receiverName: string;
+    idMaterial: number;
+    materialName: string;
+    status: 'PENDING' | 'SELECTED' | 'CONCLUDED';
     transactionType: 'DOACAO' | 'TROCA' | 'VENDA';
     transactionDate: string;
     offeredMaterial?: MaterialDTO;
