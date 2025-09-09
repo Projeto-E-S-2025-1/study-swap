@@ -115,4 +115,12 @@ class MaterialResponseDTOTest {
         assertEquals(dto1, dto3);
     }
 
+    @Test
+    void testEqualsSameInstance() {
+        MaterialResponseDTO dto = new MaterialResponseDTO();
+        dto.setId(1L);
+
+        // compara o objeto com ele mesmo
+        assertEquals(dto, dto);
+    }
 }
