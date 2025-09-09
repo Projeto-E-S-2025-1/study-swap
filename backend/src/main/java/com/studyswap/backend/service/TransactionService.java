@@ -112,6 +112,14 @@ public class TransactionService {
     	}
     	transaction.getMaterial().setAvailable(false);
 		transaction.setStatus(TransactionStatus.CONCLUDED);
+
+		transactionRepository.findByMaterial(transaction.getMaterial()).stream()
+		.filter(t -> !t.getId().equals(transaction.getId()) && t.getStatus() == TransactionStatus.PENDING)
+		.forEach(t -> {
+			t.setStatus(TransactionStatus.DENIED);
+			transactionRepository.save(t);
+		});
+
     	return convertToResponseDTO(transactionRepository.save(transaction));
     }
     
@@ -137,20 +145,42 @@ public class TransactionService {
 	}
     
     private TransactionResponseDTO convertToResponseDTO(Transaction transaction) {
-		MaterialDTO offeredMaterial =  new MaterialDTO(transaction.getMaterial().getId(), transaction.getMaterial().getTitle(), 
-													   transaction.getMaterial().getMaterialType(), transaction.getMaterial().getConservationStatus());
-		return new TransactionResponseDTO(transaction.getId(), transaction.getTransactionDate(), transaction.getMaterial().getId(), 
-				transaction.getStatus(), transaction.getReceiver().getId(), transaction.getReceiver().getName(),
-				transaction.getAnnouncer().getId(), transaction.getAnnouncer().getName(), transaction.getType(), offeredMaterial);
+		MaterialDTO offeredMaterial = null;
+		
+		if (transaction.getMaterialTrade() != null) {
+			offeredMaterial = new MaterialDTO(
+				transaction.getMaterialTrade().getId(),
+				transaction.getMaterialTrade().getTitle(), 
+				transaction.getMaterialTrade().getMaterialType(),
+				transaction.getMaterialTrade().getConservationStatus()
+			);
+		}
+
+		return new TransactionResponseDTO(
+			transaction.getId(),
+			transaction.getTransactionDate(),
+			transaction.getMaterial().getId(),
+			transaction.getMaterial().getTitle(),
+			transaction.getStatus(),
+			transaction.getReceiver().getId(),
+			transaction.getReceiver().getName(),
+			transaction.getAnnouncer().getId(),
+			transaction.getAnnouncer().getName(),
+			transaction.getType(),
+			offeredMaterial
+		);
 	}
+
 	private boolean isParticipantInTransaction(User user, Transaction transaction) {
 		return isAnnouncer(user, transaction) || isReceiver(user, transaction);
 	}
+
 	private boolean isAnnouncer(User user, Transaction transaction){
 		return transaction.getAnnouncer() != null && user != null
 				&& transaction.getAnnouncer().getId() != null
 				&& transaction.getAnnouncer().getId().equals(user.getId());
 	}
+	
 	private boolean isReceiver(User user, Transaction transaction){
 		return transaction.getReceiver() != null && user != null
 				&& transaction.getReceiver().getId() != null

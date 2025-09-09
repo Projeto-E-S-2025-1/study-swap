@@ -27,11 +27,11 @@
         name="comment"
         class="form-control"
         rows="4"
-        [(ngModel)]="reviewDTO.comment"
+        [(ngModel)]="reviewDTO.description"
         required
         placeholder="Compartilhe sua experiência...">
       </textarea>
-      <div *ngIf="reviewForm.submitted && !reviewDTO.comment" class="text-danger small">
+      <div *ngIf="reviewForm.submitted && !reviewDTO.description" class="text-danger small">
         O comentário é obrigatório.
       </div>
     </div>

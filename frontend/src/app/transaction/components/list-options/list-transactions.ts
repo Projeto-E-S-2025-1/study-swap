@@ -1,3 +1,4 @@
+//src/app/transaction/components/list-options/list-transactions.ts
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Transaction } from '../../models/transaction.model';
@@ -42,9 +43,13 @@ export class TransactionProposalsComponent implements OnInit {
     this.selectedProposal = proposal;
   }
 
-  confirmSelection(): void {
-  this.confirmedSelection = true;
-}
+  isCompleted(): boolean {
+    return this.proposals.some(p => p.status === 'CONCLUDED');
+  }
+
+  get completedTransaction(): Transaction | null {
+    return this.proposals.find(p => p.status === 'CONCLUDED') || null;
+  }
 
   finalizeTransaction(): void {
     if (!this.selectedProposal) return;

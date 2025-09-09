@@ -1,24 +1,41 @@
 <div class="profile-card">
+  <!-- Header com fundo verde -->
+  <div class="profile-banner"></div>
+
+  <!-- Info + Foto -->
   <div class="profile-header">
-    <div class="avatar">
-      <span>{{ name.charAt(0).toUpperCase() }}</span>
-    </div>
+    <img 
+      [src]="user.photo_url ? apiUrl + user.photo_url : apiUrl + '/images/user-photo.png'" 
+      alt="Foto de Perfil"
+      class="profile-photo"
+    >
+
     <div class="info">
-      <h2>{{ name }}</h2>
-      <p>{{ description }}</p>
+      <h2>{{ user.name }}</h2>
+      <h4 class="role">{{ user.role }}</h4>
+
+      <!-- Estrelas do averageRating -->
+      <div class="stars-rating">
+        <ng-container *ngFor="let star of [1,2,3,4,5]">
+          <span [class.filled]="star <= rating.averageRating">★</span>
+        </ng-container>
+        <small class="avg-text">({{ rating.averageRating | number:'1.1-1' }}/5)</small>
+      </div>
+
+      <p class="interests">{{ user.interests }}</p>
     </div>
   </div>
 
+  <!-- Avaliações -->
   <div class="reviews">
     <h3>Avaliações anteriores</h3>
     <div *ngFor="let review of reviews" class="review-card">
       <div class="review-header">
-        <strong>{{ review.reviewer }}</strong>
-        <span class="rating">
-          ⭐ {{ review.rating }}/5
-        </span>
+        <strong>{{ review.authorName }}</strong>
+        <span class="material">{{ review.materialTitle }}</span>
+        <span class="rating">⭐ {{ review.rating }}/5</span>
       </div>
-      <p>{{ review.comment }}</p>
+      <p class="review-text">{{ review.description }}</p>
     </div>
   </div>
 </div>
