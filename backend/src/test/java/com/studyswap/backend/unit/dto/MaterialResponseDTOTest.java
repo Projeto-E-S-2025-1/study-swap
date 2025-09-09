@@ -96,4 +96,23 @@ class MaterialResponseDTOTest {
         // hashCode
         assertEquals(dto1.hashCode(), dto2.hashCode());
     }
+
+    @Test
+    void testEqualsWithNullId() {
+        MaterialResponseDTO dto1 = new MaterialResponseDTO();
+        dto1.setId(null);
+
+        MaterialResponseDTO dto2 = new MaterialResponseDTO();
+        dto2.setId(1L);
+
+        MaterialResponseDTO dto3 = new MaterialResponseDTO();
+        dto3.setId(null);
+
+        // dto1 vs dto2 -> ids diferentes, um é null
+        assertNotEquals(dto1, dto2);
+
+        // dto1 vs dto3 -> ambos null -> deve ser true
+        assertEquals(dto1, dto3);
+    }
+
 }
