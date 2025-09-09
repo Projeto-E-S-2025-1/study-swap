@@ -40,8 +40,7 @@
 
   <div class="product-grid" *ngIf="isFiltered">
     <div *ngFor="let produto of materials" class="product-card" [routerLink]="['/material', produto.id]" style="cursor: pointer;">
-      <img
-      [src]="produto.photo ? 'http://localhost:8080' + produto.photo : 'http://localhost:8080/images/default-photo.png'"
+      <img [src]="produto.photo ? apiUrl + produto.photo : apiUrl + 'images/default-photo.png'"
       [alt]="produto.title"
       class="product-image"
       />
