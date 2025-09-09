@@ -169,62 +169,62 @@ class TransactionServiceTest {
 
     // ---------------------- cancelTransaction ----------------------
 
-    @Test
-    void testCancelTransaction_ByReceiver_Success() {
-        // Usuário participante (receiver)
-        lenient().when(authentication.getPrincipal()).thenReturn(receiverUser);
+   @Test
+void testCancelTransaction_ByReceiver_Success() {
+    lenient().when(authentication.getPrincipal()).thenReturn(receiverUser);
 
-        // Stub do material e transação
-        doReturn(Optional.of(pendingTransaction.getMaterial()))
-                .when(materialRepository).findById(anyLong());
+    doReturn(Optional.of(pendingTransaction.getMaterial()))
+            .when(materialRepository).findById(anyLong());
 
-        doReturn(Optional.of(pendingTransaction))
-                .when(transactionRepository).findByMaterialAndAnnouncer(any(Material.class), any(User.class));
+    doReturn(List.of(pendingTransaction))
+            .when(transactionRepository).findByMaterial(any(Material.class));
 
-        // Act
-        transactionService.cancelTransaction(authentication, pendingTransaction.getMaterial().getId());
+    transactionService.cancelTransaction(authentication, pendingTransaction.getMaterial().getId());
 
-        // Assert
-        verify(transactionRepository, times(1)).delete(pendingTransaction);
-    }
+    verify(transactionRepository, times(1)).delete(pendingTransaction);
+}
+
 
     @Test
     void testCancelTransaction_Forbidden() {
-        // Usuário que não participa da transação
         lenient().when(authentication.getPrincipal()).thenReturn(anotherUser);
 
         doReturn(Optional.of(pendingTransaction.getMaterial()))
                 .when(materialRepository).findById(anyLong());
 
-        doReturn(Optional.of(pendingTransaction))
-                .when(transactionRepository).findByMaterialAndAnnouncer(any(Material.class), any(User.class));
+        doReturn(List.of(pendingTransaction))
+                .when(transactionRepository).findByMaterial(any(Material.class));
 
         Long materialId = pendingTransaction.getMaterial().getId();
-        assertThrows(ResponseStatusException.class, () ->
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () ->
                 transactionService.cancelTransaction(authentication, materialId)
         );
 
+        assertEquals(HttpStatus.FORBIDDEN, ex.getStatusCode());
         verify(transactionRepository, never()).delete(any());
     }
 
     @Test
     void testCancelTransaction_NotPending() {
-        // Usuário participante
         lenient().when(authentication.getPrincipal()).thenReturn(receiverUser);
 
         doReturn(Optional.of(concludedTransaction.getMaterial()))
                 .when(materialRepository).findById(anyLong());
 
-        doReturn(Optional.of(concludedTransaction))
-                .when(transactionRepository).findByMaterialAndAnnouncer(any(Material.class), any(User.class));
+        doReturn(List.of(concludedTransaction))
+                .when(transactionRepository).findByMaterial(any(Material.class));
 
         Long materialId = concludedTransaction.getMaterial().getId();
-        assertThrows(ResponseStatusException.class, () ->
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () ->
                 transactionService.cancelTransaction(authentication, materialId)
         );
 
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
         verify(transactionRepository, never()).delete(any());
     }
+
 
     // ---------------------- completeTransaction ----------------------
 
@@ -443,14 +443,17 @@ class TransactionServiceTest {
     @Test
     void testCancelTransaction_TransactionNotFound() {
         when(authentication.getPrincipal()).thenReturn(announcerUser);
+
         when(materialRepository.findById(10L)).thenReturn(Optional.of(testMaterial));
-        when(transactionRepository.findByMaterialAndAnnouncer(any(Material.class), any(User.class)))
-                .thenReturn(Optional.empty());
+
+        when(transactionRepository.findByMaterial(any(Material.class)))
+                .thenReturn(List.of());
 
         ResponseStatusException ex = assertThrows(ResponseStatusException.class, () ->
-                transactionService.cancelTransaction(authentication, 10L));
+                transactionService.cancelTransaction(authentication, 10L)
+        );
 
-        assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
+        assertEquals(HttpStatus.FORBIDDEN, ex.getStatusCode());
     }
 
     @Test
