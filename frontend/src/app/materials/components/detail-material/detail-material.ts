@@ -13,6 +13,8 @@ import { OpenTransactionComponent } from '../../../transaction/components/open-t
 import { TransactionProposalsComponent } from '../../../transaction/components/list-options/list-transactions';
 import { TransactionService } from '../../../transaction/services/transaction.service';
 import { FavoriteService } from '../../../favorite/favorite.service';
+import { UserAverage } from '../../../transaction/models/review.model';
+import { ReviewService } from '../../../transaction/services/review.service';
 
 @Component({
   selector: 'app-detail-material',
@@ -23,6 +25,7 @@ import { FavoriteService } from '../../../favorite/favorite.service';
 })
 export class DetailMaterial implements OnInit {
   material: (Material & { id: number }) | null = null;
+  rating!: UserAverage;
   isLoading: boolean = true;
   errorMessage: string = '';
   isFavorite: boolean = false;
@@ -37,7 +40,7 @@ export class DetailMaterial implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private transactionService: TransactionService,
+    private reviewService: ReviewService,
     private materialService: MaterialService,
     private authService: AuthService,
     private favoriteService: FavoriteService
@@ -58,6 +61,7 @@ export class DetailMaterial implements OnInit {
           this.material = data as any;
           this.isOwner = this.authService.getUserId() == this.material?.userId;
           this.isLoading = false;
+          this.loadRating();
         },
         error: () => {
           this.errorMessage = 'Não foi possível carregar o material.';
@@ -70,6 +74,20 @@ export class DetailMaterial implements OnInit {
     }
 
     this.updateFavorited();
+  }
+
+  loadRating(): void {
+    const userId = this.material?.userId;
+    if (userId == null) return;
+
+    this.reviewService.getUserRating(userId).subscribe({
+      next: (res: UserAverage) => {
+        this.rating = res;
+      },
+      error: (err) => {
+        console.error("Erro ao carregar rating:", err);
+      }
+    });
   }
 
   get materialId(): number | null {
