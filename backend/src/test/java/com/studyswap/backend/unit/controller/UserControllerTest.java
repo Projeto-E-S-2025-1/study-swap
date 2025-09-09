@@ -1,6 +1,7 @@
 package com.studyswap.backend.unit.controller;
 
 import com.studyswap.backend.controller.UserController;
+import com.studyswap.backend.dto.MaterialResponseDTO;
 import com.studyswap.backend.dto.UserResponseDTO;
 import com.studyswap.backend.dto.UserUpdateDTO;
 import com.studyswap.backend.model.Role;
@@ -13,7 +14,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -88,4 +92,56 @@ class UserControllerTest {
         assertEquals("Carlos", result.getName());
         assertEquals("/images/default.png", result.getPhotoUrl());
     }
+
+    @Test
+    void testFavoriteMaterial() {
+        Long materialId = 10L;
+
+        ResponseEntity<Void> response = userController.favoriteMaterial(materialId);
+
+        Mockito.verify(userService).favoriteMaterial(materialId);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+    }
+
+    @Test
+    void testUnfavoriteMaterial() {
+        Long materialId = 20L;
+
+        ResponseEntity<Void> response = userController.unfavoriteMaterial(materialId);
+
+        Mockito.verify(userService).unfavoriteMaterial(materialId);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+    }
+
+    @Test
+    void testListFavorites() {
+        MaterialResponseDTO m1 = new MaterialResponseDTO();
+        m1.setId(1L);
+        m1.setTitle("Material 1");
+        m1.setDescription("Descrição 1");
+
+        MaterialResponseDTO m2 = new MaterialResponseDTO();
+        m2.setId(2L);
+        m2.setTitle("Material 2");
+        m2.setDescription("Descrição 2");
+
+        List<MaterialResponseDTO> favorites = List.of(m1, m2);
+
+        Mockito.when(userService.listFavoriteMaterials()).thenReturn(favorites);
+
+        ResponseEntity<List<MaterialResponseDTO>> response = userController.listFavorites();
+        List<MaterialResponseDTO> result = response.getBody();
+
+        Mockito.verify(userService).listFavoriteMaterials();
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals("Material 1", result.get(0).getTitle());
+        assertEquals("Material 2", result.get(1).getTitle());
+    }
+
 }
