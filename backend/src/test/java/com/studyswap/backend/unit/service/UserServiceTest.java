@@ -166,6 +166,35 @@
         assertThrows(ResponseStatusException.class, ()->{userService.favoriteMaterial(1L);
         });
     }
+    @Test
+    void testUnfavoriteExistentMaterial() throws ResponseStatusException{
+        when(authService.getAuthenticatedUser()).thenReturn(user);
+        Material material = new Material();
+        material.setId(1L);
+        material.setTitle("O Pequeno principe");
+        when(materialRepository.findById(1L)).thenReturn(Optional.of(material));
+        user.getFavoriteMaterials().add(material);
+        userService.unfavoriteMaterial(1L);
+        assertFalse(user.getFavoriteMaterials().contains(material));
+    }
+    @Test
+    void testUnfavoriteNotExistentMaterial() throws ResponseStatusException {
+        when(authService.getAuthenticatedUser()).thenReturn(user);
+        when(materialRepository.findById(1L)).thenReturn(Optional.empty());
+        assertThrows(ResponseStatusException.class, () -> {
+            userService.unfavoriteMaterial(1L);
+        });
+    }
+    @Test
+    void testUnfavoriteNotFavoritedMaterial() throws ResponseStatusException {
+        when(authService.getAuthenticatedUser()).thenReturn(user);
+        Material material = new Material();
+        material.setId(1L);
+        material.setTitle("O Pequeno principe");
+        when(materialRepository.findById(1L)).thenReturn(Optional.of(material));
+        assertThrows(ResponseStatusException.class, ()->{
+            userService.unfavoriteMaterial(1L);
+        });
+    }
     
-
 }
