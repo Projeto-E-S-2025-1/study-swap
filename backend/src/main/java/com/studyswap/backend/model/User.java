@@ -68,6 +68,7 @@ public class User implements UserDetails {
     }
 
     public User() {
+        this.favoriteMaterials = new HashSet<>();
     }
 
     public Long getId() {
