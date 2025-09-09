@@ -1,3 +1,4 @@
+//src/app/materials/components/question-list/question-list.ts
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';

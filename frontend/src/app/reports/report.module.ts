@@ -1,3 +1,4 @@
+//src/app/reports/report.module.ts
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReportFormComponent } from './report-form/report-form';

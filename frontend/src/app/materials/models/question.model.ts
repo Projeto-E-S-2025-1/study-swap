@@ -1,3 +1,4 @@
+//src/app/materials/models/question.model.ts
 export interface Question {
   id: number;
   title: string;
