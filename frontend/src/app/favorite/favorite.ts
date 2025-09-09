@@ -28,7 +28,6 @@ export class Favorite implements OnInit {
     this.favoriteService.getFavorites().subscribe({
       next: (data) => {
         this.materiais = data;
-        console.log(data);
       },
       error: (err) => {
         console.error(err);
