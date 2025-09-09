@@ -42,6 +42,15 @@
         <label for="price">Preço</label>
         <input id="price" name="price" type="number" class="form-control" [(ngModel)]="materialDTO.price" required>
       </div>
+
+      <div class="form-group mt-3">
+        <label for="file">Foto do Material</label>
+        <input type="file" id="file" name="file" class="form-control" 
+              (change)="onFileSelected($event)" accept="image/png, image/jpeg">
+        <small class="form-text text-muted">
+          Tamanho máximo: 5MB. Tipos permitidos: JPG, PNG, JPEG.
+        </small>
+      </div>
   
       <button type="submit" class="btn btn-success mt-3">Salvar</button>
   

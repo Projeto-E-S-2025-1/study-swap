@@ -57,8 +57,30 @@ export class FormMaterial implements OnInit {
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
+      const allowedTypes = ['image/jpeg', 'image/png']; // tipos permitidos
+      const maxSizeMB = 5; // tamanho máximo em MB
+      const maxSizeBytes = maxSizeMB * 1024 * 1024;
+
+      // Validação do tipo
+      if (!allowedTypes.includes(file.type)) {
+        this.errorMessage = 'Tipo de arquivo inválido. Apenas JPG, PNG ou JPEG são permitidos.';
+        this.selectedFile = undefined;
+        this.imagePreview = undefined;
+        return;
+      }
+
+      // Validação do tamanho
+      if (file.size > maxSizeBytes) {
+        this.errorMessage = `Arquivo muito grande. Máximo permitido: ${maxSizeMB}MB.`;
+        this.selectedFile = undefined;
+        this.imagePreview = undefined;
+        return;
+      }
+
+      // Se passou nas validações, define o arquivo
       this.selectedFile = file;
-      
+      this.errorMessage = '';
+
       // Criar preview da imagem
       const reader = new FileReader();
       reader.onload = (e: any) => {
@@ -71,7 +93,7 @@ export class FormMaterial implements OnInit {
   onSubmit(): void {
     this.successMessage = '';
     this.errorMessage = '';
-  
+
     if (!this.materialDTO.title) {
       this.errorMessage = 'Preencha todos os campos obrigatórios.';
       return;
@@ -83,17 +105,17 @@ export class FormMaterial implements OnInit {
       materialToSend.price = null;
     }
     materialToSend.userId = Number(this.authService.getUserId());
-  
+
     this.materialService.create(materialToSend, this.selectedFile).subscribe({
-      next: () => {
+      next: (materialCadastrado) => {
         this.successMessage = 'Material cadastrado com sucesso!';
+        this.materialAdicionado.emit(materialCadastrado); // <-- objeto correto
         setTimeout(() => this.router.navigate(['/material']), 1500);
-        this.materialAdicionado.emit(materialToSend);
       },
       error: (err) => {
         this.errorMessage = 'Erro ao cadastrar o material.';
         console.error(err);
       }
     });
-  }  
+  }
 }
