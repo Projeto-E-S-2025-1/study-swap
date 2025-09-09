@@ -58,12 +58,13 @@ public class User implements UserDetails {
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "material_id")
     )
-    private Set<Material> favoriteMaterials = new HashSet<>();
+    private Set<Material> favoriteMaterials;
     public User(String name, String email, String password, Role role) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.favoriteMaterials = new HashSet<>();
     }
 
     public User() {
@@ -133,7 +134,8 @@ public class User implements UserDetails {
 
     public void setInterests(String interests) {
         this.interests = interests;
-    }  
+    }
+
     public Set<Material> getFavoriteMaterials() {
         return favoriteMaterials;
     }
