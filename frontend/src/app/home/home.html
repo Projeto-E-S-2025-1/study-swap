@@ -1,8 +1,40 @@
 <!-- src/app/home/home.html -->
 
-<div class="home-container">
-    <h1>Página Inicial do StudySwap</h1>
-    <p>Explore nossa plataforma de troca de conhecimentos.</p>
-    <a routerLink="/login" class="btn">Login</a>
-    <a routerLink="/register" class="btn">Cadastre-se</a>
+<div class="home-hero">
+  <div class="hero-text">
+    <h1>Bem-vindo ao <span>StudySwap</span></h1>
+    <p>
+      A plataforma que conecta estudantes e professores para doar, trocar e vender
+      materiais acadêmicos de forma sustentável.
+    </p>
+    <div class="hero-buttons">
+      <a routerLink="/login" class="btn btn-primary">Entrar</a>
+      <a routerLink="/register" class="btn btn-secondary">Cadastrar-se</a>
+    </div>
+  </div>
+  <div class="hero-image">
+    <!-- SVG ilustrativo -->
+    <img src="landing/study-swap-hero.svg" alt="Troca de materiais acadêmicos" />
+  </div>
 </div>
+
+<section class="features">
+  <h2>Por que usar o StudySwap?</h2>
+  <div class="features-grid">
+    <div class="feature-card">
+      <img src="landing/reuse.svg" alt="Reutilizar" />
+      <h3>Reutilize</h3>
+      <p>Dê uma nova vida a livros, cadernos e materiais de estudo.</p>
+    </div>
+    <div class="feature-card">
+      <img src="landing/exchange.svg" alt="Trocar" />
+      <h3>Troque</h3>
+      <p>Encontre outros estudantes e faça trocas justas e práticas.</p>
+    </div>
+    <div class="feature-card">
+      <img src="landing/save-money.svg" alt="Economizar" />
+      <h3>Economize</h3>
+      <p>Reduza seus custos acadêmicos e ajude a natureza.</p>
+    </div>
+  </div>
+</section>
