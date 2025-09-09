@@ -1,76 +1,94 @@
 .transactions-container {
   max-width: 900px;
-  margin: 40px auto;
-  padding: 20px;
-  background: #f8faf7; /* tom suave */
-  border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-  font-family: 'Inter', sans-serif;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  font-family: "Inter", sans-serif;
 }
 
 .transactions-container h2 {
-  font-size: 28px;
+  font-size: 1.8rem;
   font-weight: 600;
-  color: #2a2a2a;
-  margin-bottom: 24px;
+  margin-bottom: 1.5rem;
+  color: #2f4f4f; /* verde escuro elegante */
   text-align: center;
 }
 
 .empty-message {
   text-align: center;
-  font-size: 18px;
-  color: #6b6b6b;
-  padding: 40px 0;
+  font-size: 1.1rem;
+  color: #777;
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px dashed #ccc;
 }
 
 .transaction-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.2rem;
   background: #ffffff;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 16px;
-  border-left: 5px solid #34a853; /* destaque verde */
-  transition: transform 0.2s, box-shadow 0.2s;
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 1.2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .transaction-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+.transaction-info h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: #2f4f4f;
 }
 
 .transaction-info p {
-  margin: 4px 0;
-  font-size: 16px;
-  color: #333333;
+  margin: 0.3rem 0;
+  font-size: 0.95rem;
+  color: #555;
 }
 
 .transaction-info strong {
-  color: #1b5e20; /* verde escuro */
+  color: #2f4f4f;
 }
 
+.transaction-info a {
+  color: #1b7f5a;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.transaction-info a:hover {
+  text-decoration: underline;
+}
+
+/* Botões */
 .transaction-actions {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
 }
 
 .transaction-actions .btn {
-  background-color: #34a853;
-  color: white;
-  font-weight: 500;
-  padding: 10px 18px;
+  font-size: 0.9rem;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
   border: none;
-  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.2s;
+  font-weight: 500;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.transaction-actions .btn:hover {
-  background-color: #2c8c46;
-  transform: translateY(-2px);
+.transaction-actions .btn-primary {
+  background: #1b7f5a;
+  color: white;
 }
 
-.transaction-actions .btn:active {
-  transform: translateY(0);
+.transaction-actions .btn-primary:hover {
+  background: #145e44;
+  transform: translateY(-1px);
 }
