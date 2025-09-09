@@ -10,6 +10,7 @@
     </div>
     <div class="nav-links">
         <ng-container *ngIf="isUserAuthenticated; else loggedOutLinks">
+            <a routerLink="/favorite">Meus Favoritos</a>
             <a routerLink="/material">Catálogo</a>
             <button (click)="logout()">Logout</button>
         </ng-container>
