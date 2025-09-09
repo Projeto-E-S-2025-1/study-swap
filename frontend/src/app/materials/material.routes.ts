@@ -1,3 +1,4 @@
+//src/app/materials/material.routes.ts
 import { Routes } from '@angular/router';
 import { ListMaterial } from './components/list-material/list-material';
 import { FormMaterial } from './components/form-material/form-material';

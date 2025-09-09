@@ -1,3 +1,4 @@
+//src/app/profile/user-profile.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserProfile, ProfileService } from './user-profile.service';

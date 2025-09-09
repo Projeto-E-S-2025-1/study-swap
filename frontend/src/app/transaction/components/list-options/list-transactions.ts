@@ -1,3 +1,4 @@
+//src/app/transaction/components/list-options/list-transactions.ts
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Transaction } from '../../models/transaction.model';

@@ -1,3 +1,4 @@
+//src/app/transaction/models/transaction.model.ts
 export interface Transaction {
     id: number;
     announcerId: number;

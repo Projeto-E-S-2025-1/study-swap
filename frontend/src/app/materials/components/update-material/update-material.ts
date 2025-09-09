@@ -1,3 +1,4 @@
+//src/app/materials/components/form-material/form-material.ts
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MaterialType, ConservationStatus, TransactionType } from '../../models/material.model';
@@ -77,11 +78,11 @@ export class UpdateMaterial implements OnInit {
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      const allowedTypes = ['image/jpeg', 'image/png'];
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
       const maxSizeMB = 5; // tamanho máximo em MB
       const maxSizeBytes = maxSizeMB * 1024 * 1024;
       if (!allowedTypes.includes(file.type)) {
-        this.errorMessage = 'Tipo de arquivo inválido. Apenas JPG, PNG ou JPEG são permitidos.';
+        this.errorMessage = 'Tipo de arquivo inválido. Apenas JPG, PNG ou WebP são permitidos.';
         this.selectedFile = undefined;
         return;
       }
