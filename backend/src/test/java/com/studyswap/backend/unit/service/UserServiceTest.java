@@ -6,14 +6,11 @@
     import static org.mockito.Mockito.when;
     
     import java.io.IOException;
-    import java.util.ArrayList;
     import java.util.List;
     import java.util.Optional;
 
-    import com.studyswap.backend.dto.MaterialDTO;
     import com.studyswap.backend.dto.MaterialResponseDTO;
     import com.studyswap.backend.model.Material;
-    import jakarta.validation.constraints.AssertFalse;
     import org.junit.jupiter.api.BeforeEach;
     import org.junit.jupiter.api.Test;
     import org.springframework.mock.web.MockMultipartFile;
