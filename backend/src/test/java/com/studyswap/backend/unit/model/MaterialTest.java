@@ -87,7 +87,7 @@ class MaterialTest {
         assertNotEquals(m1, m3);
 
         // equals false: objeto null
-        assertNotEquals(m1, null);
+        assertNotEquals(null, m1);
 
         // equals false: objeto de classe diferente
         assertNotEquals(m1, notMaterial);

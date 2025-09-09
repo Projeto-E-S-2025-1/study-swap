@@ -55,7 +55,7 @@ class UserControllerTest {
     }
 
     @Test
-    void testUpdateProfileWithFile() throws Exception {
+    void testUpdateProfileWithFile() {
         UserResponseDTO responseDTO = new UserResponseDTO(
                 1L, "Maria", "/uploads/foto.png", "Leitura", Role.STUDENT
         );
@@ -76,7 +76,7 @@ class UserControllerTest {
     }
 
     @Test
-    void testUpdateProfileWithoutFile() throws Exception {
+    void testUpdateProfileWithoutFile() {
         UserResponseDTO responseDTO = new UserResponseDTO(
                 1L, "Carlos", "/images/default.png", "Esportes", Role.STUDENT
         );
