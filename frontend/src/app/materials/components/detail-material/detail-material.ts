@@ -128,13 +128,10 @@ export class DetailMaterial implements OnInit {
           }
         }
         if(flag) {
-          console.log("É favorito");
           this.isFavorite = true;
         } else {
-          console.log("Não é favorito");
           this.isFavorite = false;
         }
-        console.log(data);
       },
       error: (err) => {
         console.error(err);
