@@ -95,6 +95,7 @@ public class Transaction {
         this.receiver = receiver;
         this.status=status;
         this.type = type;
+        this.materialTrade = null;
     }
 
     public void setMaterial(Material material) {

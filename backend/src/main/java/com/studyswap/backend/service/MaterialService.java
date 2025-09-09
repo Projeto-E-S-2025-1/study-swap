@@ -122,7 +122,6 @@ public class MaterialService {
         entity.setConservationStatus(materialDTO.getConservationStatus());
         entity.setTransactionType(materialDTO.getTransactionType());
         entity.setPrice(materialDTO.getPrice());
-        entity.setAvailable(materialDTO.isAvailable());
     }
 
     private MaterialResponseDTO convertToResponseDTO(Material material) {

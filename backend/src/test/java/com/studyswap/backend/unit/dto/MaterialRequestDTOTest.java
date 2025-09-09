@@ -111,7 +111,6 @@ class MaterialRequestDTOTest {
     void testGettersAndSetters() {
         MaterialRequestDTO dto = new MaterialRequestDTO();
 
-        dto.setAvailable(true);
         dto.setTitle("Novo título");
         dto.setDescription("Nova descrição");
         dto.setMaterialType(MaterialType.EQUIPAMENTO);
@@ -119,7 +118,6 @@ class MaterialRequestDTOTest {
         dto.setTransactionType(TransactionType.TROCA);
         dto.setPrice(100.0);
 
-        assertTrue(dto.isAvailable());
         assertEquals("Novo título", dto.getTitle());
         assertEquals("Nova descrição", dto.getDescription());
         assertEquals(MaterialType.EQUIPAMENTO, dto.getMaterialType());

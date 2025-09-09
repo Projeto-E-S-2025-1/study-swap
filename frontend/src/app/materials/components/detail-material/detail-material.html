@@ -8,6 +8,12 @@
 
     <div class="detalhe-material-info">
       <h2 class="detalhe-material-titulo">{{ material?.title }}</h2>
+      <div class="detalhe-material-subtitulo" *ngIf="rating">
+        <a [routerLink]="['/profile', rating.userId]" class="subtitulo-link">
+          <span class="detalhe-material-username">{{ material?.userName }}</span>
+          <span class="detalhe-material-rating">⭐ {{ rating.averageRating }}/5</span>
+        </a>
+      </div>
       <p class="detalhe-material-descricao">{{ material?.description }}</p>
       <div class="detalhe-material-atributos">
         <span><strong>Tipo:</strong> {{ material?.materialType }}</span>

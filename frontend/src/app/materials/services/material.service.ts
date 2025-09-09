@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { Material } from '../models/material.model';
 import { environment } from '../../../environments/environment';
+import { MaterialDTO } from '../../transaction/models/transaction.model';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +35,7 @@ export class MaterialService {
     return this.http.get<Material[]>(`${this.API_URL}/user`);
   }
 
-  create(material: Partial<Material>, file?: File): Observable<Material> {
+  create(material: MaterialDTO, file?: File): Observable<Material> {
     const formData = new FormData();
 
     // Transforma o DTO em string JSON

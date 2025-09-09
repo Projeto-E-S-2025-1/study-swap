@@ -9,8 +9,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public class MaterialRequestDTO {
-    private boolean available;
-
 	@NotBlank(message = "O título é obrigatório")
     private String title;
 
@@ -40,14 +38,6 @@ public class MaterialRequestDTO {
         this.conservationStatus = conservationStatus;
         this.transactionType = transactionType;
         this.price = price;
-        this.available=available;
-    }
-    public boolean isAvailable() {
-    	return available;
-    }
-    
-    public void setAvailable(boolean available) {
-    	this.available = available;
     }
 
     public String getTitle() {

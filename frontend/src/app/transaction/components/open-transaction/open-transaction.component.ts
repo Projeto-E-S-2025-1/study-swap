@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ConservationStatus, Material, MaterialType, TransactionType } from '../../../materials/models/material.model';
 import { TransactionService } from '../../services/transaction.service';
 import { AuthService } from '../../../auth/auth.service';
+import { MaterialDTO } from '../../models/transaction.model';
 
 @Component({
   selector: 'app-open-transaction',
@@ -15,7 +16,7 @@ import { AuthService } from '../../../auth/auth.service';
 })
 export class OpenTransactionComponent {
   @Input() material!: Material;
-  @Input() transactionType!: 'DOACAO' | 'VENDA' | 'TROCA';
+  @Input() transactionType!: TransactionType;
   @Input() isDone!: boolean;
 
   @Output() close = new EventEmitter<void>();
@@ -76,14 +77,36 @@ export class OpenTransactionComponent {
       return;
     }
 
-    const materialToSend = { ...this.materialDTO };
-    if (materialToSend.transactionType !== TransactionType.VENDA) {
-      materialToSend.price = null;
+    let materialToSend: MaterialDTO | null = null;
+
+    switch (this.transactionType) {
+      case TransactionType.TROCA:
+        materialToSend = {
+          title: this.materialDTO.title,
+          description: this.materialDTO.description,
+          materialType: this.materialDTO.materialType,
+          conservationStatus: this.materialDTO.conservationStatus,
+          transactionType: TransactionType.TROCA,
+        };
+        break;
+      
+      case TransactionType.VENDA:
+        if (!this.materialDTO.price || this.materialDTO.price <= 0) {
+          this.errorMessage = 'Preço inválido';
+          this.isLoading = false;
+          return;
+        }
+        materialToSend = null;
+        break;
+
+      case TransactionType.DOACAO:
+        materialToSend = null;
+        break;
     }
-    materialToSend.userId = Number(this.authService.getUserId());
+
     this.transactionService.createTransaction(this.material.id, materialToSend).subscribe({
       next: (res) => {
-        console.log('Transação criada (troca):', res);
+        console.log('Transação criada:', res);
         this.isLoading = false;
         this.confirm.emit();
         this.close.emit();
@@ -91,7 +114,7 @@ export class OpenTransactionComponent {
       error: (err) => {
         this.errorMessage = 'Erro ao criar transação';
         this.isLoading = false;
-        console.error('Erro ao criar transação (troca):', err);
+        console.error('Erro ao criar transação:', err);
         this.close.emit();
       }
     });

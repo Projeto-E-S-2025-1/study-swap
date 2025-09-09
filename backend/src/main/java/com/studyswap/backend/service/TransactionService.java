@@ -33,8 +33,8 @@ public class TransactionService {
 		this.materialRepository = materialRepository;
 	}
 
-	@Transactional
-	public TransactionResponseDTO createTransaction(Authentication auth, Long idMaterial, MaterialRequestDTO offeredMaterialDTO) {
+		@Transactional
+	public TransactionResponseDTO createTransaction(Authentication auth, Long idMaterial, MaterialRequestDTO dto) {
 		Material material = materialRepository.findById(idMaterial).orElseThrow(
 				()-> new ResponseStatusException(
 						HttpStatus.NOT_FOUND, MATERIAL_NOT_FOUND)
@@ -54,23 +54,33 @@ public class TransactionService {
         }
 		Transaction transaction;
 
-		if (type == TransactionType.TROCA) {
-			if (offeredMaterialDTO == null) {
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "É necessário enviar um material para realizar a troca");
-			}
-			Material offered = new Material();
-			offered.setTitle(offeredMaterialDTO.getTitle());
-			offered.setDescription(offeredMaterialDTO.getDescription());
-			offered.setConservationStatus(offeredMaterialDTO.getConservationStatus());
-			offered.setMaterialType(offeredMaterialDTO.getMaterialType());
-			offered.setTransactionType(TransactionType.TROCA);
-			offered.setAvailable(false);
-			offered.setUser(receiver);
+		switch (type) {
+            case TROCA -> {
+                if (dto == null || dto.getTitle() == null) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "É necessário enviar material para troca");
+                }
+                Material offered = new Material();
+                offered.setTitle(dto.getTitle());
+                offered.setDescription(dto.getDescription());
+                offered.setConservationStatus(dto.getConservationStatus());
+                offered.setMaterialType(dto.getMaterialType());
+                offered.setTransactionType(TransactionType.TROCA);
+                offered.setAvailable(false);
+                offered.setUser(receiver);
 
-			transaction = new Transaction(material, announcer, receiver, TransactionStatus.PENDING, type, offered);
-		} else {
-			transaction = new Transaction(material, announcer, receiver, TransactionStatus.PENDING, type);
-    }
+                transaction = new Transaction(material, announcer, receiver, TransactionStatus.PENDING, type, offered);
+            }
+            case VENDA -> {
+                if (dto == null || dto.getPrice() == null || dto.getPrice() <= 0) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Preço inválido para venda");
+                }
+                transaction = new Transaction(material, announcer, receiver, TransactionStatus.PENDING, type);
+            }
+            case DOACAO -> {
+                transaction = new Transaction(material, announcer, receiver, TransactionStatus.PENDING, type);
+            }
+            default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tipo de transação inválido");
+        }
 		return convertToResponseDTO(transactionRepository.save(transaction));
 	}
 	

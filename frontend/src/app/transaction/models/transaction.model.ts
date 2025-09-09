@@ -1,3 +1,5 @@
+import { TransactionType } from "../../materials/models/material.model";
+
 //src/app/transaction/models/transaction.model.ts
 export interface Transaction {
     id: number;
@@ -6,7 +8,7 @@ export interface Transaction {
     receiverId: number;
     receiverName: string;
     idMaterial: number;
-    status: 'PENDING' | 'SELECTED' | 'CONCLUDED';
+    status: 'PENDING' | 'DENIED' | 'CONCLUDED';
     transactionType: 'DOACAO' | 'TROCA' | 'VENDA';
     transactionDate: string;
     offeredMaterial?: MaterialDTO;
@@ -20,15 +22,17 @@ export interface TransactionDTO {
     receiverName: string;
     idMaterial: number;
     materialName: string;
-    status: 'PENDING' | 'SELECTED' | 'CONCLUDED';
-    transactionType: 'DOACAO' | 'TROCA' | 'VENDA';
+    status: 'PENDING' | 'DENIED' | 'CONCLUDED';
+    transactionType: TransactionType;
     transactionDate: string;
     offeredMaterial?: MaterialDTO;
 }
 
 export interface MaterialDTO {
-    id: number | null;
-    title: string | null;
-    materialType: string | null;
-    conservationStatus: string | null;
+    title?: string;
+    description?: string;
+    materialType?: string;
+    conservationStatus?: string;
+    transactionType: string;
+    price?: number | null;
 }

@@ -250,3 +250,53 @@ app-open-transaction {
   display: flex;
   align-items: center;
 }
+
+  .transaction-proposals-wrapper {
+  width: 100%;
+  max-width: 700px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* espaço entre propostas */
+  margin-top: 24px; /* separação do conteúdo acima */
+}
+
+.transaction-proposals-wrapper app-transaction-proposals {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+  background: #fafafa;
+}
+
+.detalhe-material-subtitulo {
+  display: flex;
+  align-items: center;
+  font-size: 1rem; /* subtítulo mais próximo do título */
+  color: #666;
+  margin-bottom: 16px; /* espaço abaixo do subtítulo */
+}
+
+.subtitulo-link {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* distância entre nome e rating */
+  text-decoration: none;
+  color: inherit;
+}
+
+.detalhe-material-username {
+  font-weight: 500;
+}
+
+.detalhe-material-rating {
+  font-weight: 400;
+  color: #ffb400; /* amarelo para as estrelas */
+  background-color: #f2f2f2;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
