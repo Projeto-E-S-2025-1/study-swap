@@ -196,5 +196,25 @@
             userService.unfavoriteMaterial(1L);
         });
     }
-    
+    @Test
+    void testListFavoriteMaterials() {
+        when(authService.getAuthenticatedUser()).thenReturn(user);
+        Material material = new Material();
+        material.setId(1L);
+        user.setId(2L);
+        user.setName("Maria");
+        material.setUser(user);
+        MaterialResponseDTO materialDTO = new MaterialResponseDTO();
+        materialDTO.setId(1L);
+        user.getFavoriteMaterials().add(material);
+        List<MaterialResponseDTO> favoriteMaterials = userService.listFavoriteMaterials();
+        assertTrue(favoriteMaterials.contains(materialDTO));
+    }
+    @Test
+    void testListFavoriteMaterialsWhenEmpty() {
+        when(authService.getAuthenticatedUser()).thenReturn(user);
+        List<MaterialResponseDTO> favoriteMaterials = userService.listFavoriteMaterials();
+        assertTrue(favoriteMaterials.isEmpty());
+    }
+
 }
