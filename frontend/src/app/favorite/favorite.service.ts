@@ -1,14 +1,13 @@
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Router } from 'express';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 import { Material } from '../materials/models/material.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
-
 export class FavoriteService {
   private readonly API_URL = `${environment.apiUrl}/user/favorites`;
   private http = inject(HttpClient);
@@ -18,11 +17,11 @@ export class FavoriteService {
     return this.http.get<Material[]>(this.API_URL);
   }
 
-  favoriteMaterial(idMaterial: number): void {
-    this.http.put<Material[]>(`${this.API_URL}/${idMaterial}`, null);
+  favoriteMaterial(idMaterial: number): Observable<void> {
+    return this.http.put<void>(`${this.API_URL}/${idMaterial}`, null);
   }
   
-  unfavoriteMaterial(idMaterial: number): void {
-    this.http.delete<Material[]>(`${this.API_URL}/${idMaterial}`);
+  unfavoriteMaterial(idMaterial: number): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/${idMaterial}`);
   }
 }

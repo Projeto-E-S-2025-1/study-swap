@@ -12,6 +12,7 @@ import { UpdateMaterial } from '../update-material/update-material';
 import { OpenTransactionComponent } from '../../../transaction/components/open-transaction/open-transaction.component';
 import { TransactionProposalsComponent } from '../../../transaction/components/list-options/list-transactions';
 import { TransactionService } from '../../../transaction/services/transaction.service';
+import { FavoriteService } from '../../../favorite/favorite.service';
 
 @Component({
   selector: 'app-detail-material',
@@ -24,6 +25,7 @@ export class DetailMaterial implements OnInit {
   material: (Material & { id: number }) | null = null;
   isLoading: boolean = true;
   errorMessage: string = '';
+  isFavorite: boolean = false;
   isOwner: boolean = false;
   isDone: boolean = false;
   showMenu: boolean = false;
@@ -37,7 +39,8 @@ export class DetailMaterial implements OnInit {
     private router: Router,
     private transactionService: TransactionService,
     private materialService: MaterialService,
-    private authService: AuthService
+    private authService: AuthService,
+    private favoriteService: FavoriteService
   ) {}
 
   toggleMenu(): void {
@@ -65,6 +68,8 @@ export class DetailMaterial implements OnInit {
       this.errorMessage = 'ID do material não fornecido.';
       this.isLoading = false;
     }
+
+    this.updateFavorited();
   }
 
   get materialId(): number | null {
@@ -86,6 +91,53 @@ export class DetailMaterial implements OnInit {
   closeModal(): void {
     this.showModalUpdate = false;
     this.showModalTransaction = false;
+  }
+
+  favorite(): void {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.favoriteService.favoriteMaterial(id).subscribe({
+      next: () => {},
+      error: (err) => {
+        console.error(err);
+      }
+    });
+    setTimeout(() => this.router.navigate(['/material/' + id]), 500);
+    this.isFavorite = true;
+  }
+
+  unfavorite(): void{
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.favoriteService.unfavoriteMaterial(id).subscribe({
+      next: () => {},
+      error: (err) => {
+        console.error(err);
+      }
+    });
+    setTimeout(() => this.router.navigate(['/material/' + id]), 500);
+    this.isFavorite = false;
+  }
+
+  updateFavorited(): void {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+
+    this.favoriteService.getFavorites().subscribe({
+      next: (data) => {
+        var flag = false;
+        for(const atom of data){
+          if(atom.id == id){
+            flag = true;
+          }
+        }
+        if(flag) {
+          this.isFavorite = true;
+        } else {
+          this.isFavorite = false;
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
   }
 
   onMaterialAtualizado(novoMaterial: Material): void {

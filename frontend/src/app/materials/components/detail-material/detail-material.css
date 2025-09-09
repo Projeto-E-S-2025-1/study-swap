@@ -221,3 +221,27 @@ app-open-transaction {
   box-shadow: 0 2px 10px rgba(0,0,0,0.3);
   z-index: 1001;
 }
+
+.estrelaApagada{
+  color: transparent; 
+  text-shadow: 0 0 0 #555;
+  font-size: 1.7em;
+  border: none;
+  background-color: transparent;
+  transition: text-shadow 0.3s ease;
+}
+
+.estrelaApagada:hover {
+  text-shadow: 0 0 0 rgb(108, 83, 21);
+}
+
+.estrelaAcesa{
+  font-size: 1.7em;
+  border: none;
+  background-color: transparent;
+  transition: color 0.3s ease;
+}
+
+.estrelaAcesa:hover {
+  color: rgba(0, 0, 0, 0.9);
+}
