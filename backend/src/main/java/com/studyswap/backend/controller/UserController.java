@@ -42,13 +42,13 @@ public class UserController {
     }
 
     @PutMapping("/favorites/{id}")
-    public ResponseEntity<Void> favoriteMaterial (@PathVariable("id") Long id_Material){
-    	userService.favoriteMaterial(id_Material);
+    public ResponseEntity<Void> favoriteMaterial (@PathVariable("id") Long idMaterial){
+    	userService.favoriteMaterial(idMaterial);
     	return  ResponseEntity.noContent().build();
     }
     @DeleteMapping("/favorites/{id}")
-    public ResponseEntity<Void> unfavoriteMaterial (@PathVariable("id") Long id_Material){
-    	userService.unfavoriteMaterial(id_Material);
+    public ResponseEntity<Void> unfavoriteMaterial (@PathVariable("id") Long idMaterial){
+    	userService.unfavoriteMaterial(idMaterial);
     	return ResponseEntity.noContent().build();
     }
     @GetMapping("/favorites")
