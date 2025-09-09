@@ -15,7 +15,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -206,11 +208,14 @@ class ReviewServiceTest {
         when(reviewRepository.findById(100L)).thenReturn(Optional.of(testReview));
 
         // Act & Assert
-        assertThrows(SecurityException.class, () -> {
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
             reviewService.deleteReview(100L, authentication);
         });
+
+        assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());
         verify(reviewRepository, never()).delete(any());
     }
+
 
     // ---------------------- getUserAverageRating ----------------------
 
