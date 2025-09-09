@@ -83,7 +83,7 @@ export class OpenTransactionComponent {
     materialToSend.userId = Number(this.authService.getUserId());
     this.transactionService.createTransaction(this.material.id, materialToSend).subscribe({
       next: (res) => {
-        console.log('Transação criada (troca):', res);
+        console.log('Transação criada:', res);
         this.isLoading = false;
         this.confirm.emit();
         this.close.emit();
@@ -91,7 +91,7 @@ export class OpenTransactionComponent {
       error: (err) => {
         this.errorMessage = 'Erro ao criar transação';
         this.isLoading = false;
-        console.error('Erro ao criar transação (troca):', err);
+        console.error('Erro ao criar transação:', err);
         this.close.emit();
       }
     });
