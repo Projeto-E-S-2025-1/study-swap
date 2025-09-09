@@ -21,6 +21,10 @@ export class HeaderComponent {
     this.authService.logout();
   }
 
+  get userId(): number | null{
+    return this.authService.getUserId();
+  }
+
   // Este getter chamará a versão SSR-safe do isAuthenticated()
   get isUserAuthenticated(): boolean {
     return this.authService.isAuthenticated();

@@ -7,20 +7,19 @@
 
   <div *ngFor="let t of transactions" class="transaction-card">
     <div class="transaction-info">
-      <p><strong>Material:</strong> {{ t.material.title }}</p>
+      <h3><strong>{{ t.materialName }}</strong></h3>
       <p><strong>Tipo:</strong> {{ t.transactionType }}</p>
       <p><strong>Status:</strong> {{ t.status }}</p>
-      <p><strong>Anunciante:</strong> {{ t.announcer.name }}</p>
-      <p><strong>Interessado:</strong> {{ t.interested.name }}</p>
+      <p><strong>Anunciante:</strong> {{ t.announcerName }}</p>
+      <p><strong>Interessado:</strong> {{ t.receiverName }}</p>
     </div>
 
     <div class="transaction-actions">
       <!-- botão aparece só quando concluída -->
       <button
         class="btn btn-primary"
-        *ngIf="t.status === 'COMPLETED'"
-        [routerLink]="['/review/:id']"
-        [queryParams]="{ transactionId: t.id }"
+        *ngIf="t.status === 'CONCLUDED' && !hasReview(t.id) && isReceiver(t)"
+        [routerLink]="['review', t.id]"
       >
         Avaliar Transação
       </button>

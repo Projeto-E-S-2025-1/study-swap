@@ -5,5 +5,5 @@ import { ReviewFormComponent } from './components/review-transaction/review-tran
 
 export const TRANSACTION_ROUTES: Routes = [
     {path: '', component: TransactionsComponent},
-    {path: 'review/:id', component: ReviewFormComponent},
+    {path: 'review/:id', component: ReviewFormComponent}
 ]

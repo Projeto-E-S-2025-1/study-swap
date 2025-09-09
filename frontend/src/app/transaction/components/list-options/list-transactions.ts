@@ -42,9 +42,13 @@ export class TransactionProposalsComponent implements OnInit {
     this.selectedProposal = proposal;
   }
 
-  confirmSelection(): void {
-  this.confirmedSelection = true;
-}
+  isCompleted(): boolean {
+    return this.proposals.some(p => p.status === 'CONCLUDED');
+  }
+
+  get completedTransaction(): Transaction | null {
+    return this.proposals.find(p => p.status === 'CONCLUDED') || null;
+  }
 
   finalizeTransaction(): void {
     if (!this.selectedProposal) return;
