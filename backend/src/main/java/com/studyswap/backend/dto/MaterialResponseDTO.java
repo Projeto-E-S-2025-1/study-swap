@@ -5,6 +5,8 @@ import com.studyswap.backend.model.ConservationStatus;
 import com.studyswap.backend.model.MaterialType;
 import com.studyswap.backend.model.TransactionType;
 
+import java.util.Objects;
+
 public class MaterialResponseDTO {
     private boolean available;
     private Long id;
@@ -123,4 +125,16 @@ public class MaterialResponseDTO {
         this.userName = userName;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MaterialResponseDTO that = (MaterialResponseDTO) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }
