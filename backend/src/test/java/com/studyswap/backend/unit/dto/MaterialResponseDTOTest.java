@@ -88,7 +88,7 @@ class MaterialResponseDTOTest {
         assertNotEquals(dto1, dto3);
 
         // equals false com null
-        assertNotEquals(dto1, null);
+        assertNotEquals(null, dto1);
 
         // equals false com classe diferente
         assertNotEquals(dto1, notADTO);

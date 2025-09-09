@@ -72,9 +72,9 @@ public class UserService {
                 updated.getRole()
         );
     }
-    public void favoriteMaterial(Long id_material){
+    public void favoriteMaterial(Long idMaterial){
     	User loggedUser = authService.getAuthenticatedUser();
-    	Material material = materialRepository.findById(id_material).orElseThrow(
+    	Material material = materialRepository.findById(idMaterial).orElseThrow(
     			()-> new ResponseStatusException(
 				HttpStatus.NOT_FOUND, "Material não encontrado")
 		);
@@ -85,9 +85,9 @@ public class UserService {
 		userRepository.save(loggedUser);
     }
     
-    public void unfavoriteMaterial(Long id_material){
+    public void unfavoriteMaterial(Long idMaterial){
     	User loggedUser = authService.getAuthenticatedUser();
-    	Material material = materialRepository.findById(id_material).orElseThrow(
+    	Material material = materialRepository.findById(idMaterial).orElseThrow(
     			()-> new ResponseStatusException(
 				HttpStatus.NOT_FOUND, "Material não encontrado")
 		);
